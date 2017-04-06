@@ -21,8 +21,8 @@ const source = new KStream("streams-file-input");
 //KTable
 const counts = source
     .flatMapValues(etl_ValueFlatten)
-        .map(etl_KeyValueMapper)
-        .countByKey("Counts");
+    .map(etl_KeyValueMapper)
+    .countByKey("Counts");
 
 counts.to("streams-wordcount-output");
 
