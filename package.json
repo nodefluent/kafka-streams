@@ -1,0 +1,43 @@
+{
+  "name": "kafka-streams",
+  "version": "0.9.0",
+  "description": "kafka-streams for nodejs",
+  "main": "index.js",
+  "scripts": {
+    "word-count": "node ./examples/wordCount.js",
+    "test": "istanbul cover _mocha -- --recursive -R spec test && istanbul check-coverage --statements 60"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krystianity/kafka-streams.git"
+  },
+  "keywords": [
+    "kafka-streams",
+    "kafka",
+    "streams",
+    "streaming",
+    "topics",
+    "produce",
+    "consume",
+    "merge",
+    "join",
+    "map",
+    "flat",
+    "filter",
+    "reduce"
+  ],
+  "author": "Christian Froehlingsdorf <chris@5cf.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krystianity/kafka-streams/issues"
+  },
+  "homepage": "https://github.com/krystianity/kafka-streams#readme",
+  "dependencies": {
+    "sinek": "~3.2.0"
+  },
+  "devDependencies": {
+    "expect.js": "~0.3.1",
+    "mocha": "~3.2.0",
+    "istanbul": "~0.4.2"
+  }
+}
