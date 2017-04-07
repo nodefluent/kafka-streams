@@ -1,11 +1,12 @@
 {
   "name": "kafka-streams",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "kafka-streams for nodejs",
   "main": "index.js",
   "scripts": {
     "word-count": "node ./examples/wordCount.js",
-    "test": "istanbul cover _mocha -- --recursive -R spec test && istanbul check-coverage --statements 60"
+    "obs-test": "node ./examples/observableTest.js",
+    "test": "istanbul cover _mocha -- --recursive -R spec test && istanbul check-coverage --statements 75"
   },
   "repository": {
     "type": "git",
@@ -33,11 +34,13 @@
   },
   "homepage": "https://github.com/krystianity/kafka-streams#readme",
   "dependencies": {
+    "bluebird": "~3.5.0",
+    "most": " ~1.2.2",
     "sinek": "~3.2.0"
   },
   "devDependencies": {
-    "expect.js": "~0.3.1",
+    "istanbul": "~0.4.2",
     "mocha": "~3.2.0",
-    "istanbul": "~0.4.2"
+    "proxyquire": "~1.7.11"
   }
 }

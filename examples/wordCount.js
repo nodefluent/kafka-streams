@@ -9,10 +9,10 @@ function etl_ValueFlatten(value){
     return value.toLowerCase().split(" ");
 }
 
-function etl_KeyValueMapper(key, value){
+function etl_KeyValueMapper(elements){
     return {
-        key,
-        value
+        key: elements[0],
+        value: elements[1]
     };
 }
 
@@ -26,9 +26,11 @@ const counts = source
 
 counts.to("streams-wordcount-output");
 
-const streams = new KafkaStreams([source], config);
+const streams = new KafkaStreams(source, config);
 streams.start();
 
 setTimeout(() => {
     streams.close();
 }, 5000);
+
+//# alternatively checkout ../test/unit/WordCount.test.js for a working example without kafka broker

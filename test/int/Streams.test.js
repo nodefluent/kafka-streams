@@ -1,6 +1,6 @@
 "use strict";
 
-const expect = require("expect.js");
+const assert = require("assert");
 
 const {} = require("./../../index.js");
 const config = require("./../test-config.js");
@@ -16,7 +16,8 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to test the truth", function (done) {
-        expect(1+1).to.be.equal(2);
+        //TODO integration test with kafka
+        assert.equal(1+1, 2);
         done();
     });
 });
