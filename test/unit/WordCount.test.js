@@ -33,15 +33,13 @@ describe("WordCount UNIT", function() {
 
         const source = new KStream("streams-file-input");
 
-        const counts = source
+        source
             .map(etl_ValueFlatten)
             .map(etl_KeyValueMapper)
-            .countByKey("key", "Counts");
-
-        source.skip(7);
-        source.map(etl_deflate);
-
-        counts.to("streams-wordcount-output");
+            .countByKey("key", "Counts")
+            .skip(7)
+            .map(etl_deflate)
+            .to("streams-wordcount-output");
 
         const streams = new KafkaStreams(source, {});
         streams.start();

@@ -18,13 +18,11 @@ function etl_KeyValueMapper(elements){
 
 const source = new KStream("streams-file-input");
 
-//KTable
-const counts = source
+source
     .flatMapValues(etl_ValueFlatten)
     .map(etl_KeyValueMapper)
-    .countByKey("Counts");
-
-counts.to("streams-wordcount-output");
+    .countByKey("Counts")
+    .to("streams-wordcount-output");
 
 const streams = new KafkaStreams(source, config);
 streams.start();
