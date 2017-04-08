@@ -19,7 +19,7 @@ function etl_KeyValueMapper(elements){
 const source = new KStream("streams-file-input");
 
 source
-    .flatMapValues(etl_ValueFlatten)
+    .map(etl_ValueFlatten)
     .map(etl_KeyValueMapper)
     .countByKey("Counts")
     .to("streams-wordcount-output");
