@@ -1,9 +1,14 @@
 # kafka-streams
 kafka-streams :octopus: equivalent for nodejs :turtle: :rocket:
+
 build on super fast :fire: observables using most.js :metal:
+
 ships with sinek :pray: for backpressure
+
 overwriteable local-storage solution allows for any kind of ETL datastore e.g. RocksDB, Redis, Postgres..
+
 async (Promises) and sync stream operators e.g. `$stream.map()` or `$stream.asyncMap()`
+
 super easy API :trollface:
 
 ## Progress Overview (Port Adaption)
