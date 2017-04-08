@@ -10,9 +10,9 @@ const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
 
 const {KStream} = require("./../../index.js");
 
-describe("WordCount UNIT", function() {
+describe("Sum-Action UNIT", function() {
 
-    it("should be able to count words", function (done) {
+    it("should be able to sum values", function (done) {
 
         const factory = new KafkaFactoryStub();
 
@@ -27,37 +27,30 @@ describe("WordCount UNIT", function() {
             };
         }
 
-        function etl_deflate(value){
-            return value.count;
-        }
-
         const source = new KStream("streams-file-input");
 
         source
             .map(etl_ValueFlatten)
             .map(etl_KeyValueMapper)
-            .countByKey("key", "count")
-            .skip(7)
-            .take(3)
-            .map(etl_deflate)
+            .take(4)
+            .sumByKey("key", "value")
             .to("streams-wordcount-output");
 
         const streams = new KafkaStreams(source, {});
         streams.start();
 
         factory.lastConsumer.fakeIncomingMessages([
-           "if bla", "if xta", "bla 1", "if blup",
-            "blup 2", "if hihi", "bla 2", "if five",
-            "bla third", "blup second derp"
-        ]); // if = 5, bla = 3, blup = 2
+            "abc 1", "def 1", "abc 3", "def 4"
+        ]); // abc 4, def 5
 
         setTimeout(() => {
             const messages = factory.lastProducer.producedMessages;
             console.log(messages);
 
-            assert.equal(messages[0], 5); //if
-            assert.equal(messages[1], 3); //bla
-            assert.equal(messages[2], 2); //blup
+            const data = source.storage.state;
+
+            assert.equal(data.abc, 4);
+            assert.equal(data.def, 5);
 
             streams.close();
             done();

@@ -7,25 +7,24 @@ ships with sinek :pray: for backpressure
 
 overwriteable local-storage solution allows for any kind of ETL datastore e.g. RocksDB, Redis, Postgres..
 
-async (Promises) and sync stream operators e.g. `$stream.map()` or `$stream.asyncMap()`
+async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyncMap()`
 
 super easy API :trollface:
 
 ## Progress Overview (Port Adaption)
 
 - [x] core structure
+- [x] KStream - stream as a changelog
+- [x] KTable - stream as a database
 - [ ] complex stream join structure
 - [x] word-count example
 - [x] local-storage for etl actions
-- [ ] default RocksDB storage for global etl actions
-- [ ] local-storage back-up to kafka topic
-- [ ] re-load back-up kafka topic of local-storage
+- [ ] local-storage factory (one per action)
+- [ ] storing and reading local-storage via kafka topic
 - [ ] kafka client implementation
-- [ ] KTable replay to Kafka (produce)
+- [x] KTable replay to Kafka (produce)
 - [ ] sinek implementation for backpressure
 - [ ] auto-json payloads (read-map/write-map)
-- [ ] additional access functions to states of local-storage
-- [ ] additional access functions to KTable instances
 - [ ] ..
 
 ## Operator Implementations
@@ -41,7 +40,7 @@ super easy API :trollface:
 - [x] skipRepeatsWith
 - [ ] transduce
 - [ ] slice
-- [ ] take*
+- [x] take*
 - [x] skip
 - [ ] takeWhile
 - [ ] skipWhile
@@ -69,6 +68,7 @@ super easy API :trollface:
 ## Stream Action Implementations
 
 - [x] countByKey
+- [x] sumByKey
 - [ ] ..
 - Want more? Feel free to open an issue :cop:
 

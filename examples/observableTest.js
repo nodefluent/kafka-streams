@@ -37,7 +37,7 @@ function slowKeyCount(value){
 
 const kafka = new FakeKafka();
 
-const $stream = most.fromEvent("message", kafka)
+const stream$ = most.fromEvent("message", kafka)
     .map(value => value.toLowerCase().split(" "))
     .map(value => ({ key: value[0], "value": value [1]}))
     .flatMap(value => most.fromPromise(slowKeyCount(value)))
@@ -46,7 +46,7 @@ const $stream = most.fromEvent("message", kafka)
         return most.empty();
     });
 
-$stream.forEach(value => {
+stream$.forEach(value => {
     console.log(value);
 });
 

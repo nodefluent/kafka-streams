@@ -27,7 +27,7 @@ describe("KTable UNIT", function() {
         const source = new KTable("streams-file-input", etl_KeyValueMapper);
 
         source
-            .consumeUntilCount(7)
+            .consumeUntilCount(20)
             .to("streams-wordcount-output");
 
         const streams = new KafkaStreams(source, {});
@@ -38,27 +38,27 @@ describe("KTable UNIT", function() {
             "blup 1", "if 4"
         ]);
 
+        let intervalCount = 0;
         setInterval(() => {
+            intervalCount++;
             factory.lastConsumer.fakeIncomingMessages([
-                "bla 2", "if 5",
-                "bla 3", "blup 2"
+                "bla " + intervalCount * 2, "if "  + intervalCount * 3, "blup " + intervalCount * 4
             ]);
-        }, 5);
+        }, 2);
 
         setTimeout(() => {
             const messages = factory.lastProducer.producedMessages;
-            console.log(messages);
+            //console.log(messages);
 
             const data = source.getTable();
             console.log(data);
 
-            const tableStream = source.getStream();
-            tableStream.forEach(console.log);
-            source.replay();
+            assert.equal(data.if, 15);
+            assert.equal(data.bla, 10);
+            assert.equal(data.blup, 16);
 
-            assert.equal(data.if, 4);
-            assert.equal(data.bla, 2);
-            assert.equal(data.blup, 1);
+            source.forEach(kv => console.log(kv));
+            source.replay();
 
             streams.close();
             done();

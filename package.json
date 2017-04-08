@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/krystianity/kafka-streams#readme",
   "dependencies": {
+    "@most/create": "~2.0.1",
     "bluebird": "~3.5.0",
     "most": " ~1.2.2",
     "sinek": "~3.2.0"
