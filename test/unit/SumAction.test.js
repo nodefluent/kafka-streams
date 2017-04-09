@@ -32,16 +32,20 @@ describe("Sum-Action UNIT", function() {
         source
             .map(etl_ValueFlatten)
             .map(etl_KeyValueMapper)
-            .take(4)
-            .sumByKey("key", "value")
+            .take(11)
+            .sumByKey("key", "value", "sum")
+            .skip(7)
+            .map(kv => kv.sum)
             .to("streams-wordcount-output");
 
         const streams = new KafkaStreams(source, {});
         streams.start();
 
         factory.lastConsumer.fakeIncomingMessages([
-            "abc 1", "def 1", "abc 3", "def 4"
-        ]); // abc 4, def 5
+            "abc 1", "def 1", "abc 3", "fus eins,", "def 4",
+            "abc 12", "fus zwei,", "def 100", "abc 50", "ida 0",
+            "fus drei"
+        ]); // abc 66, def 105, ida 0, fus eins,zwei,drei
 
         setTimeout(() => {
             const messages = factory.lastProducer.producedMessages;
@@ -49,8 +53,10 @@ describe("Sum-Action UNIT", function() {
 
             const data = source.storage.state;
 
-            assert.equal(data.abc, 4);
-            assert.equal(data.def, 5);
+            assert.equal(data.abc, 66);
+            assert.equal(data.def, 105);
+            assert.equal(data.ida, 0);
+            assert.equal(data.fus, "eins,zwei,drei");
 
             streams.close();
             done();

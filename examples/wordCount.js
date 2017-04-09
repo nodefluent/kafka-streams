@@ -21,7 +21,7 @@ const source = new KStream("streams-file-input");
 source
     .map(etl_ValueFlatten)
     .map(etl_KeyValueMapper)
-    .countByKey("Counts")
+    .countByKey("key", "count")
     .to("streams-wordcount-output");
 
 const streams = new KafkaStreams(source, config);
