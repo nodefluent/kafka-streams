@@ -1,9 +1,9 @@
 # kafka-streams
-kafka-streams :octopus: equivalent for nodejs :turtle: :rocket:
+[kafka-streams](http://docs.confluent.io/3.0.0/streams) :octopus: equivalent for nodejs :turtle: :rocket:
 
-build on super fast :fire: observables using most.js :metal:
+build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:
 
-ships with sinek :pray: for backpressure
+ships with [sinek](https://github.com/krystianity/node-sinek) :pray: for backpressure
 
 overwriteable local-storage solution allows for any kind of ETL datastore e.g. RocksDB, Redis, Postgres..
 
@@ -11,12 +11,20 @@ async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyn
 
 super easy API :trollface:
 
+## Aim of this Library
+- this is not a 1:1 port of the official Java kafka-streams
+- the goal of this project is to give at least the same options to
+a nodejs developer that kafka-streams currently gives a JVM dev
+- stream-state processing, table representation, joins, aggregate etc.
+I am aiming for the easiest api access possible checkout the [word count example](https://github.com/krystianity/kafka-streams/blob/master/examples/wordCount.js)
+
 ## Progress Overview (Port Adaption)
 
 - [x] core structure
 - [x] KStream - stream as a changelog
 - [x] KTable - stream as a database
 - [ ] complex stream join structure
+- [ ] windows (joins)
 - [x] word-count example
 - [x] local-storage for etl actions
 - [ ] local-storage factory (one per action)
@@ -25,6 +33,8 @@ super easy API :trollface:
 - [x] KTable replay to Kafka (produce)
 - [ ] sinek implementation for backpressure
 - [ ] auto-json payloads (read-map/write-map)
+- [ ] documentation
+- [ ] API description
 - [ ] ..
 
 ## Operator Implementations
@@ -72,8 +82,11 @@ super easy API :trollface:
 - [ ] ..
 - Want more? Feel free to open an issue :cop:
 
+## Can I use this library yet?
+No, but very soon (aiming for end of April 2017).
+
 ## Are we ready for production yet?
-- No, please have some more patience :smile:
+No, please have some more patience :smile:
 
 ## More
-- Forks or Stars give motivation :bowtie:
+Forks or Stars give motivation :bowtie:

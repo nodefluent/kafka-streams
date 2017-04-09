@@ -1,34 +1,47 @@
 "use strict";
 
+//# aims to be similiar to this "official" word count example
 //# https://github.com/apache/kafka/blob/0.10.0/streams/examples/src/main/java/org/apache/kafka/streams/examples/wordcount/WordCountDemo.java
+
+/*
+    the input topic could look like this:
+
+    "fruit banana"
+    "fruit cherry"
+    "vegetable broccoli"
+    "fruit strawberry"
+    "vegetable lettuce"
+
+    the output topic would then look like this:
+
+    "fruit 3"
+ */
 
 const {KStream, KafkaStreams} = require("./../index.js");
 const config = require("./../test/test-config.js");
 
-function etl_ValueFlatten(value){
-    return value.toLowerCase().split(" ");
-}
+const source = new KStream("my-input-topic");
 
-function etl_KeyValueMapper(elements){
+source
+    .map(keyValueMapperEtl)
+    .countByKey("key", "count")
+    .filter(kv => kv.count >= 3)
+    .map(kv => kv.key + " " + kv.count)
+    .to("my-output-topic");
+
+const streams = new KafkaStreams(source, config);
+streams.start(); //start to consume
+
+setTimeout(() => {
+    streams.close();
+}, 5000); //consume & produce for 5 seconds
+
+function keyValueMapperEtl(message){
+    const elements = message.toLowerCase().split(" ");
     return {
         key: elements[0],
         value: elements[1]
     };
 }
-
-const source = new KStream("streams-file-input");
-
-source
-    .map(etl_ValueFlatten)
-    .map(etl_KeyValueMapper)
-    .countByKey("key", "count")
-    .to("streams-wordcount-output");
-
-const streams = new KafkaStreams(source, config);
-streams.start();
-
-setTimeout(() => {
-    streams.close();
-}, 5000);
 
 //# alternatively checkout ../test/unit/WordCount.test.js for a working example without kafka broker

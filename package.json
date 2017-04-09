@@ -1,11 +1,11 @@
 {
   "name": "kafka-streams",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "kafka-streams for nodejs",
   "main": "index.js",
   "scripts": {
     "word-count": "node ./examples/wordCount.js",
-    "obs-test": "node ./examples/observableTest.js",
+    "obs-test": "mocha test/unit/Observable.test.js",
     "test": "istanbul cover _mocha -- --recursive -R spec test && istanbul check-coverage --statements 75"
   },
   "repository": {
