@@ -24,7 +24,7 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [x] core structure
 - [x] KStream - stream as a changelog
 - [x] KTable - stream as a database
-- [ ] complex stream join structure
+- [x] complex stream join structure
 - [ ] windows (for joins)
 - [x] word-count example
 - [ ] more examples

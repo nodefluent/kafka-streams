@@ -94,25 +94,29 @@ describe("Streams Integration", function() {
             .mapStringToKV()
             .countByKey();
 
-        firstStream
-            .chain(secondStream)
+        const mergedStream = firstStream.chain(secondStream);
+
+        mergedStream
             .mapStringify()
             .chainForEach(v => {
                 console.log("cs: " + v);
                 final();
             })
-            .to(outputTopic);
+            .to(outputTopic, 1, () => { //merged has to await a producer being setup
 
-        firstStream.start(() => {
-            console.log("first stream up");
-            secondStream.start(() => {
-                console.log("second stream up");
+                console.log("merge-stream producer up");
 
-                firstStream.writeToStream("lol lol");
-                secondStream.writeToStream("four 1");
-                secondStream.writeToStream("four 2");
+                firstStream.start(() => {
+                    console.log("first stream up");
+                    secondStream.start(() => {
+                        console.log("second stream up");
+
+                        firstStream.writeToStream("lol lol");
+                        secondStream.writeToStream("four 1");
+                        secondStream.writeToStream("four 2");
+                    });
+                });
             });
-        });
     });
 
     it("should give kafka a few seconds again", function(done){
@@ -121,7 +125,9 @@ describe("Streams Integration", function() {
 
     it("should be able to consume the freshly produced merge topic", function(done){
 
-        const stream = kafkaStreams.getKStream(outputTopic);
+        const stream = kafkaStreams.getKTable(outputTopic, element => {
+            return JSON.parse(element.value);
+        });
 
         let messageCount = 0;
         function final(){
@@ -130,16 +136,25 @@ describe("Streams Integration", function() {
                 throw new Error("more than 11");
             }
             if(messageCount === 11){
+
+                //TODO table is empty, assert values here
+                const data = stream.getTable();
+                console.log(data);
+
+                assert.equal(data.four, 2);
+                assert.equal(data.hi, "too");
+                assert.equal(data.one, 1);
+                assert.equal(data.two, 3);
+                assert.equal(data.three, 2);
+
                 done();
             }
         }
 
         stream
-            .mapWrapKafkaPayload()
-            .chainForEach(v => {
-                console.log("fs: " + v);
-                final();
-            });
+            .consumeUntilCount(11)
+            .forEach(e => final())
+            .catch(e => console.error(e));
 
         stream.start();
     });
