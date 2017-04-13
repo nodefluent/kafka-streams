@@ -29,7 +29,7 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [x] word-count example
 - [ ] more examples
 - [x] local-storage for etl actions
-- [ ] local-storage factory (one per action)
+- [x] local-storage factory (one per action)
 - [ ] KStorage example for any DB that supports atomic actions
 - [ ] backing-up local-storage via kafka
 - [x] kafka client implementation
