@@ -8,8 +8,6 @@ const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
-const {KTable} = require("./../../index.js");
-
 describe("KTable UNIT", function() {
 
     it("should be able to represent a table from a stream", function (done) {
@@ -24,14 +22,14 @@ describe("KTable UNIT", function() {
             };
         }
 
-        const source = new KTable("streams-file-input", etl_KeyValueMapper);
+        const streams = new KafkaStreams({});
+        const source = streams.getKTable("ktable-unit", etl_KeyValueMapper);
 
         source
             .consumeUntilCount(20)
             .to("streams-wordcount-output");
 
-        const streams = new KafkaStreams(source, {});
-        streams.start();
+        source.start();
 
         factory.lastConsumer.fakeIncomingMessages([
             "derp 1", "derp 2", "derpa 1", "derp 3",
@@ -48,7 +46,7 @@ describe("KTable UNIT", function() {
 
         setTimeout(clearInterval, 20, intv);
         setTimeout(() => {
-            const messages = factory.lastProducer.producedMessages;
+            //const messages = factory.lastProducer.producedMessages;
             //console.log(messages);
 
             const data = source.getTable();
@@ -69,7 +67,7 @@ describe("KTable UNIT", function() {
                     assert.equal(replays.derpa, 10);
                     assert.equal(replays.derpb, 16);
 
-                    streams.close();
+                    streams.closeAll();
                     done();
                 }
             }).catch(e => {
@@ -77,7 +75,6 @@ describe("KTable UNIT", function() {
             });
 
             source.replay();
-
         }, 100);
     });
 });

@@ -8,8 +8,6 @@ const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
-const {KStream} = require("./../../index.js");
-
 describe("Sum-Action UNIT", function() {
 
     it("should be able to sum values", function (done) {
@@ -27,7 +25,8 @@ describe("Sum-Action UNIT", function() {
             };
         }
 
-        const source = new KStream("streams-file-input");
+        const streams = new KafkaStreams({});
+        const source = streams.getKStream("sum-action-unit");
 
         source
             .map(etl_ValueFlatten)
@@ -38,8 +37,7 @@ describe("Sum-Action UNIT", function() {
             .map(kv => kv.sum)
             .to("streams-wordcount-output");
 
-        const streams = new KafkaStreams(source, {});
-        streams.start();
+        source.start();
 
         factory.lastConsumer.fakeIncomingMessages([
             "abc 1", "def 1", "abc 3", "fus eins,", "def 4",
@@ -58,7 +56,7 @@ describe("Sum-Action UNIT", function() {
             assert.equal(data.ida, 0);
             assert.equal(data.fus, "eins,zwei,drei");
 
-            streams.close();
+            streams.closeAll();
             done();
         }, 5);
     });

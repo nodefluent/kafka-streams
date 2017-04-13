@@ -18,15 +18,11 @@ class KafkaFactoryStub {
         return this;
     }
 
-    getProducer(topic){
-        const kafka = new FakeKafka(topic);
-        this.lastProducer = kafka;
-        return kafka;
-    }
-
-    getConsumer(topic){
+    getKafkaClient(topic){
+        console.log("KafkaFactoryStub creating KafkaClient for " + topic);
         const kafka = new FakeKafka(topic);
         this.lastConsumer = kafka;
+        this.lastProducer = kafka;
         return kafka;
     }
 }

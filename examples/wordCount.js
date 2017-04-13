@@ -15,12 +15,13 @@
     the output topic would then look like this:
 
     "fruit 3"
- */
+*/
 
-const {KStream, KafkaStreams} = require("./../index.js");
+const {KafkaStreams} = require("./../index.js");
 const config = require("./../test/test-config.js");
 
-const source = new KStream("my-input-topic");
+const kafkaStreams = new KafkaStreams(config);
+const source = kafkaStreams.getKStream("my-input-topic");
 
 source
     .map(keyValueMapperEtl)
@@ -29,11 +30,10 @@ source
     .map(kv => kv.key + " " + kv.count)
     .to("my-output-topic");
 
-const streams = new KafkaStreams(source, config);
-streams.start(); //start to consume
+source.start();
 
 setTimeout(() => {
-    streams.close();
+    kafkaStreams.closeAll();
 }, 5000); //consume & produce for 5 seconds
 
 function keyValueMapperEtl(message){

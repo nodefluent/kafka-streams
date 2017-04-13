@@ -1,23 +1,27 @@
 "use strict";
 
-const EventEmitter = require("events");
+const KafkaClient = require("./../../lib/KafkaClient.js");
 
-class FakeKafka extends EventEmitter {
+class FakeKafka extends KafkaClient {
 
-    constructor(topic){
-        super();
+    constructor(topic, config = {}){
+        super(topic, config);
         this.topic = topic;
         this.producedMessages = [];
     }
 
     fakeIncomingMessages(messages = []){
         messages.forEach(message => {
-            this.emit("message", message);
+            super.emit("message", message);
         });
     }
 
+    send(topic, message, cb){
+        this._send([message], cb);
+    }
+
     //produce
-    send(payloads, cb){
+    _send(payloads, cb){
         payloads.forEach(payload => this.producedMessages.push(payload));
         if(cb){
             cb();

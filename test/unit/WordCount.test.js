@@ -8,8 +8,6 @@ const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
-const {KStream} = require("./../../index.js");
-
 describe("WordCount UNIT", function() {
 
     it("should be able to count words", function (done) {
@@ -31,7 +29,8 @@ describe("WordCount UNIT", function() {
             return value.count;
         }
 
-        const source = new KStream("streams-file-input");
+        const streams = new KafkaStreams({});
+        const source = streams.getKStream("word-count-unit");
 
         source
             .map(etl_ValueFlatten)
@@ -42,8 +41,7 @@ describe("WordCount UNIT", function() {
             .map(etl_deflate)
             .to("streams-wordcount-output");
 
-        const streams = new KafkaStreams(source, {});
-        streams.start();
+        source.start();
 
         factory.lastConsumer.fakeIncomingMessages([
            "if bla", "if xta", "bla 1", "if blup",
@@ -59,7 +57,7 @@ describe("WordCount UNIT", function() {
             assert.equal(messages[1], 3); //bla
             assert.equal(messages[2], 2); //blup
 
-            streams.close();
+            streams.closeAll();
             done();
         }, 5);
     });
