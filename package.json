@@ -1,6 +1,6 @@
 {
   "name": "kafka-streams",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "kafka-streams for nodejs",
   "main": "index.js",
   "scripts": {
@@ -42,6 +42,8 @@
   "devDependencies": {
     "istanbul": "~0.4.2",
     "mocha": "~3.2.0",
-    "proxyquire": "~1.7.11"
+    "proxyquire": "~1.7.11",
+    "uuid": "~3.0.1",
+    "log4bro": "~2.0.1"
   }
 }
