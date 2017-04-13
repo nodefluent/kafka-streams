@@ -1,6 +1,6 @@
 {
   "name": "kafka-streams",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "kafka-streams for nodejs",
   "main": "index.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "@most/create": "~2.0.1",
     "bluebird": "~3.5.0",
     "most": " ~1.2.2",
-    "sinek": "~3.2.0"
+    "sinek": "~3.3.0"
   },
   "devDependencies": {
     "istanbul": "~0.4.2",

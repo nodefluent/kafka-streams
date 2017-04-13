@@ -1,22 +1,21 @@
 # kafka-streams
 
-[kafka-streams](http://docs.confluent.io/3.0.0/streams) :octopus: equivalent for nodejs :turtle: :rocket:
-
-build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:
-
-ships with [sinek](https://github.com/krystianity/node-sinek) :pray: for backpressure
-
-overwriteable local-storage solution allows for any kind of ETL datastore e.g. RocksDB, Redis, Postgres..
-
-async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyncMap()`
-
-super easy API :trollface:
+  [kafka-streams](http://docs.confluent.io/3.0.0/streams) :octopus: equivalent for nodejs :turtle: :rocket:
+  build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:
+  ships with [sinek](https://github.com/krystianity/node-sinek) :pray: for backpressure
+  overwriteable local-storage solution allows for any kind of datastore e.g. RocksDB, Redis, Postgres..
+  async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyncMap()`
+  super easy API :goberserk:
+  your kafka broker should be version `>= 0.9.x`
+  the lib is based on `sinek`, which is based on node-kafka's `ConsumerGroups`
+therefore it still requires a zookeeper connection (dont worry, your offset will be stored
+in the kafka broker)
 
 ## Aim of this Library
 
-- this is not a 1:1 port of the official Java kafka-streams
+- this is not a 1:1 port of the official JAVA kafka-streams
 - the goal of this project is to give at least the same options to
-a nodejs developer that kafka-streams currently gives a JVM dev
+a nodejs developer that kafka-streams provides for JVM developers
 - stream-state processing, table representation, joins, aggregate etc.
 I am aiming for the easiest api access possible checkout the [word count example](https://github.com/krystianity/kafka-streams/blob/master/examples/wordCount.js)
 

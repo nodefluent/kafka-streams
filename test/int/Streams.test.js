@@ -16,7 +16,7 @@ describe("Streams Integration", function() {
 
     after(function(done){
         kafkaStreams.closeAll();
-        done();
+        setTimeout(done, 500);
     });
 
     it("should be able to start up a stream to produce some messages", function (done) {
@@ -31,7 +31,11 @@ describe("Streams Integration", function() {
             stream.writeToStream("hi its me");
             stream.writeToStream("hey is it you");
             stream.writeToStream("hi yes true");
-            stream.writeToStream("wow it is");
+            stream.writeToStream("hiu it is");
+            stream.writeToStream("huu it is");
+            stream.writeToStream("hoo it is");
+            stream.writeToStream("hi too here");
+            stream.writeToStream("hou it is");
 
             setTimeout(done, 10);
         });
@@ -58,34 +62,45 @@ describe("Streams Integration", function() {
     });
 
     it("should give kafka a few seconds", function(done){
-        this.timeout(2100);
-        setTimeout(done, 2000);
+        setTimeout(done, 1000);
     });
 
     it("should be able to consume and join two kafka topics as streams", function(done){
-        this.timeout(12000);
+        this.timeout(5000);
+
+        let messageCount = 0;
+        function final(){
+            messageCount++;
+            if(messageCount > 11){
+                throw new Error("more than 11");
+            }
+            if(messageCount === 11){
+                done();
+            }
+        }
 
         const firstStream = kafkaStreams.getKStream(inputTopic);
         const secondStream = kafkaStreams.getKStream(secondTopic);
 
-        //TODO mode to enable and disable message or message.value as payload of stream event (flat on stream)
-        //TODO sinek needs a non JSON mode for message consumption
-        //TODO sinek fix offset missing if offset is 0..
-
         firstStream
+            .mapWrapKafkaPayload()
+            .chainForEach(v => console.log("1s: " + v))
             .mapStringToKV(" ", 0, 1)
-            //.chainForEach(v => console.log(v))
             .filter(o => o.key === "hi");
 
         secondStream
+            .mapWrapKafkaPayload()
+            .chainForEach(v => console.log("2s: " + v))
             .mapStringToKV()
-            //.chainForEach(v => console.log(v))
-            .countByKey(); //TODO four seems to be emitted twice count incs per 2
+            .countByKey();
 
         firstStream
             .chain(secondStream)
             .mapStringify()
-            .chainForEach(v => console.log(v))
+            .chainForEach(v => {
+                console.log("cs: " + v);
+                final();
+            })
             .to(outputTopic);
 
         firstStream.start(() => {
@@ -96,10 +111,36 @@ describe("Streams Integration", function() {
                 firstStream.writeToStream("lol lol");
                 secondStream.writeToStream("four 1");
                 secondStream.writeToStream("four 2");
-
-                setTimeout(done, 6000);
             });
         });
     });
 
+    it("should give kafka a few seconds again", function(done){
+        setTimeout(done, 1000);
+    });
+
+    it("should be able to consume the freshly produced merge topic", function(done){
+
+        const stream = kafkaStreams.getKStream(outputTopic);
+
+        let messageCount = 0;
+        function final(){
+            messageCount++;
+            if(messageCount > 11){
+                throw new Error("more than 11");
+            }
+            if(messageCount === 11){
+                done();
+            }
+        }
+
+        stream
+            .mapWrapKafkaPayload()
+            .chainForEach(v => {
+                console.log("fs: " + v);
+                final();
+            });
+
+        stream.start();
+    });
 });
