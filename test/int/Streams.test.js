@@ -2,11 +2,24 @@
 
 const assert = require("assert");
 const uuid = require("uuid");
+const v8 = require("v8");
 
 const {KafkaStreams} = require("./../../index.js");
 const config = require("./../test-config.js");
 
 describe("Streams Integration", function() {
+
+    function getMemory(){
+        let space = null;
+        v8.getHeapSpaceStatistics().forEach(_space => {
+            if(_space.space_name === "old_space"){
+                space = _space;
+            }
+        });
+        return space.space_used_size;
+    }
+
+    const startMemory = getMemory();
 
     const roundId = uuid.v4();
     const inputTopic = "ks-input-" + roundId;
@@ -32,20 +45,20 @@ describe("Streams Integration", function() {
 
             console.log("create stream one ready.");
 
-            stream.writeToStream("hi its me");
-            stream.writeToStream("hey is it you");
-            stream.writeToStream("hi yes true");
-            stream.writeToStream("hiu it is");
-            stream.writeToStream("huu it is");
-            stream.writeToStream("hoo it is");
-            stream.writeToStream("hi too here");
-            stream.writeToStream("hou it is");
+            stream.writeToStream("hi 1");
+            stream.writeToStream("hey 1");
+            stream.writeToStream("hi 2");
+            stream.writeToStream("hiu 1");
+            stream.writeToStream("huu 1");
+            stream.writeToStream("hoo 1");
+            stream.writeToStream("hi 3");
+            stream.writeToStream("hou 1");
 
             setTimeout(done, 10);
         }, null);
     });
 
-    it("should be able to produce to two topics using a merged stream", function (done) {
+    it("should be able to produce to three topics using a merged stream", function (done) {
 
         const stream = kafkaStreams.getKStream(null);
         const stream2 = stream.merge(kafkaStreams.getKStream(null));
@@ -60,11 +73,11 @@ describe("Streams Integration", function() {
             console.log("create stream (1-3) two ready.");
 
             stream.writeToStream("one 1");
+            stream.writeToStream("two 1");
+            stream.writeToStream("three 1");
             stream.writeToStream("two 2");
-            stream.writeToStream("three 3");
-            stream.writeToStream("two 2");
-            stream.writeToStream("three 3");
-            stream.writeToStream("two 2");
+            stream.writeToStream("three 2");
+            stream.writeToStream("two 3");
 
             setTimeout(done, 10);
         });
@@ -74,7 +87,7 @@ describe("Streams Integration", function() {
         setTimeout(done, 1000);
     });
 
-    it("should be able to count keys on third topic", function(done){
+    xit("should be able to count keys on third topic", function(done){
 
         const stream = kafkaStreams.getKStream(thirdTopic);
 
@@ -100,29 +113,36 @@ describe("Streams Integration", function() {
         stream.start();
     });
 
-    it("should be able to count keys on fourth topic joining a local stream", function(done){
+    xit("should be able to count keys on fourth topic joining a local stream", function(done){
 
         const stream = kafkaStreams.getKStream(null);
         const stream2 = kafkaStreams.getKStream(fourthTopic);
 
+        stream
+            .mapWrapKafkaPayload()
+            .mapStringToKV()
+            .filter(kv => kv.key === "one");
+
         stream2
             .mapWrapKafkaPayload()
             .mapStringToKV()
-            .countByKey();
+            .filter(kv => kv.key === "two" || kv.key === "one");
 
         const stream3 = stream.merge(stream2);
+        stream3.countByKey();
 
         let count = 0;
         stream3.forEach(element => {
             console.log(element);
             count++;
-            if(count === 8){
-                const data = stream2.storage.state;
+            if(count === 7){
+                const data = stream3.storage.state;
                 console.log(data);
 
-                assert.equal(data.one, 1);
+                assert.equal(data.one, 4);
                 assert.equal(data.two, 3);
-                assert.equal(data.three, 2);
+                assert.equal(data.three, undefined);
+                assert.equal(data.four, undefined);
 
                 done();
             }
@@ -133,49 +153,56 @@ describe("Streams Integration", function() {
             stream2.start()
         ]).then(_ => {
             console.log("streams up");
-            stream.writeToStream("a message");
-            stream.writeToStream("another message");
+            stream.writeToStream("one message1");
+            stream.writeToStream("one message2");
+            stream.writeToStream("one message3");
+            stream.writeToStream("four message1");
         })
     });
 
     it("should be able to consume and join two kafka topics as streams", function(done){
-        this.timeout(5000);
-
-        let messageCount = 0;
-        function final(){
-            messageCount++;
-            if(messageCount > 11){
-                throw new Error("more than 11");
-            }
-            if(messageCount === 11){
-                done();
-            }
-        }
 
         const firstStream = kafkaStreams.getKStream(inputTopic);
         const secondStream = kafkaStreams.getKStream(secondTopic);
 
+        let messageCount = 0;
+        function final(){
+            messageCount++;
+
+            if(messageCount > 9){
+                throw new Error("more than 9");
+            }
+
+            if(messageCount === 9){
+                const data = secondStream.storage.state;
+                console.log(data);
+
+                assert.equal(data.hi, undefined);
+                assert.equal(data.two, 4);
+
+                done();
+            }
+        }
+
         firstStream
             .mapWrapKafkaPayload()
-            //.chainForEach(v => console.log("1s: " + v))
-            .mapStringToKV(" ", 0, 1)
-            .filter(o => o.key === "hi");
+            .mapStringToKV()
+            .filter(kv => kv.key === "hi");
 
         secondStream
             .mapWrapKafkaPayload()
-            //.chainForEach(v => console.log("2s: " + v))
             .mapStringToKV()
+            .filter(kv => kv.key == "two")
             .countByKey();
-            //.forEach(v => console.log("2r: " + JSON.stringify(v)));
 
         const mergedStream = firstStream.merge(secondStream);
 
         mergedStream
-            .mapStringify()
             .chainForEach(v => {
-                console.log("cs: " + v);
+                //console.log("cs: " + JSON.stringify(v));
                 final();
-            });
+            })
+            .mapStringify();
 
         Promise.all([
             firstStream.start(),
@@ -185,17 +212,18 @@ describe("Streams Integration", function() {
 
             console.log("merge-stream up");
 
-            firstStream.writeToStream("lol lol");
+            firstStream.writeToStream("hi 4");
+            firstStream.writeToStream("hi 5");
+            secondStream.writeToStream("two 4");
             secondStream.writeToStream("four 1");
-            secondStream.writeToStream("four 2");
         });
     });
 
-    it("should give kafka a few seconds again", function(done){
+    xit("should give kafka a few seconds again", function(done){
         setTimeout(done, 1000);
     });
 
-    it("should be able to consume the freshly produced merge topic", function(done){
+    xit("should be able to consume the freshly produced merge topic as table", function(done){
 
         const stream = kafkaStreams.getKTable(outputTopic, element => {
             return JSON.parse(element.value);
@@ -205,20 +233,17 @@ describe("Streams Integration", function() {
         function final(e){
             console.log(e);
             messageCount++;
-            if(messageCount > 11){
-                throw new Error("more than 11");
+            if(messageCount > 9){
+                throw new Error("more than 8");
             }
-            if(messageCount === 11){
+            if(messageCount === 9){
 
                 //TODO table is empty, assert values here
                 const data = stream.getTable();
                 console.log(data);
 
-                assert.equal(data.four, 2);
                 assert.equal(data.hi, "too");
-                assert.equal(data.one, 1);
-                assert.equal(data.two, 3);
-                assert.equal(data.three, 2);
+                assert.equal(data.two, "3");
 
                 done();
             }
@@ -232,9 +257,16 @@ describe("Streams Integration", function() {
         stream.start();
     });
 
-    it("should be able to investigate stats for kafka clients", function(done){
+    xit("should be able to investigate stats for kafka clients", function(done){
        const stats = kafkaStreams.getStats();
         assert.equal(stats.length, 14);
+        done();
+    });
+
+    xit("should be able to consume a decent amount of memory", function(done){
+        const consumed = getMemory() - startMemory;
+        console.log("consumed additional memory: " + consumed + " bytes");
+        assert(consumed < 13.3e6, true);
         done();
     });
 });
