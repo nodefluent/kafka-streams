@@ -8,18 +8,21 @@ const config = require("./../test-config.js");
 
 describe("Streams Integration", function() {
 
-    const inputTopic = "ks-input-" + uuid.v4();
-    const secondTopic = "ks-second-" + uuid.v4();
-    const outputTopic = "ks-output-" + uuid.v4();
+    const roundId = uuid.v4();
+    const inputTopic = "ks-input-" + roundId;
+    const secondTopic = "ks-second-" + roundId;
+    const thirdTopic = "ks-third-" + roundId;
+    const outputTopic = "ks-output-" + roundId;
 
     const kafkaStreams = new KafkaStreams(config);
 
     after(function(done){
         kafkaStreams.closeAll();
+        console.log(`topic roundId: ks-*-${roundId}.`);
         setTimeout(done, 500);
     });
 
-    it("should be able to start up a stream to produce some messages", function (done) {
+    it("should be able to produce messages to topic", function (done) {
 
         const stream = kafkaStreams.getKStream(null);
         stream.to(inputTopic);
@@ -41,28 +44,57 @@ describe("Streams Integration", function() {
         });
     });
 
-    it("should be able to start up a second stream to produce some more messages", function (done) {
+    it("should be able to produce to two topics using a merged stream", function (done) {
 
         const stream = kafkaStreams.getKStream(null);
+        const stream2 = stream.merge(kafkaStreams.getKStream(null));
+
         stream.to(secondTopic);
+        stream2.to(thirdTopic).then(_ => {
+            stream.start(() => {
 
-        stream.start(() => {
+                console.log("create stream two ready.");
 
-            console.log("create stream two ready.");
+                stream.writeToStream("one 1");
+                stream.writeToStream("two 2");
+                stream.writeToStream("three 3");
+                stream.writeToStream("two 2");
+                stream.writeToStream("three 3");
+                stream.writeToStream("two 2");
 
-            stream.writeToStream("one 1");
-            stream.writeToStream("two 2");
-            stream.writeToStream("three 3");
-            stream.writeToStream("two 2");
-            stream.writeToStream("three 3");
-            stream.writeToStream("two 2");
-
-            setTimeout(done, 10);
+                setTimeout(done, 10);
+            });
         });
     });
 
     it("should give kafka a few seconds", function(done){
         setTimeout(done, 1000);
+    });
+
+    it("should be able to count keys on third topic", function(done){
+
+        const stream = kafkaStreams.getKStream(thirdTopic);
+
+        let count = 0;
+        stream
+            .mapWrapKafkaPayload()
+            .mapStringToKV()
+            .countByKey()
+            .forEach(_ => {
+                count++;
+                if(count === 6){
+                    const data = stream.storage.state;
+                    console.log(data);
+
+                    assert.equal(data.one, 1);
+                    assert.equal(data.two, 3);
+                    assert.equal(data.three, 2);
+
+                    done();
+                }
+            });
+
+        stream.start();
     });
 
     it("should be able to consume and join two kafka topics as streams", function(done){
@@ -84,25 +116,27 @@ describe("Streams Integration", function() {
 
         firstStream
             .mapWrapKafkaPayload()
-            .chainForEach(v => console.log("1s: " + v))
+            //.chainForEach(v => console.log("1s: " + v))
             .mapStringToKV(" ", 0, 1)
             .filter(o => o.key === "hi");
 
         secondStream
             .mapWrapKafkaPayload()
-            .chainForEach(v => console.log("2s: " + v))
+            //.chainForEach(v => console.log("2s: " + v))
             .mapStringToKV()
-            .countByKey();
+            //.countByKey()
+            .sumByKey("key", "value", "sum")
+            .forEach(v => console.log("2r: " + JSON.stringify(v)));
 
-        const mergedStream = firstStream.chain(secondStream);
+        const mergedStream = firstStream.merge(secondStream);
 
         mergedStream
             .mapStringify()
             .chainForEach(v => {
-                console.log("cs: " + v);
+                //console.log("cs: " + v);
                 final();
             })
-            .to(outputTopic, 1, () => { //merged has to await a producer being setup
+            .to(outputTopic, 1).then(_ => { //merged has to await a producer being setup
 
                 console.log("merge-stream producer up");
 
@@ -130,7 +164,8 @@ describe("Streams Integration", function() {
         });
 
         let messageCount = 0;
-        function final(){
+        function final(e){
+            console.log(e);
             messageCount++;
             if(messageCount > 11){
                 throw new Error("more than 11");
@@ -153,9 +188,15 @@ describe("Streams Integration", function() {
 
         stream
             .consumeUntilCount(11)
-            .forEach(e => final())
+            .forEach(e => final(e))
             .catch(e => console.error(e));
 
         stream.start();
+    });
+
+    it("should be able to investigate stats for kafka clients", function(done){
+       const stats = kafkaStreams.getStats();
+        assert.equal(stats.length, 9);
+        done();
     });
 });
