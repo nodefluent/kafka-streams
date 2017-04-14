@@ -12,6 +12,7 @@ describe("Streams Integration", function() {
     const inputTopic = "ks-input-" + roundId;
     const secondTopic = "ks-second-" + roundId;
     const thirdTopic = "ks-third-" + roundId;
+    const fourthTopic = "ks-fourth-" + roundId;
     const outputTopic = "ks-output-" + roundId;
 
     const kafkaStreams = new KafkaStreams(config);
@@ -41,29 +42,31 @@ describe("Streams Integration", function() {
             stream.writeToStream("hou it is");
 
             setTimeout(done, 10);
-        });
+        }, null);
     });
 
     it("should be able to produce to two topics using a merged stream", function (done) {
 
         const stream = kafkaStreams.getKStream(null);
         const stream2 = stream.merge(kafkaStreams.getKStream(null));
+        const stream3 = stream.merge(kafkaStreams.getKStream(null));
 
-        stream.to(secondTopic);
-        stream2.to(thirdTopic).then(_ => {
-            stream.start(() => {
+        Promise.all([
+            stream.to(secondTopic),
+            stream2.to(thirdTopic),
+            stream3.to(fourthTopic),
+            stream.start()
+        ]).then(_ => {
+            console.log("create stream (1-3) two ready.");
 
-                console.log("create stream two ready.");
+            stream.writeToStream("one 1");
+            stream.writeToStream("two 2");
+            stream.writeToStream("three 3");
+            stream.writeToStream("two 2");
+            stream.writeToStream("three 3");
+            stream.writeToStream("two 2");
 
-                stream.writeToStream("one 1");
-                stream.writeToStream("two 2");
-                stream.writeToStream("three 3");
-                stream.writeToStream("two 2");
-                stream.writeToStream("three 3");
-                stream.writeToStream("two 2");
-
-                setTimeout(done, 10);
-            });
+            setTimeout(done, 10);
         });
     });
 
@@ -97,6 +100,44 @@ describe("Streams Integration", function() {
         stream.start();
     });
 
+    it("should be able to count keys on fourth topic joining a local stream", function(done){
+
+        const stream = kafkaStreams.getKStream(null);
+        const stream2 = kafkaStreams.getKStream(fourthTopic);
+
+        stream2
+            .mapWrapKafkaPayload()
+            .mapStringToKV()
+            .countByKey();
+
+        const stream3 = stream.merge(stream2);
+
+        let count = 0;
+        stream3.forEach(element => {
+            console.log(element);
+            count++;
+            if(count === 8){
+                const data = stream2.storage.state;
+                console.log(data);
+
+                assert.equal(data.one, 1);
+                assert.equal(data.two, 3);
+                assert.equal(data.three, 2);
+
+                done();
+            }
+        });
+
+        Promise.all([
+            stream.start(),
+            stream2.start()
+        ]).then(_ => {
+            console.log("streams up");
+            stream.writeToStream("a message");
+            stream.writeToStream("another message");
+        })
+    });
+
     it("should be able to consume and join two kafka topics as streams", function(done){
         this.timeout(5000);
 
@@ -124,33 +165,30 @@ describe("Streams Integration", function() {
             .mapWrapKafkaPayload()
             //.chainForEach(v => console.log("2s: " + v))
             .mapStringToKV()
-            //.countByKey()
-            .sumByKey("key", "value", "sum")
-            .forEach(v => console.log("2r: " + JSON.stringify(v)));
+            .countByKey();
+            //.forEach(v => console.log("2r: " + JSON.stringify(v)));
 
         const mergedStream = firstStream.merge(secondStream);
 
         mergedStream
             .mapStringify()
             .chainForEach(v => {
-                //console.log("cs: " + v);
+                console.log("cs: " + v);
                 final();
-            })
-            .to(outputTopic, 1).then(_ => { //merged has to await a producer being setup
-
-                console.log("merge-stream producer up");
-
-                firstStream.start(() => {
-                    console.log("first stream up");
-                    secondStream.start(() => {
-                        console.log("second stream up");
-
-                        firstStream.writeToStream("lol lol");
-                        secondStream.writeToStream("four 1");
-                        secondStream.writeToStream("four 2");
-                    });
-                });
             });
+
+        Promise.all([
+            firstStream.start(),
+            secondStream.start(),
+            mergedStream.to(outputTopic, 1)
+        ]).then(_ => { //merged has to await a producer being setup
+
+            console.log("merge-stream up");
+
+            firstStream.writeToStream("lol lol");
+            secondStream.writeToStream("four 1");
+            secondStream.writeToStream("four 2");
+        });
     });
 
     it("should give kafka a few seconds again", function(done){
@@ -196,7 +234,7 @@ describe("Streams Integration", function() {
 
     it("should be able to investigate stats for kafka clients", function(done){
        const stats = kafkaStreams.getStats();
-        assert.equal(stats.length, 9);
+        assert.equal(stats.length, 14);
         done();
     });
 });
