@@ -9,7 +9,7 @@ overwriteable local-storage solution allows for any kind of datastore e.g. Rocks
 async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyncMap()`  
 super easy API :goberserk:  
 your kafka broker should be version `>= 0.9.x`  
-the lib is based on `sinek`, which is based on node-kafka's `ConsumerGroups`
+the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
 therefore it still requires a zookeeper connection (dont worry, your offset will be stored
 in the kafka broker)
 

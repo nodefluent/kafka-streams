@@ -87,7 +87,7 @@ describe("Streams Integration", function() {
         setTimeout(done, 1000);
     });
 
-    xit("should be able to count keys on third topic", function(done){
+    it("should be able to count keys on third topic", function(done){
 
         const stream = kafkaStreams.getKStream(thirdTopic);
 
@@ -113,7 +113,7 @@ describe("Streams Integration", function() {
         stream.start();
     });
 
-    xit("should be able to count keys on fourth topic joining a local stream", function(done){
+    it("should be able to count keys on fourth topic joining a local stream", function(done){
 
         const stream = kafkaStreams.getKStream(null);
         const stream2 = kafkaStreams.getKStream(fourthTopic);
@@ -130,6 +130,7 @@ describe("Streams Integration", function() {
 
         const stream3 = stream.merge(stream2);
         stream3.countByKey();
+        stream3.mapStringify();
 
         let count = 0;
         stream3.forEach(element => {
@@ -198,11 +199,11 @@ describe("Streams Integration", function() {
         const mergedStream = firstStream.merge(secondStream);
 
         mergedStream
+            .mapStringify()
             .chainForEach(v => {
-                //console.log("cs: " + JSON.stringify(v));
+                console.log("cs: " + v);
                 final();
-            })
-            .mapStringify();
+            });
 
         Promise.all([
             firstStream.start(),
@@ -219,11 +220,11 @@ describe("Streams Integration", function() {
         });
     });
 
-    xit("should give kafka a few seconds again", function(done){
+    it("should give kafka a few seconds again", function(done){
         setTimeout(done, 1000);
     });
 
-    xit("should be able to consume the freshly produced merge topic as table", function(done){
+    it("should be able to consume the freshly produced merge topic as table", function(done){
 
         const stream = kafkaStreams.getKTable(outputTopic, element => {
             return JSON.parse(element.value);
@@ -257,13 +258,13 @@ describe("Streams Integration", function() {
         stream.start();
     });
 
-    xit("should be able to investigate stats for kafka clients", function(done){
+    it("should be able to investigate stats for kafka clients", function(done){
        const stats = kafkaStreams.getStats();
         assert.equal(stats.length, 14);
         done();
     });
 
-    xit("should be able to consume a decent amount of memory", function(done){
+    it("should be able to consume a decent amount of memory", function(done){
         const consumed = getMemory() - startMemory;
         console.log("consumed additional memory: " + consumed + " bytes");
         assert(consumed < 13.3e6, true);

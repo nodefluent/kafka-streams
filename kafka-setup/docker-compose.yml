@@ -1,1 +1,20 @@
 version: '2'
+services:
+  zookeeper:
+    image: jplock/zookeeper:3.4.6
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+  kafka:
+    image: ches/kafka:0.10.2.0
+    ports:
+      - 9092:9092
+    links:
+     - zookeeper:zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      ZOOKEEPER_IP: zookeeper
+    volumes:
+      - /tmp/kafka-data/data:/data
+      - /tmp/kafka-data/logs:/logs
