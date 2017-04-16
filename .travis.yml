@@ -1,7 +1,5 @@
 language: node_js
 node_js:
-  - "4.8"
-  - "5.12"
   - "6.10"
   - "7.6"
   - "node"
