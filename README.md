@@ -4,16 +4,19 @@
 
 > (stateful) kafka stream processing 100% nodejs
 
-[kafka-streams](http://docs.confluent.io/3.0.0/streams) :octopus: equivalent for nodejs :turtle: :rocket:
-build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:
-ships with [sinek](https://github.com/krystianity/node-sinek) :pray: for backpressure
-overwriteable local-storage solution allows for any kind of datastore e.g. RocksDB, Redis, Postgres..
-async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyncMap()`
-super easy API :goberserk:
-your kafka broker should be version `>= 0.9.x`
+[kafka-streams](http://docs.confluent.io/3.0.0/streams) :octopus: equivalent for nodejs :turtle: :rocket:  
+build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:  
+ships with [sinek](https://github.com/krystianity/node-sinek) :pray: for backpressure  
+overwriteable local-storage solution allows for any kind of datastore e.g. RocksDB, Redis, Postgres..  
+async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyncMap()`  
+super easy API :goberserk:   
 the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
 therefore it still requires a zookeeper connection (dont worry, your offset will be stored
 in the kafka broker)
+
+## Prerequisites
+- kafka broker should be version `>= 0.9.x` 
+- nodejs should be version `>= 6.10`
 
 ## Aim of this Library
 
