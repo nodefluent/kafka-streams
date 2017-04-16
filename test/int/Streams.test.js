@@ -21,7 +21,7 @@ describe("Streams Integration", function() {
 
     const startMemory = getMemory();
 
-    const roundId = uuid.v4();
+    const roundId = process.env.KST_TOPIC || uuid.v4();
     const inputTopic = "ks-input-" + roundId;
     const secondTopic = "ks-second-" + roundId;
     const thirdTopic = "ks-third-" + roundId;
