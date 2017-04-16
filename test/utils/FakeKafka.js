@@ -1,5 +1,6 @@
 "use strict";
 
+const Promise = require("bluebird");
 const KafkaClient = require("./../../lib/KafkaClient.js");
 
 class FakeKafka extends KafkaClient {
@@ -16,8 +17,30 @@ class FakeKafka extends KafkaClient {
         });
     }
 
-    send(topic, message, cb){
-        this._send([message], cb);
+    start(readyCallback = null){
+
+        if(!this.topic){
+            return;
+        }
+
+        process.nextTick(() => {
+            if(readyCallback){
+                readyCallback();
+            }
+        });
+    }
+
+    setupProducer(produceTopic, partitions = 1, readyCallback = null, kafkaErrorCallback = null){
+
+        process.nextTick(() => {
+            if(readyCallback){
+                readyCallback();
+            }
+        });
+    }
+
+    send(topic, message){
+        return new Promise(resolve => this._send([message], resolve));
     }
 
     //produce

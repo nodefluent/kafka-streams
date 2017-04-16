@@ -28,6 +28,7 @@ source
     .countByKey("key", "count")
     .filter(kv => kv.count >= 3)
     .map(kv => kv.key + " " + kv.count)
+    .tap(kv => console.log(kv))
     .to("my-output-topic");
 
 source.start();

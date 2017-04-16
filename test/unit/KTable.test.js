@@ -46,35 +46,37 @@ describe("KTable UNIT", function() {
 
         setTimeout(clearInterval, 20, intv);
         setTimeout(() => {
-            //const messages = factory.lastProducer.producedMessages;
-            //console.log(messages);
+            const messages = factory.lastProducer.producedMessages;
+            console.log(messages);
 
-            const data = source.getTable();
-            console.log(data);
+            source.getTable().then(data => {
 
-            assert.equal(data.derp, 15);
-            assert.equal(data.derpa, 10);
-            assert.equal(data.derpb, 16);
+                console.log(data);
 
-            const replays = {};
+                assert.equal(data.derp, 15);
+                assert.equal(data.derpa, 10);
+                assert.equal(data.derpb, 16);
 
-            source.forEach(kv => {
-                console.log(kv);
-                replays[kv.key] = kv.value;
-                if(Object.keys(replays).length === 3){
+                const replays = {};
 
-                    assert.equal(replays.derp, 15);
-                    assert.equal(replays.derpa, 10);
-                    assert.equal(replays.derpb, 16);
+                source.forEach(kv => {
+                    console.log(kv);
+                    replays[kv.key] = kv.value;
+                    if(Object.keys(replays).length === 3){
 
-                    streams.closeAll();
-                    done();
-                }
-            }).catch(e => {
-                console.error(e);
+                        assert.equal(replays.derp, 15);
+                        assert.equal(replays.derpa, 10);
+                        assert.equal(replays.derpb, 16);
+
+                        streams.closeAll();
+                        done();
+                    }
+                }).catch(e => {
+                    console.error(e);
+                });
+
+                source.replay();
             });
-
-            source.replay();
         }, 100);
     });
 });

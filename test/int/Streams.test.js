@@ -68,7 +68,7 @@ describe("Streams Integration", function() {
             stream.to(secondTopic),
             stream2.to(thirdTopic),
             stream3.to(fourthTopic),
-            stream.start()
+            stream.start() //this one still needs a sync producer
         ]).then(_ => {
             console.log("create stream (1-3) two ready.");
 
@@ -200,7 +200,7 @@ describe("Streams Integration", function() {
 
         mergedStream
             .mapStringify()
-            .chainForEach(v => {
+            .tap(v => {
                 console.log("cs: " + v);
                 final();
             });
@@ -232,27 +232,31 @@ describe("Streams Integration", function() {
 
         let messageCount = 0;
         function final(e){
+
             console.log(e);
             messageCount++;
+
             if(messageCount > 9){
                 throw new Error("more than 8");
             }
+
             if(messageCount === 9){
 
-                //TODO table is empty, assert values here
-                const data = stream.getTable();
-                console.log(data);
+                stream.getTable().then(data => {
+                    console.log(data);
 
-                assert.equal(data.hi, "too");
-                assert.equal(data.two, "3");
+                    assert.equal(data.hi, "3");
+                    assert.equal(data.two, "3");
 
-                done();
+                    done();
+                });
             }
         }
 
         stream
-            .consumeUntilCount(11)
-            .forEach(e => final(e))
+            .consumeUntilCount(9)
+            .tap(e => final(e))
+            .forEach(e => {})
             .catch(e => console.error(e));
 
         stream.start();
