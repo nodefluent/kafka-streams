@@ -29,7 +29,7 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [x] complex stream join structure
 - [ ] windows (for joins)
 - [x] word-count example
-- [ ] more examples
+- [x] more examples
 - [x] local-storage for etl actions
 - [x] local-storage factory (one per action)
 - [ ] KStorage example for any DB that supports atomic actions
@@ -42,20 +42,20 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [ ] auto-json payloads (read-map/write-map)
 - [ ] documentation
 - [ ] API description
+- [ ] higher join & combine examples
 - [ ] ..
 
 ## Operator Implementations
 
 - [x] map + asyncMap
 - [ ] constant
-- [ ] scan*
+- [ ] scan
 - [ ] ap
 - [ ] timestamp
-- [ ] tap
+- [x] tap
 - [x] filter
 - [x] skipRepeats
 - [x] skipRepeatsWith
-- [ ] transduce
 - [ ] slice
 - [x] take
 - [x] skip
@@ -68,17 +68,17 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [ ] reduce
 - [x] forEach
 - [ ] drain
-- [x] merge
+- [x] _merge
 - [ ] combine
 - [ ] sample
 - [ ] sampleWith
-- [x] zip
+- [x] _zip
 - [ ] switch
-- [x] join
+- [x] _join
 - [ ] throttle
 - [ ] debounce
 - [ ] delay
-- [ ] multicast
+- [x] multicast
 
 ## Additional Operators
 

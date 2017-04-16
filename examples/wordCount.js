@@ -21,9 +21,9 @@ const {KafkaStreams} = require("./../index.js");
 const config = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
-const source = kafkaStreams.getKStream("my-input-topic");
+const stream = kafkaStreams.getKStream("my-input-topic");
 
-source
+stream
     .map(keyValueMapperEtl)
     .countByKey("key", "count")
     .filter(kv => kv.count >= 3)
@@ -31,11 +31,10 @@ source
     .tap(kv => console.log(kv))
     .to("my-output-topic");
 
-source.start();
+stream.start();
 
-setTimeout(() => {
-    kafkaStreams.closeAll();
-}, 5000); //consume & produce for 5 seconds
+//consume & produce for 5 seconds
+setTimeout(kafkaStreams.closeAll().bind(kafkaStreams), 5000);
 
 function keyValueMapperEtl(message){
     const elements = message.toLowerCase().split(" ");
