@@ -87,6 +87,7 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [x] mapStringToKV
 - [x] mapParse
 - [x] mapStringify
+- [x] atThroughput
 - Want more? Feel free to open an issue :cop:
 
 ## Join Operations
