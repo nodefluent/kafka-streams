@@ -5,9 +5,9 @@ const config = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
 
-const stream1 = kafkaStreams.getKTable("my-input-topic-1");
-const stream2 = kafkaStreams.getKTable("my-input-topic-2");
-const stream3 = kafkaStreams.getKTable("my-input-topic-3");
+const stream1 = kafkaStreams.getKStream("my-input-topic-1");
+const stream2 = kafkaStreams.getKStream("my-input-topic-2");
+const stream3 = kafkaStreams.getKStream("my-input-topic-3");
 
 //merge will make sure any message that is consumed on any of the streams
 //will end up being emitted in the merged stream
