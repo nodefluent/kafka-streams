@@ -8,7 +8,7 @@
     "obs-test": "mocha test/unit/Observable.test.js",
     "test-unit": "istanbul cover _mocha -- --recursive -R spec test/unit && istanbul check-coverage --statements 60",
     "test-int": "istanbul cover _mocha -- --recursive -R spec test/int && istanbul check-coverage --statements 70",
-    "test": "npm run test-int"
+    "test": "npm run test-unit && npm run test-int"
   },
   "repository": {
     "type": "git",
