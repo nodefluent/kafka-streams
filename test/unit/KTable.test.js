@@ -33,7 +33,7 @@ describe("KTable UNIT", function() {
             .atThroughput(21, () => {
 
                 const messages = factory.lastProducer.producedMessages;
-                console.log(messages);
+                //console.log(messages);
 
                 source.getTable().then(data => {
 
@@ -63,7 +63,8 @@ describe("KTable UNIT", function() {
                     source.replay();
                 });
             })
-            .to("streams-wordcount-output");
+          .tap(console.log)
+          .to("streams-wordcount-output");
 
         source.start();
 

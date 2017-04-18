@@ -7,7 +7,7 @@ const kafkaStreams = new KafkaStreams(config);
 const stream = kafkaStreams.getKStream("my-input-topic");
 
 //adding a side effect call to the stream via tap
-stream.tap(message => {
+stream.forEach(message => {
     console.log(message);
 });
 

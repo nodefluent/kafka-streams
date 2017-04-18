@@ -74,7 +74,7 @@ describe("Observable2 UNIT", function(){
 
         stream2$.forEach(kv => console.log(kv));
 
-        const stream3$ = stream1$.merge(stream2$);
+        const stream3$ = stream1$.multicast().merge(stream2$.multicast());
 
         stream3$.forEach(value => {
             console.log(value);

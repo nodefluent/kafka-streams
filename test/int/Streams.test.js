@@ -194,7 +194,10 @@ describe("Streams Integration", function() {
             .mapWrapKafkaPayload()
             .mapStringToKV()
             .filter(kv => kv.key == "two")
-            .countByKey();
+            .countByKey()
+            .chainForEach(m => {
+              console.log(m);
+            });
 
         const mergedStream = firstStream.merge(secondStream);
 
