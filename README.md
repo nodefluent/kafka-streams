@@ -4,18 +4,23 @@
 
 > (stateful) kafka stream processing 100% nodejs
 
-[kafka-streams](http://docs.confluent.io/3.0.0/streams) :octopus: equivalent for nodejs :turtle: :rocket:  
-build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:  
-ships with [sinek](https://github.com/krystianity/node-sinek) :pray: for backpressure  
-overwriteable local-storage solution allows for any kind of datastore e.g. RocksDB, Redis, Postgres..  
-async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyncMap()`  
-super easy API :goberserk:   
-the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
-therefore it still requires a zookeeper connection (dont worry, your offset will be stored
-in the kafka broker)
+## Overview
+
+* [Prerequisites](#prerequisites)
+* [Aim of this Library](#aim-of-this-library)
+* [Description](#description)
+* [Port Progress Overview](#port-progress-overview)
+* [Operator Implementations](#operator-implementations)
+* [Additional Operators](#additional-operators)
+* [Join Operators Status](#join-operations)
+* [Stream Action Implementations](#stream-action-implementations)
+* [FAQ - More](#more)
+* [API Docs](docs/api.md)
+* [Operator descriptions](docs/most-api.md)
+* [Examples](https://github.com/krystianity/kafka-streams/tree/master/examples)
 
 ## Prerequisites
-- kafka broker should be version `>= 0.9.x` 
+- kafka broker should be version `>= 0.9.x`
 - nodejs should be version `>= 6.10`
 
 ## Aim of this Library
@@ -26,13 +31,34 @@ a nodejs developer that kafka-streams provides for JVM developers
 - stream-state processing, table representation, joins, aggregate etc.
 I am aiming for the easiest api access possible checkout the [word count example](https://github.com/krystianity/kafka-streams/blob/master/examples/wordCount.js)
 
-## Progress Overview (Port Adaption)
+## Description
+
+[kafka-streams](http://docs.confluent.io/3.0.0/streams) :octopus: equivalent for nodejs :sparkles::turtle::rocket::sparkles:
+build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:
+
+ships with [sinek](https://github.com/krystianity/node-sinek) :pray: for backpressure
+
+the lib also comes with a few `window` operations that are more similar to [Apache Flink](https://flink.apache.org/),
+yet they still feel natural in this api :squirrel:
+
+overwriteable local-storage solution allows for any kind of datastore e.g. RocksDB, Redis, Postgres..
+
+async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyncMap()`
+
+super easy API :goberserk:
+
+the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
+therefore it still requires a zookeeper connection (dont worry, your offset will be stored
+in the kafka broker)
+
+## Port Progress Overview
 
 - [x] core structure
-- [x] KStream - stream as a changelog
-- [x] KTable - stream as a database
+- [x] KStream base - stream as a changelog
+- [x] KTable base - stream as a database
 - [x] complex stream join structure
-- [ ] windows (for joins)
+- [ ] advanced joins [see](#join-operations)
+- [ ] windows (for joins) [see](#join-operations)
 - [x] word-count example
 - [x] more examples
 - [x] local-storage for etl actions
@@ -44,11 +70,11 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [x] stream for topic message production only
 - [x] sinek implementation
 - [ ] backpressure mode for KafkaClient
-- [ ] auto-json payloads (read-map/write-map)
+- [x] auto-json payloads (read-map/write-map)
+- [ ] auto producer partition and keyed-message handling
 - [ ] documentation
 - [ ] API description
 - [ ] higher join & combine examples
-- [ ] ..
 
 ## Operator Implementations
 
@@ -56,7 +82,7 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [ ] constant
 - [ ] scan
 - [ ] ap
-- [ ] timestamp
+- [x] timestamp
 - [x] tap
 - [x] filter
 - [x] skipRepeats
@@ -84,6 +110,7 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [ ] debounce
 - [ ] delay
 - [x] multicast
+A description of the operators can be found [here](docs/most-api.md)
 
 ## Additional Operators
 
@@ -93,21 +120,42 @@ I am aiming for the easiest api access possible checkout the [word count example
 - [x] mapParse
 - [x] mapStringify
 - [x] atThroughput
-- Want more? Feel free to open an issue :cop:
+Want more? Feel free to open an issue :cop:
 
 ## Join Operations
+
+### KStream Status
+
 - [x] merge
+- [x] window
 - [ ] outerJoin
 - [ ] innerJoin
 - [ ] leftJoin
-- Want more? Feel free to open an issue :cop:
+
+### KTable Status
+
+- [ ] merge
+- [ ] window
+- [ ] outerJoin
+- [ ] innerJoin
+- [ ] leftJoin
+
+### KTable <-> KStream Status
+
+- [ ] merge
+- [ ] window
+- [ ] outerJoin
+- [ ] innerJoin
+- [ ] leftJoin
 
 ## Stream Action Implementations
 
 - [x] countByKey
 - [x] sumByKey
 - [ ] ..
-- Want more? Feel free to open an issue :cop:
+Want more? Feel free to open an issue :cop:
+
+# More
 
 ## Can I use this library yet?
 
@@ -117,6 +165,6 @@ No, but very soon (aiming for end of April 2017).
 
 No, please have some more patience :smile:
 
-## More
+## Even More
 
 Forks or Stars give motivation :bowtie:

@@ -277,4 +277,60 @@ describe("Streams Integration", function() {
         assert(consumed < 13.3e6, true);
         done();
     });
+
+    it("should be able to reset the consumer config", function(done){
+        kafkaStreams.config.groupId += "-1"; //makes topics re-readable
+        setTimeout(done, 1);
+    });
+
+    it("should be able to build a window", function(done){
+
+        const inputStream = kafkaStreams.getKStream(null);
+
+        const from = Date.now() + 10;
+        const to = Date.now() + 610;
+
+        const {stream, window} = inputStream.window(from, to);
+
+        let count = 0;
+        setInterval(() => {
+            count++;
+            inputStream.writeToStream(`elmo1 ${count}.`);
+        }, 100);
+
+        stream
+            .take(6) //end this stream, since dsl.replace..() will hold it open
+            .forEach(console.log)
+            .then(_ => {
+                assert.equal(window.container.length, 6);
+                done();
+            });
+    });
+
+    it("should be able to abort a running window", function(done){
+
+        const inputStream = kafkaStreams.getKStream(null);
+
+        const from = Date.now() + 10;
+        const to = Date.now() + 610;
+
+        const {stream, abort, window} = inputStream.window(from, to);
+
+        let count = 0;
+        setInterval(() => {
+            count++;
+            inputStream.writeToStream(`elmo2 ${count}.`);
+        }, 100);
+
+        setTimeout(abort, 305);
+
+        stream
+            .take(3) //end this stream, since dsl.replace..() will hold it open
+            .forEach(console.log)
+            .then(_ => {
+                assert.equal(window.container.length, 3);
+                done();
+            });
+    });
+
 });

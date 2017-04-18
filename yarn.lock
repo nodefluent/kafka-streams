@@ -2,29 +2,23 @@
 # yarn lockfile v1
 
 
-"@most/create@~2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@most/create/-/create-2.0.1.tgz#29156589638fa4ed12620203c7a698d6951a348f"
-  dependencies:
-    "@most/multicast" "^1.2.4"
-
 "@most/multicast@^1.2.4", "@most/multicast@^1.2.5":
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/@most/multicast/-/multicast-1.2.5.tgz#ba5abc997f9a6511094bec117914f4959720a8fb"
   dependencies:
     "@most/prelude" "^1.4.0"
 
-"@most/prelude@^1.4.0":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@most/prelude/-/prelude-1.5.2.tgz#0290fd316684db00712b41656fb29ba3cd07d59c"
+"@most/prelude@^1.4.0", "@most/prelude@^1.4.1":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@most/prelude/-/prelude-1.6.0.tgz#4256e3a902ddf04c1f07afca2267526195072e13"
 
 abbrev@1, abbrev@1.0.x:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.0.9.tgz#91b4792588a7738c25f35dd6f63752a2f8776135"
 
 ajv@^4.9.1:
-  version "4.11.6"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.6.tgz#947e93049790942b2a2d60a8289b28924d39f987"
+  version "4.11.7"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.7.tgz#8655a5d86d0824985cc471a1d913fb6729a0ec48"
   dependencies:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
@@ -474,7 +468,7 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-glob@7.0.5, glob@^7.0.3, glob@^7.0.5:
+glob@7.0.5, glob@^7.0.3:
   version "7.0.5"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.0.5.tgz#b4202a69099bbb4d292a7c1b95b6682b67ebdc95"
   dependencies:
@@ -855,7 +849,15 @@ morgan@~1.8.1:
     on-finished "~2.3.0"
     on-headers "~1.0.1"
 
-"most@ ~1.2.2":
+most-subject@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/most-subject/-/most-subject-5.3.0.tgz#3a6e3efd436fa93bd8b33c2a239c9088230a6102"
+  dependencies:
+    "@most/multicast" "^1.2.4"
+    "@most/prelude" "^1.4.1"
+    most "^1.1.0"
+
+"most@ ~1.2.2", most@^1.1.0:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/most/-/most-1.2.2.tgz#8f12e434ad6195ed2e1efb3ec217e0cbcf3e1de8"
   dependencies:
@@ -1098,13 +1100,7 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@2:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.1.tgz#c2338ec643df7a1b7fe5c54fa86f57428a55f33d"
-  dependencies:
-    glob "^7.0.5"
-
-rimraf@~2.4.0:
+rimraf@2, rimraf@~2.4.0:
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.4.5.tgz#ee710ce5d93a8fdb856fb5ea8ff0e2d75934b2da"
   dependencies:

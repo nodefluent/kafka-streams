@@ -1,12 +1,12 @@
 {
   "name": "kafka-streams",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "kafka-streams for nodejs",
   "main": "index.js",
   "scripts": {
     "word-count": "node ./examples/wordCount.js",
     "obs-test": "mocha test/unit/Observable.test.js",
-    "test-unit": "istanbul cover _mocha -- --recursive -R spec test/unit && istanbul check-coverage --statements 60",
+    "test-unit": "istanbul cover _mocha -- --recursive -R spec test/unit",
     "test-int": "istanbul cover _mocha -- --recursive -R spec test/int && istanbul check-coverage --statements 70",
     "test": "npm run test-unit && npm run test-int"
   },
@@ -27,7 +27,10 @@
     "map",
     "flat",
     "filter",
-    "reduce"
+    "reduce",
+    "flink",
+    "window",
+    "combine"
   ],
   "author": "Christian Froehlingsdorf <chris@5cf.de>",
   "license": "MIT",
@@ -36,16 +39,16 @@
   },
   "homepage": "https://github.com/krystianity/kafka-streams#readme",
   "dependencies": {
-    "@most/create": "~2.0.1",
     "bluebird": "~3.5.0",
     "most": " ~1.2.2",
+    "most-subject": "^5.3.0",
     "sinek": "~3.4.0"
   },
   "devDependencies": {
     "istanbul": "~0.4.2",
+    "log4bro": "~2.0.1",
     "mocha": "~3.2.0",
     "proxyquire": "~1.7.11",
-    "uuid": "~3.0.1",
-    "log4bro": "~2.0.1"
+    "uuid": "~3.0.1"
   }
 }
