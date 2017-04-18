@@ -1,5 +1,5 @@
-most.js API [taken from](https://github.com/cujojs/most/blob/master/docs/api.md)
-==========================
+most.js API [taken from here](https://github.com/cujojs/most/blob/master/docs/api.md)
+===========================
 
 1. Reading these docs
 	* [Notation](#notation)

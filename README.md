@@ -110,7 +110,7 @@ in the kafka broker)
 - [ ] debounce
 - [ ] delay
 - [x] multicast
-A description of the operators can be found [here](docs/most-api.md)
+- A description of the operators can be found [here](docs/most-api.md)
 
 ## Additional Operators
 
@@ -120,7 +120,7 @@ A description of the operators can be found [here](docs/most-api.md)
 - [x] mapParse
 - [x] mapStringify
 - [x] atThroughput
-Want more? Feel free to open an issue :cop:
+- Want more? Feel free to open an issue :cop:
 
 ## Join Operations
 
@@ -153,7 +153,7 @@ Want more? Feel free to open an issue :cop:
 - [x] countByKey
 - [x] sumByKey
 - [ ] ..
-Want more? Feel free to open an issue :cop:
+- Want more? Feel free to open an issue :cop:
 
 # More
 
