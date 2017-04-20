@@ -71,7 +71,7 @@ in the kafka broker)
 - [x] sinek implementation
 - [ ] backpressure mode for KafkaClient
 - [x] auto-json payloads (read-map/write-map)
-- [ ] auto producer partition and keyed-message handling
+- [x] auto producer partition and keyed-message handling
 - [ ] documentation
 - [ ] API description
 - [ ] higher join & combine examples
