@@ -341,9 +341,9 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to produce a million messages to a topic", function(done){
-        this.timeout(180000);
+        this.timeout(210000);
 
-        const partitionCount = isTravis ? 10 : 1;
+        const partitionCount = isTravis ? 3 : 1;
         const stream  = kafkaStreams.getKStream(null);
         stream
             .to(trafficTopic, partitionCount, stream.PRODUCE_TYPES.BUFFER_FORMAT);
@@ -418,13 +418,14 @@ describe("Streams Integration", function() {
     });
 
     it("should wait a few moments", function(done){
-        setTimeout(done, 500);
+        this.timeout(5000);
+        setTimeout(done, isTravis ? 4900 : 500);
     });
 
     it("should be able to consume a decent amount of memory after large consumption", function(done){
         const consumed = getMemory() - subMemory;
         console.log("consumed additional memory: " + consumed + " bytes");
-        assert(consumed < 100e6, true);
+        assert(consumed < (isTravis ? 310e6 : 61e6), true);
         done();
     });
 });
