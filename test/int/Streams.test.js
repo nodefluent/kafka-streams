@@ -394,7 +394,7 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to stream a million messages with attached operations", function(done){
-        this.timeout(120000);
+        this.timeout(210000);
 
         const stream = kafkaStreams.getKStream(trafficTopic);
 
