@@ -341,9 +341,9 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to produce a million messages to a topic", function(done){
-        this.timeout(120000);
+        this.timeout(180000);
 
-        const partitionCount = isTravis ? 50 : 1;
+        const partitionCount = isTravis ? 10 : 1;
         const stream  = kafkaStreams.getKStream(null);
         stream
             .to(trafficTopic, partitionCount, stream.PRODUCE_TYPES.BUFFER_FORMAT);
@@ -372,7 +372,7 @@ describe("Streams Integration", function() {
 
         stream.start().then(_ => {
 
-            const batchSize = 25000;
+            const batchSize = isTravis ? 20000 : 25000; // absolute max is 30 000 per second here
             const operationCount = millionMessageCount / batchSize;
 
             const operations = Array(operationCount).fill(undefined);
@@ -389,11 +389,12 @@ describe("Streams Integration", function() {
     });
 
     it("should wait a few moments for messages to arrive", function(done){
-        setTimeout(done, 1000);
+        this.timeout(5000);
+        setTimeout(done, isTravis ? 4900 : 500);
     });
 
     it("should be able to stream a million messages with attached operations", function(done){
-        this.timeout(60000);
+        this.timeout(120000);
 
         const stream = kafkaStreams.getKStream(trafficTopic);
 
