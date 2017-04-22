@@ -3,8 +3,9 @@
 const assert = require("assert");
 const uuid = require("uuid");
 const v8 = require("v8");
+const async = require("async");
 
-const {KafkaStreams} = require("./../../index.js");
+const {KafkaStreams, KafkaClient} = require("./../../index.js");
 const config = require("./../test-config.js");
 
 describe("Streams Integration", function() {
@@ -20,13 +21,18 @@ describe("Streams Integration", function() {
     }
 
     const startMemory = getMemory();
+    let subMemory = null;
 
+    const isTravis = !!process.env.KST_TOPIC || false;
     const roundId = process.env.KST_TOPIC || uuid.v4();
     const inputTopic = "ks-input-" + roundId;
     const secondTopic = "ks-second-" + roundId;
     const thirdTopic = "ks-third-" + roundId;
     const fourthTopic = "ks-fourth-" + roundId;
     const outputTopic = "ks-output-" + roundId;
+    const trafficTopic = "ks-traffic-" + roundId;
+
+    const millionMessageCount = isTravis ? 1e6 : 1e5;
 
     const kafkaStreams = new KafkaStreams(config);
 
@@ -271,13 +277,6 @@ describe("Streams Integration", function() {
         done();
     });
 
-    it("should be able to consume a decent amount of memory", function(done){
-        const consumed = getMemory() - startMemory;
-        console.log("consumed additional memory: " + consumed + " bytes");
-        assert(consumed < 13.3e6, true);
-        done();
-    });
-
     it("should be able to reset the consumer config", function(done){
         kafkaStreams.config.groupId += "-1"; //makes topics re-readable
         setTimeout(done, 1);
@@ -333,4 +332,98 @@ describe("Streams Integration", function() {
             });
     });
 
+    it("should be able to consume a decent amount of memory", function(done){
+        subMemory = getMemory();
+        const consumed = subMemory - startMemory;
+        console.log("consumed additional memory: " + consumed + " bytes");
+        assert(consumed < 13.3e6, true);
+        done();
+    });
+
+    it("should be able to produce a million messages to a topic", function(done){
+        this.timeout(120000);
+
+        const partitionCount = isTravis ? 50 : 1;
+        const stream  = kafkaStreams.getKStream(null);
+        stream
+            .to(trafficTopic, partitionCount, stream.PRODUCE_TYPES.BUFFER_FORMAT);
+
+        let count = 0;
+        const intv = setInterval(_ => {
+            console.log("produce count: " + count);
+            console.log("total published: " + stream.getStats().producer.totalPublished);
+        }, 2200);
+
+        function sendBatch(size, callback){
+            const operations = Array(size).fill(undefined);
+            async.eachLimit(operations, 1, (_, _callback) => {
+
+                stream.writeToStream({
+                    "message": "bla-bla-bla",
+                    "stuff": KafkaClient._getRandomIntInclusive(1e1, 1e5)
+                });
+
+                process.nextTick(() => {
+                    count++;
+                    _callback();
+                });
+            }, callback);
+        }
+
+        stream.start().then(_ => {
+
+            const batchSize = 25000;
+            const operationCount = millionMessageCount / batchSize;
+
+            const operations = Array(operationCount).fill(undefined);
+            async.eachLimit(operations, 1, (_, callback) => {
+                sendBatch(batchSize, () => {
+                    setTimeout(callback, 1000);
+                });
+            }, _ => {
+                console.log("produce count-final: " + count);
+                clearInterval(intv);
+                done();
+            });
+        });
+    });
+
+    it("should wait a few moments for messages to arrive", function(done){
+        setTimeout(done, 1000);
+    });
+
+    it("should be able to stream a million messages with attached operations", function(done){
+        this.timeout(60000);
+
+        const stream = kafkaStreams.getKStream(trafficTopic);
+
+        let count = 0;
+        const intv = setInterval(_ => {
+            console.log("consumed count: " + count);
+        }, 2000);
+
+        stream
+            .mapParse()
+            .map(m => m.value)
+            .tap(_ => {
+                count++;
+            }).atThroughput(millionMessageCount, _ => {
+                console.log("consumed count: " + count);
+                clearInterval(intv);
+                done();
+            }).forEach(_ => {});
+
+        stream.start();
+    });
+
+    it("should wait a few moments", function(done){
+        setTimeout(done, 500);
+    });
+
+    it("should be able to consume a decent amount of memory after large consumption", function(done){
+        const consumed = getMemory() - subMemory;
+        console.log("consumed additional memory: " + consumed + " bytes");
+        assert(consumed < 100e6, true);
+        done();
+    });
 });
