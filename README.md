@@ -100,12 +100,11 @@ in the kafka broker)
 - [x] forEach (observe)
 - [x] chainForEach
 - [x] drain
-- [ ] combine
-- [ ] sample
-- [ ] sampleWith
 - [x] _zip
 - [x] _merge
 - [x] _join
+- [x] _combine
+- [x] _sample
 - [ ] switch
 - [ ] throttle
 - [ ] debounce
