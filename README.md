@@ -187,7 +187,7 @@ in the kafka broker)
 
 ## Can I use this library yet?
 
-No, but very soon (aiming for end of April 2017).
+Yes.
 
 ## Are we ready for production yet?
 
