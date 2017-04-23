@@ -82,16 +82,15 @@ in the kafka broker)
 - [x] map + asyncMap
 - [x] constant
 - [x] scan
-- [ ] ap
 - [x] timestamp
 - [x] tap
 - [x] filter
 - [x] skipRepeats
 - [x] skipRepeatsWith
-- [ ] slice
+- [x] slice
 - [x] take
 - [x] skip
-- [ ] takeWhile
+- [x] takeWhile
 - [ ] skipWhile
 - [ ] until
 - [ ] since
@@ -112,6 +111,7 @@ in the kafka broker)
 - [ ] delay
 - [x] multicast
 - A description of the operators can be found [here](docs/most-api.md)
+- Missing an operator? Feel free to open an issue :cop:
 
 ## Additional Operators
 
