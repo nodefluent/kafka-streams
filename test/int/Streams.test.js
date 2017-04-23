@@ -31,7 +31,7 @@ describe("Streams Integration", function() {
     const outputTopic = "ks-output-" + roundId;
     const trafficTopic = "ks-traffic-" + roundId;
 
-    const millionMessageCount = isTravis ? 3e5 : 1e5;
+    const millionMessageCount = isTravis ? 5e4 : 1e5;
 
     const kafkaStreams = new KafkaStreams(config);
 
@@ -389,7 +389,7 @@ describe("Streams Integration", function() {
 
         stream.start().then(_ => {
 
-            const batchSize = isTravis ? 20000 : 25000; // absolute max is 30 000 per second here
+            const batchSize = isTravis ? 10000 : 25000; // absolute max is 30 000 per second here
             const operationCount = millionMessageCount / batchSize;
 
             const operations = Array(operationCount).fill(undefined);

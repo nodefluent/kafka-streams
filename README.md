@@ -2,9 +2,13 @@
 
 [![Build Status](https://travis-ci.org/krystianity/kafka-streams.svg?branch=master)](https://travis-ci.org/krystianity/kafka-streams)
 
+```
+npm install kafka-streams
+```
+
 ```es6
-// npm i kafka-streams
 const {KafkaStreams} = require("kafka-streams");
+
 const config = require("./config.json");
 const factory = new KafkaStreams(config);
 
