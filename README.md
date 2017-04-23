@@ -92,7 +92,7 @@ in the kafka broker)
 - [x] skip
 - [x] takeWhile
 - [x] skipWhile
-- [ ] until
+- [x] until
 - [ ] since
 - [ ] during
 - [ ] thru
