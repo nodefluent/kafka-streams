@@ -2,9 +2,26 @@
 
 [![Build Status](https://travis-ci.org/krystianity/kafka-streams.svg?branch=master)](https://travis-ci.org/krystianity/kafka-streams)
 
-> (stateful) kafka stream processing 100% nodejs
+```es6
+// npm i kafka-streams
+const {KafkaStreams} = require("kafka-streams");
+const config = require("./config.json");
+const factory = new KafkaStreams(config);
 
-## Overview
+const kstream = factory.getKStream(..);
+const ktable = factory.getKTable(..);
+
+kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
+```
+
+## API Overview
+
+* [Quick Start](docs/quick-start.md)
+* [API Docs](docs/api.md)
+* [Operator descriptions](docs/most-api.md)
+* [Examples](https://github.com/krystianity/kafka-streams/tree/master/examples)
+
+## README Overview
 
 * [Prerequisites](#prerequisites)
 * [Aim of this Library](#aim-of-this-library)
@@ -12,12 +29,10 @@
 * [Port Progress Overview](#port-progress-overview)
 * [Operator Implementations](#operator-implementations)
 * [Additional Operators](#additional-operators)
-* [Join Operators Status](#join-operations)
 * [Stream Action Implementations](#stream-action-implementations)
+* [Join Operators Status](#join-operations)
+* [Window Operations](#window-operations)
 * [FAQ - More](#more)
-* [API Docs](docs/api.md)
-* [Operator descriptions](docs/most-api.md)
-* [Examples](https://github.com/krystianity/kafka-streams/tree/master/examples)
 
 ## Prerequisites
 - kafka broker should be version `>= 0.9.x`
