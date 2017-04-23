@@ -152,6 +152,8 @@ in the kafka broker)
 
 - [x] countByKey
 - [x] sumByKey
+- [x] min
+- [x] max
 - [ ] ..
 - Want more? Feel free to open an issue :cop:
 
