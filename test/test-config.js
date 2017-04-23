@@ -12,9 +12,9 @@ const config = {
         sessionTimeout: 8000,
         protocol: ["roundrobin"],
         fromOffset: "earliest", //latest
-        fetchMaxBytes: 1024 * 100,
+        fetchMaxBytes: 1024 * 25,
         fetchMinBytes: 1,
-        fetchMaxWaitMs: 10,
+        fetchMaxWaitMs: 100,
         heartbeatInterval: 250,
         retryMinTimeout: 250,
         autoCommit: true,

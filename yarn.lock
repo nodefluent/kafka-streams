@@ -1138,9 +1138,9 @@ signal-exit@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-sinek@~3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/sinek/-/sinek-3.7.0.tgz#076dfbf66e7e2182a576737cc1175d2da16cfd04"
+sinek@~3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/sinek/-/sinek-3.8.0.tgz#e860d2fca2c66e27d7129e5ad8f2674dfc446159"
   dependencies:
     async "~2.3.0"
     bluebird "~3.5.0"

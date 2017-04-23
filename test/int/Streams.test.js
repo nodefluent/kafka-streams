@@ -21,7 +21,6 @@ describe("Streams Integration", function() {
     }
 
     const startMemory = getMemory();
-    let subMemory = null;
 
     const isTravis = !!process.env.KST_TOPIC || false;
     const roundId = process.env.KST_TOPIC || uuid.v4();
@@ -35,6 +34,10 @@ describe("Streams Integration", function() {
     const millionMessageCount = isTravis ? 1e6 : 1e5;
 
     const kafkaStreams = new KafkaStreams(config);
+
+    let subMemory = null;
+    let millionMin = 1e10;
+    let millionMax = -1;
 
     after(function(done){
         kafkaStreams.closeAll();
@@ -354,13 +357,27 @@ describe("Streams Integration", function() {
             console.log("total published: " + stream.getStats().producer.totalPublished);
         }, 2200);
 
+        function getRandomInt(){
+            const val = KafkaClient._getRandomIntInclusive(1e1, 1e9);
+
+            if(millionMax < val){
+                millionMax = val;
+            }
+
+            if(millionMin > val){
+                millionMin = val;
+            }
+
+            return val;
+        }
+
         function sendBatch(size, callback){
             const operations = Array(size).fill(undefined);
             async.eachLimit(operations, 1, (_, _callback) => {
 
                 stream.writeToStream({
                     "message": "bla-bla-bla",
-                    "stuff": KafkaClient._getRandomIntInclusive(1e1, 1e5)
+                    "stuff": getRandomInt()
                 });
 
                 process.nextTick(() => {
@@ -404,14 +421,27 @@ describe("Streams Integration", function() {
         }, 2000);
 
         stream
-            .mapParse()
             .map(m => m.value)
+            .mapParse()
+            .map(m => m.payload)
+            .min("stuff")
+            .max("stuff")
             .tap(_ => {
                 count++;
             }).atThroughput(millionMessageCount, _ => {
                 console.log("consumed count: " + count);
                 clearInterval(intv);
-                done();
+
+                Promise.all([stream.getStorage().getMin(), stream.getStorage().getMax()])
+                    .then(([min, max]) => {
+                        console.log(min, max);
+
+                        assert.equal(millionMin, min);
+                        assert.equal(millionMax, max);
+
+                        done();
+                    });
+
             }).forEach(_ => {});
 
         stream.start();
