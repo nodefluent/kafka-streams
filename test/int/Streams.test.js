@@ -31,7 +31,7 @@ describe("Streams Integration", function() {
     const outputTopic = "ks-output-" + roundId;
     const trafficTopic = "ks-traffic-" + roundId;
 
-    const millionMessageCount = isTravis ? 1e6 : 1e5;
+    const millionMessageCount = isTravis ? 3e5 : 1e5;
 
     const kafkaStreams = new KafkaStreams(config);
 

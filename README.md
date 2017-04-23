@@ -120,6 +120,18 @@ in the kafka broker)
 - [x] mapParse
 - [x] mapStringify
 - [x] atThroughput
+- [x] mapWrapKafkaPayload
+- [x] mapToFormat
+- [x] mapFromFormat
+- Want more? Feel free to open an issue :cop:
+
+## Stream Action Implementations
+
+- [x] countByKey
+- [x] sumByKey
+- [x] min
+- [x] max
+- [ ] ..
 - Want more? Feel free to open an issue :cop:
 
 ## Join Operations
@@ -147,15 +159,6 @@ in the kafka broker)
 - [ ] outerJoin
 - [ ] innerJoin
 - [ ] leftJoin
-
-## Stream Action Implementations
-
-- [x] countByKey
-- [x] sumByKey
-- [x] min
-- [x] max
-- [ ] ..
-- Want more? Feel free to open an issue :cop:
 
 # More
 
