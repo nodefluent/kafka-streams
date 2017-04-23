@@ -59,6 +59,7 @@ in the kafka broker)
 - [x] complex stream join structure
 - [ ] advanced joins [see](#join-operations)
 - [ ] windows (for joins) [see](#join-operations)
+- [ ] flink like window operations
 - [x] word-count example
 - [x] more examples
 - [x] local-storage for etl actions
