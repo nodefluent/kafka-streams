@@ -105,8 +105,7 @@ in the kafka broker)
 - [x] _join
 - [x] _combine
 - [x] _sample
-- [ ] switch
-- [ ] throttle
+- [x] throttle
 - [ ] debounce
 - [ ] delay
 - [x] multicast
