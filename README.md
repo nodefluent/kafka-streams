@@ -80,8 +80,8 @@ in the kafka broker)
 ## Operator Implementations
 
 - [x] map + asyncMap
-- [ ] constant
-- [ ] scan
+- [x] constant
+- [x] scan
 - [ ] ap
 - [x] timestamp
 - [x] tap
