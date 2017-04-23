@@ -36,8 +36,8 @@ describe("Streams Integration", function() {
     const kafkaStreams = new KafkaStreams(config);
 
     let subMemory = null;
-    let millionMin = 1e10;
-    let millionMax = -1;
+    let millionMin = 10000;
+    let millionMax = 1;
 
     after(function(done){
         kafkaStreams.closeAll();
@@ -286,6 +286,7 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to build a window", function(done){
+        this.timeout(25000);
 
         const inputStream = kafkaStreams.getKStream(null);
 
@@ -310,6 +311,7 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to abort a running window", function(done){
+        this.timeout(25000);
 
         const inputStream = kafkaStreams.getKStream(null);
 
@@ -358,7 +360,7 @@ describe("Streams Integration", function() {
         }, 2200);
 
         function getRandomInt(){
-            const val = KafkaClient._getRandomIntInclusive(1e1, 1e9);
+            const val = KafkaClient._getRandomIntInclusive(1000, 100000000);
 
             if(millionMax < val){
                 millionMax = val;

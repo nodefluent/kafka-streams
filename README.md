@@ -1,9 +1,10 @@
 # kafka-streams
 
 [![Build Status](https://travis-ci.org/krystianity/kafka-streams.svg?branch=master)](https://travis-ci.org/krystianity/kafka-streams)
+[![npm version](https://badge.fury.io/js/kafka-streams.svg)](https://badge.fury.io/js/kafka-streams)
 
 ```
-npm install kafka-streams
+npm install --save kafka-streams
 ```
 
 ```es6
