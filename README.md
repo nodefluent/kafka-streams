@@ -99,7 +99,7 @@ in the kafka broker)
 - [x] chainReduce
 - [x] forEach (observe)
 - [x] chainForEach
-- [ ] drain
+- [x] drain
 - [ ] combine
 - [ ] sample
 - [ ] sampleWith
