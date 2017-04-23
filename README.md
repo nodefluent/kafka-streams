@@ -132,7 +132,6 @@ in the kafka broker)
 - [x] sumByKey
 - [x] min
 - [x] max
-- [ ] ..
 - Want more? Feel free to open an issue :cop:
 
 ## Join Operations
@@ -140,26 +139,29 @@ in the kafka broker)
 ### KStream Status
 
 - [x] merge
-- [x] window
 - [ ] outerJoin
 - [ ] innerJoin
 - [ ] leftJoin
 
 ### KTable Status
 
-- [ ] merge
-- [ ] window
+- [x] merge
 - [ ] outerJoin
 - [ ] innerJoin
 - [ ] leftJoin
 
 ### KTable <-> KStream Status
 
-- [ ] merge
-- [ ] window
+- [x] merge
 - [ ] outerJoin
 - [ ] innerJoin
 - [ ] leftJoin
+
+## Window Operations
+
+### KStream
+
+- [x] window
 
 # More
 

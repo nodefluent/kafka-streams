@@ -1,6 +1,6 @@
 {
   "name": "kafka-streams",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "description": "kafka-streams for nodejs",
   "main": "index.js",
   "scripts": {
