@@ -79,7 +79,8 @@ in the kafka broker)
 
 ## Operator Implementations
 
-- [x] map + asyncMap
+- [x] map
+- [x] asyncMap
 - [x] constant
 - [x] scan
 - [x] timestamp
@@ -94,18 +95,18 @@ in the kafka broker)
 - [x] skipWhile
 - [x] until
 - [x] since
-- [ ] during
-- [ ] thru
-- [ ] reduce
-- [x] forEach
+- [x] reduce
+- [x] chainReduce
+- [x] forEach (observe)
+- [x] chainForEach
 - [ ] drain
-- [x] _merge
 - [ ] combine
 - [ ] sample
 - [ ] sampleWith
 - [x] _zip
-- [ ] switch
+- [x] _merge
 - [x] _join
+- [ ] switch
 - [ ] throttle
 - [ ] debounce
 - [ ] delay
