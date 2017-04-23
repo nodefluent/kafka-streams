@@ -107,7 +107,7 @@ in the kafka broker)
 - [x] _sample
 - [x] throttle
 - [x] debounce
-- [ ] delay
+- [x] delay
 - [x] multicast
 - A description of the operators can be found [here](docs/most-api.md)
 - Missing an operator? Feel free to open an issue :cop:
