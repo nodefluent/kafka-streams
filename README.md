@@ -56,6 +56,7 @@ in the kafka broker)
 - [x] core structure
 - [x] KStream base - stream as a changelog
 - [x] KTable base - stream as a database
+- [x] KStream & KTable cloning
 - [x] complex stream join structure
 - [ ] advanced joins [see](#join-operations)
 - [ ] windows (for joins) [see](#join-operations)

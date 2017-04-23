@@ -6,7 +6,7 @@
   "scripts": {
     "word-count": "node ./examples/wordCount.js",
     "obs-test": "mocha test/unit/Observable.test.js",
-    "test-unit": "_mocha -- --recursive -R spec test/unit",
+    "test-unit": "_mocha --recursive -R spec test/unit",
     "test-int": "istanbul cover _mocha -- --recursive --timeout 12500 -R spec test/int && istanbul check-coverage --statements 60",
     "test": "npm run test-unit && npm run test-int"
   },
