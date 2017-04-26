@@ -65,7 +65,7 @@ to offer additional windowing features similar to what Flink offers.
 ## Getting started
 
 A good place to start using this lib is
-the [Quick Start Tutorial](#quick-start), besides the examples.
+the [Quick Start Tutorial](https://github.com/krystianity/kafka-streams/blob/master/docs/quick-start.md), besides the examples.
 
 ## The examples
 
