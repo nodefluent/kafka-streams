@@ -3,16 +3,20 @@ kafka-streams.js Documentation
 
 1. Relation to most.js
     * [Similarities](#relation-to-most)
-    
+
 2. Relation to JAVA (kafka) kafka-streams
     * [Similarities](#relation-to-kafka-streams)
-    
+
 3. Relation to Flink
     * [Similarities](#relation-to-flink)
-    
+
 4. How to get started
    * [Getting started](#getting-started)
    * [Using the examples](#the-examples)
+
+5. Documentation (is still WIP)
+    * [HTML-Documentation](jsdoc/index.html)
+    * [MD-Documenation](doc.md)
 
 # 1. most.js
 
