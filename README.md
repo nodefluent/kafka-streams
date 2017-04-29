@@ -13,7 +13,7 @@ const {KafkaStreams} = require("kafka-streams");
 const config = require("./config.json");
 const factory = new KafkaStreams(config);
 
-const kstream = factory.getKStream(..);
+const kstream = factory.getKStream("input-topic");
 const ktable = factory.getKTable(..);
 
 kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
@@ -95,8 +95,8 @@ in the kafka broker)
 - [ ] backpressure mode for KafkaClient
 - [x] auto-json payloads (read-map/write-map)
 - [x] auto producer partition and keyed-message handling
-- [ ] documentation
-- [ ] API description
+- [x] documentation
+- [x] API description
 - [ ] higher join & combine examples
 
 ## Operator Implementations

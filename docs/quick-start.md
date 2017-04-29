@@ -3,12 +3,12 @@ Quick Start Tutorial
 
 # Requirements
 
-* Before you get started, make sure you have installed NodeJS (at least version 6.10, better latest) 
+* Before you get started, make sure you have installed NodeJS (at least version 6.10, better latest)
 running on your system and a local Zookeeper (:2181) and Kafka Broker (:9092) (if you are running
 these services elsewhere, make sure to adapt the config settings)
-* You can find the latest NodeJS version [here](https://nodejs.org/en/download/) (if you didnt know already)
-* When you are in need of a `handsfree` local kafka setup, just take a look at `/kafka-setup/start.sh` (you will need docker and docker-compose for this to work)
-* Installing kafka-streams in an exsting project (directory with package.json) is quite easy: `npm install --save kafka-streams`
+* You can find the latest NodeJS version [here](https://nodejs.org/en/download/) (if you did not know already)
+* When you are in need of a `local` kafka setup, just take a look at `/kafka-setup/start.sh` (you will need docker and docker-compose for this to work)
+* Installing kafka-streams in an existing project (directory with package.json) is quite easy: `npm install --save kafka-streams`
 
 # Configuration
 
@@ -16,6 +16,7 @@ these services elsewhere, make sure to adapt the config settings)
 {
     zkConStr: "localhost:2181/",
     logger: {
+      debug: msg => console.log(msg),
       info: msg => console.log(msg),
       warn: msg => console.log(msg),
       error: msg => console.error(msg)
@@ -43,7 +44,7 @@ these services elsewhere, make sure to adapt the config settings)
 
 * Config is a simple object that is being passed to the constructor of
 KafkaStreams, which will result an a new Factory for KStreams and KTables on the
-outside and KafkaClients and Storages on the inside.
+outside and KafkaClients and KStorages on the inside.
 
 * The sub-object options supports all settings provided by the `kafka-node`
 module.
@@ -76,7 +77,7 @@ stream.start().then(() => {
 });
 ```
 * Using the factory as base, its simple to create new streams, you can pass a
-topic name as string to `getKStream()` and calling `.start()` (which returns a Promise, 
+topic name as string to `getKStream()` and calling `.start()` (which returns a Promise,
 that will resolve when the Kafka Client is connected & ready to consume messages).
 
 ```es6
@@ -97,7 +98,7 @@ as producer, the promise will then resolve after both, the consumer and the prod
 to the broker successfully.
 
 * Keep in mind that messages which will be produced to Kafka via `.to()` will have to be in a string or
-object format depending on the type: "send", "buffer", "bufferFormat" you pass. Per default the type will be 
+object format depending on the type: "send", "buffer", "bufferFormat" you pass. Per default the type will be
 "send" which requires your events to be a string when reaching the end, using "buffer" or "bufferFormat" will require
 your events to be objects when reaching the end of the stream.
 
@@ -131,8 +132,8 @@ const secondStream = kafkaStreams.getKStream("second-topic");
 const mergedStream = firstStream.merge(secondStream); //new KStream instance
 
 Promise.all([
-    firstStream.start(), 
-    secondStream.start(), 
+    firstStream.start(),
+    secondStream.start(),
     mergedStream.to("merged-topic")
     ])
 .then(() => {
