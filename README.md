@@ -1,5 +1,7 @@
 # kafka-streams
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/krystianity/kafka-streams.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/krystianity/kafka-streams.svg?branch=master)](https://travis-ci.org/krystianity/kafka-streams)
 [![npm version](https://badge.fury.io/js/kafka-streams.svg)](https://badge.fury.io/js/kafka-streams)
 
