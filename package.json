@@ -8,7 +8,10 @@
     "obs-test": "mocha test/unit/Observable.test.js",
     "test-unit": "_mocha --recursive -R spec test/unit",
     "test-int": "istanbul cover _mocha -- --recursive --timeout 12500 -R spec test/int && istanbul check-coverage --statements 60",
-    "test": "npm run test-unit && npm run test-int"
+    "test": "npm run test-unit && npm run test-int",
+    "jsdoc": "rm -r ./docs/jsdoc && jsdoc ./lib --recurse -R ./README.md -d ./docs/jsdoc",
+    "jsdoc2md": "rm ./docs/doc.md && jsdoc2md -f ./lib/**/*.js -d > ./docs/doc.md",
+    "docs": "npm run jsdoc && npm run jsdoc2md"
   },
   "repository": {
     "type": "git",
@@ -50,6 +53,8 @@
     "mocha": "~3.2.0",
     "proxyquire": "~1.7.11",
     "uuid": "~3.0.1",
-    "async": "~2.3.0"
+    "async": "~2.3.0",
+    "jsdoc": "~3.4.3",
+    "jsdoc-to-markdown": "~3.0.0"
   }
 }

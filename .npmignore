@@ -1,0 +1,7 @@
+docs
+.idea
+coverage
+logs
+test
+examples
+kafka-setup
