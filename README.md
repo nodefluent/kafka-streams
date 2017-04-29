@@ -22,7 +22,8 @@ kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
 ## API Overview
 
 * [Quick Start](docs/quick-start.md)
-* [API Docs](docs/api.md)
+* [API Info](docs/api.md)
+* [Documentation](https://krystianity.github.io/kafka-streams/jsdoc/)
 * [Operator descriptions](docs/most-api.md)
 * [Examples](https://github.com/krystianity/kafka-streams/tree/master/examples)
 

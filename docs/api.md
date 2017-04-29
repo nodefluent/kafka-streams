@@ -15,8 +15,8 @@ kafka-streams.js Documentation
    * [Using the examples](#the-examples)
 
 5. Documentation (is still WIP)
-    * [HTML-Documentation](jsdoc/index.html)
-    * [MD-Documenation](doc.md)
+    * [HTML-Documentation](https://krystianity.github.io/kafka-streams/jsdoc/)
+    * [MD-Documentation](doc.md)
 
 # 1. most.js
 
