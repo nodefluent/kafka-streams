@@ -169,7 +169,9 @@ const toKv = message => {
     };
 };
 const table = kafkaStreams.getKTable(kafkaTopicName, toKv);
-table.consumeUntilCount(100); //checkout the topicAsTable.js example for more
+table.consumeUntilCount(100, () => {
+    console.log("topic has been consumed until count of 100 messages.");
+});
 table.start().then(() => {
     console.log("table stream started, as kafka consumer is ready.");
 }, error => {

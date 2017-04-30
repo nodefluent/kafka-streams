@@ -39,11 +39,7 @@ function keyValueMapperEtl(message){
 
 //consume the first 100 messages on the topic to build the table
 table
-    .consumeUntilCount(100)
-    //be aware that any operator you append during this runtime
-    //will apply for any message that is on the stream (in change-log behaviour)
-    //you have to consume the topic first, for it to be present as table
-    .atThroughput(100, () => {
+    .consumeUntilCount(100, () => {
         //fires when 100 messages are consumed
 
         //the table has been built, there are two ways
@@ -64,7 +60,14 @@ table
         //of the internal map onto the stream once again
         table.replay();
 
-        //do not forget to kafkaStreams.closeAll() later..
+        //kafka consumer will be closed automatically
+    })
+    //be aware that any operator you append during this runtime
+    //will apply for any message that is on the stream (in change-log behaviour)
+    //you have to consume the topic first, for it to be present as table
+    .atThroughput(50, () => {
+        //fires once when 50 messages are consumed
+        console.log("consumed 50 messages.");
     });
 
 //start the stream/table
