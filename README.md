@@ -163,7 +163,7 @@ in the kafka broker)
 
 - [x] merge
 - [ ] outerJoin
-- [ ] innerJoin
+- [x] innerJoin
 - [ ] leftJoin
 
 ### KTable Status
