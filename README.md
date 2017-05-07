@@ -1,4 +1,4 @@
-# kafka-streams
+# node-kafka-streams
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/krystianity/kafka-streams.svg)](https://greenkeeper.io/)
 
