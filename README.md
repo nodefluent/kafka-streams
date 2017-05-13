@@ -1,8 +1,6 @@
 # kafka-streams
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/krystianity/kafka-streams.svg)](https://greenkeeper.io/)
-
-[![Build Status](https://travis-ci.org/krystianity/kafka-streams.svg?branch=master)](https://travis-ci.org/krystianity/kafka-streams)
+[![Build Status](https://travis-ci.org/nodefluent/kafka-streams.svg?branch=master)](https://travis-ci.org/nodefluent/kafka-streams)
 [![npm version](https://badge.fury.io/js/kafka-streams.svg)](https://badge.fury.io/js/kafka-streams)
 
 ```
@@ -25,9 +23,9 @@ kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
 
 * [Quick Start](docs/quick-start.md)
 * [API Info](docs/api.md)
-* [Documentation](https://krystianity.github.io/kafka-streams/jsdoc/)
+* [Documentation](https://nodefluent.github.io/kafka-streams/jsdoc/)
 * [Operator descriptions](docs/most-api.md)
-* [Examples](https://github.com/krystianity/kafka-streams/tree/master/examples)
+* [Examples](https://github.com/nodefluent/kafka-streams/tree/master/examples)
 
 ## README Overview
 
@@ -52,14 +50,14 @@ kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
 - the goal of this project is to give at least the same options to
 a nodejs developer that kafka-streams provides for JVM developers
 - stream-state processing, table representation, joins, aggregate etc.
-I am aiming for the easiest api access possible checkout the [word count example](https://github.com/krystianity/kafka-streams/blob/master/examples/wordCount.js)
+I am aiming for the easiest api access possible checkout the [word count example](https://github.com/nodefluent/kafka-streams/blob/master/examples/wordCount.js)
 
 ## Description
 
 [kafka-streams](http://docs.confluent.io/3.0.0/streams) :octopus: equivalent for nodejs :sparkles::turtle::rocket::sparkles:
 build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:
 
-ships with [sinek](https://github.com/krystianity/node-sinek) :pray: for backpressure
+ships with [sinek](https://github.com/nodefluent/node-sinek) :pray: for backpressure
 
 the lib also comes with a few `window` operations that are more similar to [Apache Flink](https://flink.apache.org/),
 yet they still feel natural in this api :squirrel:
@@ -158,6 +156,8 @@ in the kafka broker)
 - Want more? Feel free to open an issue :cop:
 
 ## Join Operations
+
+[Operation description](https://cwiki.apache.org/confluence/display/KAFKA/Kafka+Streams+Join+Semantics)
 
 ### KStream Status
 

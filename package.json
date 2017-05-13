@@ -1,6 +1,6 @@
 {
   "name": "kafka-streams",
-  "version": "1.31.0",
+  "version": "1.31.1",
   "description": "kafka-streams for nodejs",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/krystianity/kafka-streams.git"
+    "url": "git+https://github.com/nodefluent/kafka-streams.git"
   },
   "keywords": [
     "kafka-streams",
@@ -38,9 +38,9 @@
   "author": "Christian Froehlingsdorf <chris@5cf.de>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/krystianity/kafka-streams/issues"
+    "url": "https://github.com/nodefluent/kafka-streams/issues"
   },
-  "homepage": "https://github.com/krystianity/kafka-streams#readme",
+  "homepage": "https://github.com/nodefluent/kafka-streams#readme",
   "dependencies": {
     "bluebird": "~3.5.0",
     "most": "~1.3.0",
