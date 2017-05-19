@@ -461,7 +461,7 @@ describe("Streams Integration", function() {
     it("should be able to consume a decent amount of memory after large consumption", function(done){
         const consumed = getMemory() - subMemory;
         console.log("consumed additional memory: " + consumed + " bytes");
-        assert(consumed < (isTravis ? 310e6 : 61e6), true);
+        assert(consumed < (isTravis ? 350e6 : 100e6), true);
         done();
     });
 });
