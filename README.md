@@ -29,6 +29,11 @@ kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
 * [Operator descriptions](docs/most-api.md)
 * [Examples](https://github.com/nodefluent/kafka-streams/tree/master/examples)
 
+## You might also like
+
+* [node-kafka-connect](https://github.com/nodefluent/kafka-connect)
+* [node-schema-registry](https://github.com/nodefluent/schema-registry)
+
 ## README Overview
 
 * [Prerequisites](#prerequisites)
