@@ -54,7 +54,7 @@
     "proxyquire": "~1.8.0",
     "uuid": "~3.0.1",
     "async": "~2.4.0",
-    "jsdoc": "~3.4.3",
+    "jsdoc": "~3.5.0",
     "jsdoc-to-markdown": "~3.0.0"
   }
 }
