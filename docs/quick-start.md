@@ -14,7 +14,8 @@ these services elsewhere, make sure to adapt the config settings)
 
 ```es6
 {
-    zkConStr: "localhost:2181/",
+    //zkConStr: "localhost:2181/",
+    kafkaHost: "localhost:9092", //either kafkaHost or zkConStr
     logger: {
       debug: msg => console.log(msg),
       info: msg => console.log(msg),

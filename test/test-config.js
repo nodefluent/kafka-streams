@@ -3,7 +3,8 @@
 const log4bro = require("log4bro");
 
 const config = {
-    zkConStr: "localhost:2181/",
+    //zkConStr: "localhost:2181/",
+    kafkaHost: "localhost:9092",
     logger: new log4bro({ level: "INFO" }),
     groupId: "kafka-streams-test",
     clientName: "kafka-streams-test-name",

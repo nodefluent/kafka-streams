@@ -76,8 +76,6 @@ async (Promises) and sync stream operators e.g. `stream$.map()` or `stream$.asyn
 super easy API :goberserk:
 
 the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
-therefore it still requires a zookeeper connection (dont worry, your offset will be stored
-in the kafka broker)
 
 ## Port Progress Overview
 
