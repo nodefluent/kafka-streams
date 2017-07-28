@@ -1,6 +1,6 @@
 {
   "name": "kafka-streams",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "kafka-streams for nodejs",
   "main": "index.js",
   "scripts": {
@@ -45,16 +45,16 @@
     "bluebird": "~3.5.0",
     "most": "~1.5.0",
     "most-subject": "^5.3.0",
-    "sinek": "~5.0.1"
+    "sinek": "^5.2.0"
   },
   "devDependencies": {
+    "async": "~2.5.0",
     "istanbul": "~0.4.2",
+    "jsdoc": "^3.5.3",
+    "jsdoc-to-markdown": "~3.0.0",
     "log4bro": "~3.0.0",
     "mocha": "~3.4.1",
     "proxyquire": "~1.8.0",
-    "uuid": "~3.1.0",
-    "async": "~2.5.0",
-    "jsdoc": "~3.5.1",
-    "jsdoc-to-markdown": "~3.0.0"
+    "uuid": "~3.1.0"
   }
 }
