@@ -3,6 +3,7 @@
 const EventEmitter = require("events");
 const most = require("most");
 const assert = require("assert");
+const debug = require("debug")("kafka-streams:unit:observable2");
 
 class FakeKafka extends EventEmitter {
 
@@ -62,30 +63,30 @@ describe("Observable2 UNIT", function(){
         const stream1$ = most.fromEvent("message", kafka1)
             .map(toKV)
             .flatMap(value => most.fromPromise(slowKeyCount(value)))
-            .tap(kv => console.log("tap1"))
+            .tap(kv => debug("tap1"))
             .multicast();
 
-        stream1$.forEach(kv => console.log(kv));
+        stream1$.forEach(kv => debug(kv));
 
         const stream2$ = most.fromEvent("message", kafka2)
             .map(toKV)
-            .tap(kv => console.log("tap2"))
+            .tap(kv => debug("tap2"))
             .multicast();
 
-        stream2$.forEach(kv => console.log(kv));
+        stream2$.forEach(kv => debug(kv));
 
         const stream3$ = stream1$.multicast().merge(stream2$.multicast());
 
         stream3$.forEach(value => {
-            console.log(value);
+            debug(value);
         });
 
         setTimeout(() => {
             kafka1.fake();
             kafka2.fake2();
             setTimeout(() => {
-                console.log();
-                console.log(countMap);
+                debug();
+                debug(countMap);
 
                 assert.equal(countMap.one, 2);
                 assert.equal(countMap.two, 3);

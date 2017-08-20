@@ -2,6 +2,7 @@
 
 const assert = require("assert");
 const proxyquire = require("proxyquire");
+const debug = require("debug")("kafka-streams:unit:word-count");
 
 const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
@@ -51,7 +52,7 @@ describe("WordCount UNIT", function() {
 
         setTimeout(() => {
             const messages = factory.lastProducer.producedMessages;
-            console.log(messages);
+            debug(messages);
 
             assert.equal(messages[0], 5); //if
             assert.equal(messages[1], 3); //bla

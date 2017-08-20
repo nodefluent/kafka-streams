@@ -2,6 +2,7 @@
 
 const assert = require("assert");
 const proxyquire = require("proxyquire");
+const debug = require("debug")("kafka-streams:unit:ktable");
 
 const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
@@ -41,11 +42,11 @@ describe("KTable UNIT", function() {
                 assert.equal(hitCount - 5 >= 0, true);
 
                 const messages = factory.lastProducer.producedMessages;
-                //console.log(messages);
+                debug(messages);
 
                 source.getTable().then(data => {
 
-                    console.log(data);
+                    debug(data);
 
                     assert.equal(data.derp, 7);
                     assert.equal(data.derpa, 7);
@@ -54,7 +55,7 @@ describe("KTable UNIT", function() {
                     const replays = {};
 
                     source.forEach(kv => {
-                        console.log(kv);
+                        debug(kv);
                         replays[kv.key] = kv.value;
                         if(Object.keys(replays).length === 3){
 
@@ -75,7 +76,7 @@ describe("KTable UNIT", function() {
                 hit++;
                 hitCount = count;
             })
-            .tap(console.log)
+            .tap(debug)
             .to("streams-wordcount-output");
 
         source.start();

@@ -1,6 +1,7 @@
 "use strict";
 
 const FakeKafka = require("./FakeKafka.js");
+const debug = require("debug")("kafka-streams:utils:kafka-stub");
 
 class KafkaFactoryStub {
 
@@ -19,7 +20,7 @@ class KafkaFactoryStub {
     }
 
     getKafkaClient(topic){
-        console.log("KafkaFactoryStub creating KafkaClient for " + topic);
+        debug("KafkaFactoryStub creating KafkaClient for " + topic);
         const kafka = new FakeKafka(topic);
         this.lastConsumer = kafka;
         this.lastProducer = kafka;
