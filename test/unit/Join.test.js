@@ -2,6 +2,7 @@
 
 const assert = require("assert");
 const proxyquire = require("proxyquire");
+const debug = require("debug")("kafka-streams:unit:join");
 
 const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
@@ -71,7 +72,7 @@ describe("Join UNIT", function() {
 
             setTimeout(() => {
                 const messages = factory.lastProducer.producedMessages;
-                console.log(messages);
+                debug(messages);
 
                 assert.equal(messages[0].left.value, "x1");
                 assert.equal(messages[0].left.value, messages[0].right.value);

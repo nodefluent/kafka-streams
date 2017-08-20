@@ -1,6 +1,7 @@
 "use strict";
 
 const {async} = require("most-subject");
+const debug = require("debug")("kafka-streams:unit:subject")
 
 describe("Subject UNIT", function(){
 
@@ -13,6 +14,6 @@ describe("Subject UNIT", function(){
             subject$.complete();
         }, 50);
 
-        return subject$.forEach(console.log);
+        return subject$.forEach(debug);
     });
 });

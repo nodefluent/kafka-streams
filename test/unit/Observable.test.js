@@ -2,6 +2,7 @@
 
 const EventEmitter = require("events");
 const most = require("most");
+const debug = require("debug")("kafka-streams:unit:observable");
 
 class FakeKafka extends EventEmitter {
 
@@ -46,12 +47,12 @@ describe("Observable UNIT", function(){
             .map(value => ({ key: value[0], "value": value [1]}))
             .flatMap(value => most.fromPromise(slowKeyCount(value)))
             .recoverWith(err => {
-                console.log(err);
+                debug(err);
                 return most.empty();
             });
 
         stream$.forEach(value => {
-            console.log(value);
+            debug(value);
         });
 
         setTimeout(() => {

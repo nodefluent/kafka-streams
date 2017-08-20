@@ -2,6 +2,7 @@
 
 const assert = require("assert");
 const proxyquire = require("proxyquire");
+const debug = require("debug")("kafka-streams:unit:sum-action");
 
 const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
@@ -47,7 +48,7 @@ describe("Sum-Action UNIT", function() {
 
         setTimeout(() => {
             const messages = factory.lastProducer.producedMessages;
-            console.log(messages);
+            debug(messages);
 
             const data = source.storage.state;
 
