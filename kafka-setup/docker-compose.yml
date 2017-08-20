@@ -1,18 +1,37 @@
-version: '2'
+version: "2"
 services:
   zookeeper:
-    image: jplock/zookeeper:3.4.6
+    image: wurstmeister/zookeeper:latest
     ports:
       - 2181:2181
   kafka:
-    image: ches/kafka:0.10.2.0
+    image: wurstmeister/kafka:0.10.2.0
     ports:
-      - 9092:9092
+      - "9092:9092"
+      - "9093:9093"
     links:
      - zookeeper:zookeeper
+    depends_on:
+      - zookeeper
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-      ZOOKEEPER_IP: zookeeper
+      KAFKA_BROKER_ID: 1
+      KAFKA_PORT: 9093
+      KAFKA_ADVERTISED_PORT: 9093
+      KAFKA_ADVERTISED_HOST_NAME: "localhost"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092,SSL://localhost:9093"
+      KAFKA_LISTENERS: "PLAINTEXT://:9092,SSL://:9093"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_SSL_KEYSTORE_LOCATION: "/certs/docker.kafka.server.keystore.jks"
+      KAFKA_SSL_TRUSTSTORE_LOCATION: "/certs/docker.kafka.server.truststore.jks"
+      KAFKA_SSL_KEYSTORE_PASSWORD: "nodesinek"
+      KAFKA_SSL_KEY_PASSWORD: "nodesinek"
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: "nodesinek"
+      KAFKA_SSL_CLIENT_AUTH: "required"
+      KAFKA_SECURITY_INTER_BROKER_PROTOCOL: "SSL"
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - /tmp/kafka-data/data:/data
       - /tmp/kafka-data/logs:/logs
+      - ../certs:/certs
+      - /var/run/docker.sock:/var/run/docker.sock
