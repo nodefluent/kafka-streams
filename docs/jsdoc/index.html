@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>kafka-streams</h1><p><a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/krystianity/kafka-streams.svg" alt="Greenkeeper badge"></a></p>
+<p><a href="https://travis-ci.org/krystianity/kafka-streams"><img src="https://travis-ci.org/krystianity/kafka-streams.svg?branch=master" alt="Build Status"></a>
+<a href="https://badge.fury.io/js/kafka-streams"><img src="https://badge.fury.io/js/kafka-streams.svg" alt="npm version"></a></p>
+<pre class="prettyprint source"><code>npm install --save kafka-streams</code></pre><pre class="prettyprint source lang-es6"><code>const {KafkaStreams} = require(&quot;kafka-streams&quot;);
+
+const config = require(&quot;./config.json&quot;);
+const factory = new KafkaStreams(config);
+
+const kstream = factory.getKStream(&quot;input-topic&quot;);
+const ktable = factory.getKTable(..);
+
+kstream.merge(ktable).filter(..).map(..).reduce(..).to(&quot;output-topic&quot;);</code></pre><h2>API Overview</h2><ul>
+<li><a href="docs/quick-start.md">Quick Start</a></li>
+<li><a href="docs/api.md">API Info</a></li>
+<li><a href="https://krystianity.github.io/kafka-streams/jsdoc/">Documentation</a></li>
+<li><a href="docs/most-api.md">Operator descriptions</a></li>
+<li><a href="https://github.com/krystianity/kafka-streams/tree/master/examples">Examples</a></li>
+</ul>
+<h2>README Overview</h2><ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#aim-of-this-library">Aim of this Library</a></li>
+<li><a href="#description">Description</a></li>
+<li><a href="#port-progress-overview">Port Progress Overview</a></li>
+<li><a href="#operator-implementations">Operator Implementations</a></li>
+<li><a href="#additional-operators">Additional Operators</a></li>
+<li><a href="#stream-action-implementations">Stream Action Implementations</a></li>
+<li><a href="#join-operations">Join Operators Status</a></li>
+<li><a href="#window-operations">Window Operations</a></li>
+<li><a href="#more">FAQ - More</a></li>
+</ul>
+<h2>Prerequisites</h2><ul>
+<li>kafka broker should be version <code>&gt;= 0.9.x</code></li>
+<li>nodejs should be version <code>&gt;= 6.10</code></li>
+</ul>
+<h2>Aim of this Library</h2><ul>
+<li>this is not a 1:1 port of the official JAVA kafka-streams</li>
+<li>the goal of this project is to give at least the same options to
+a nodejs developer that kafka-streams provides for JVM developers</li>
+<li>stream-state processing, table representation, joins, aggregate etc.
+I am aiming for the easiest api access possible checkout the <a href="https://github.com/krystianity/kafka-streams/blob/master/examples/wordCount.js">word count example</a></li>
+</ul>
+<h2>Description</h2><p><a href="http://docs.confluent.io/3.0.0/streams">kafka-streams</a> :octopus: equivalent for nodejs :sparkles::turtle::rocket::sparkles:
+build on super fast :fire: observables using <a href="https://github.com/cujojs/most">most.js</a> :metal:</p>
+<p>ships with <a href="https://github.com/krystianity/node-sinek">sinek</a> :pray: for backpressure</p>
+<p>the lib also comes with a few <code>window</code> operations that are more similar to <a href="https://flink.apache.org/">Apache Flink</a>,
+yet they still feel natural in this api :squirrel:</p>
+<p>overwriteable local-storage solution allows for any kind of datastore e.g. RocksDB, Redis, Postgres..</p>
+<p>async (Promises) and sync stream operators e.g. <code>stream$.map()</code> or <code>stream$.asyncMap()</code></p>
+<p>super easy API :goberserk:</p>
+<p>the lib is based on <code>sinek</code>, which is based on kafka-node's <code>ConsumerGroups</code>
+therefore it still requires a zookeeper connection (dont worry, your offset will be stored
+in the kafka broker)</p>
+<h2>Port Progress Overview</h2><ul>
+<li>[x] core structure</li>
+<li>[x] KStream base - stream as a changelog</li>
+<li>[x] KTable base - stream as a database</li>
+<li>[x] KStream &amp; KTable cloning</li>
+<li>[x] complex stream join structure</li>
+<li>[ ] advanced joins <a href="#join-operations">see</a></li>
+<li>[ ] windows (for joins) <a href="#join-operations">see</a></li>
+<li>[ ] flink like window operations</li>
+<li>[x] word-count example</li>
+<li>[x] more examples</li>
+<li>[x] local-storage for etl actions</li>
+<li>[x] local-storage factory (one per action)</li>
+<li>[ ] KStorage example for any DB that supports atomic actions</li>
+<li>[ ] backing-up local-storage via kafka</li>
+<li>[x] kafka client implementation</li>
+<li>[x] KTable replay to Kafka (produce)</li>
+<li>[x] stream for topic message production only</li>
+<li>[x] sinek implementation</li>
+<li>[ ] backpressure mode for KafkaClient</li>
+<li>[x] auto-json payloads (read-map/write-map)</li>
+<li>[x] auto producer partition and keyed-message handling</li>
+<li>[x] documentation</li>
+<li>[x] API description</li>
+<li>[ ] higher join &amp; combine examples</li>
+</ul>
+<h2>Operator Implementations</h2><ul>
+<li>[x] map</li>
+<li>[x] asyncMap</li>
+<li>[x] constant</li>
+<li>[x] scan</li>
+<li>[x] timestamp</li>
+<li>[x] tap</li>
+<li>[x] filter</li>
+<li>[x] skipRepeats</li>
+<li>[x] skipRepeatsWith</li>
+<li>[x] slice</li>
+<li>[x] take</li>
+<li>[x] skip</li>
+<li>[x] takeWhile</li>
+<li>[x] skipWhile</li>
+<li>[x] until</li>
+<li>[x] since</li>
+<li>[x] reduce</li>
+<li>[x] chainReduce</li>
+<li>[x] forEach (observe)</li>
+<li>[x] chainForEach</li>
+<li>[x] drain</li>
+<li>[x] _zip</li>
+<li>[x] _merge</li>
+<li>[x] _join</li>
+<li>[x] _combine</li>
+<li>[x] _sample</li>
+<li>[x] throttle</li>
+<li>[x] debounce</li>
+<li>[x] delay</li>
+<li>[x] multicast</li>
+<li>A description of the operators can be found <a href="docs/most-api.md">here</a></li>
+<li>Missing an operator? Feel free to open an issue :cop:</li>
+</ul>
+<h2>Additional Operators</h2><ul>
+<li>[x] mapStringToArray</li>
+<li>[x] mapArrayToKV</li>
+<li>[x] mapStringToKV</li>
+<li>[x] mapParse</li>
+<li>[x] mapStringify</li>
+<li>[x] atThroughput</li>
+<li>[x] mapWrapKafkaPayload</li>
+<li>[x] mapToFormat</li>
+<li>[x] mapFromFormat</li>
+<li>Want more? Feel free to open an issue :cop:</li>
+</ul>
+<h2>Stream Action Implementations</h2><ul>
+<li>[x] countByKey</li>
+<li>[x] sumByKey</li>
+<li>[x] min</li>
+<li>[x] max</li>
+<li>Want more? Feel free to open an issue :cop:</li>
+</ul>
+<h2>Join Operations</h2><h3>KStream Status</h3><ul>
+<li>[x] merge</li>
+<li>[ ] outerJoin</li>
+<li>[x] innerJoin</li>
+<li>[ ] leftJoin</li>
+</ul>
+<h3>KTable Status</h3><ul>
+<li>[x] merge</li>
+<li>[ ] outerJoin</li>
+<li>[ ] innerJoin</li>
+<li>[ ] leftJoin</li>
+</ul>
+<h3>KTable &lt;-&gt; KStream Status</h3><ul>
+<li>[x] merge</li>
+<li>[ ] outerJoin</li>
+<li>[ ] innerJoin</li>
+<li>[ ] leftJoin</li>
+</ul>
+<h2>Window Operations</h2><h3>KStream</h3><ul>
+<li>[x] window</li>
+</ul>
+<h1>More</h1><h2>Can I use this library yet?</h2><p>Yes.</p>
+<h2>Are we ready for production yet?</h2><p>No, please have some more patience :smile:</p>
+<h2>Even More</h2><p>Forks or Stars give motivation :bowtie:</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="KafkaClient.html">KafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 30 2017 22:30:06 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

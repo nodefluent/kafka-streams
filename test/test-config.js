@@ -3,7 +3,8 @@
 const log4bro = require("log4bro");
 
 const config = {
-    zkConStr: "localhost:2181/",
+    //zkConStr: "localhost:2181/",
+    kafkaHost: "localhost:9092",
     logger: new log4bro({ level: "INFO" }),
     groupId: "kafka-streams-test",
     clientName: "kafka-streams-test-name",
@@ -18,7 +19,10 @@ const config = {
         heartbeatInterval: 250,
         retryMinTimeout: 250,
         autoCommit: true,
-        autoCommitIntervalMs: 1000
+        autoCommitIntervalMs: 1000,
+        requireAcks: 0,
+        //ackTimeoutMs: 100,
+        //partitionerType: 3
     }
 };
 

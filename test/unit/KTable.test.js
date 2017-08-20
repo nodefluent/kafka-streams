@@ -23,14 +23,22 @@ describe("KTable UNIT", function() {
         }
 
         let intv = null;
+        let count = 0;
+        let hit = 0;
+        let hitCount = 0;
 
         const streams = new KafkaStreams({});
         const source = streams.getKTable("ktable-unit", etl_KeyValueMapper);
 
         source
-            .consumeUntilCount(21)
-            //.tap(v => console.log("tap " + JSON.stringify(v)))
-            .atThroughput(21, () => {
+            .tap(_ => {
+                count++;
+            })
+            .consumeUntilCount(21, () => {
+
+                assert.equal(count, 21);
+                assert.equal(hit, 1);
+                assert.equal(hitCount - 5 >= 0, true);
 
                 const messages = factory.lastProducer.producedMessages;
                 //console.log(messages);
@@ -63,8 +71,12 @@ describe("KTable UNIT", function() {
                     source.replay();
                 });
             })
-          .tap(console.log)
-          .to("streams-wordcount-output");
+            .atThroughput(5, () => {
+                hit++;
+                hitCount = count;
+            })
+            .tap(console.log)
+            .to("streams-wordcount-output");
 
         source.start();
 
