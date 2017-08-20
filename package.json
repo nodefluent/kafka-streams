@@ -15,7 +15,6 @@
     "kafka:start": "./kafka-setup/start.sh",
     "kafka:stop": "./kafka-setup/stop.sh",
     "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f"
-
   },
   "repository": {
     "type": "git",
