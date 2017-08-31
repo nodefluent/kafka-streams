@@ -142,9 +142,9 @@ aws4@^1.2.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.6.0.tgz#83ef5ca860b2b32e4a0deedee8c771b9db57471e"
 
-babylon@~7.0.0-beta.16:
-  version "7.0.0-beta.16"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.16.tgz#448ceedeec0a5ef56b62812e3556bf36c5bb9781"
+babylon@~7.0.0-beta.19:
+  version "7.0.0-beta.22"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.22.tgz#74f0ad82ed7c7c3cfeab74cf684f815104161b65"
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -167,7 +167,7 @@ binary@~0.3.0:
     buffers "~0.1.1"
     chainsaw "~0.1.0"
 
-bindings@1.2.1:
+bindings@1.2.1, bindings@1.x:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
 
@@ -247,13 +247,7 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
 
-catharsis@~0.8.8:
-  version "0.8.8"
-  resolved "https://registry.yarnpkg.com/catharsis/-/catharsis-0.8.8.tgz#693479f43aac549d806bd73e924cd0d944951a06"
-  dependencies:
-    underscore-contrib "~0.3.0"
-
-catharsis@~0.8.9:
+catharsis@~0.8.8, catharsis@~0.8.9:
   version "0.8.9"
   resolved "https://registry.yarnpkg.com/catharsis/-/catharsis-0.8.9.tgz#98cc890ca652dd2ef0e70b37925310ff9e90fc8b"
   dependencies:
@@ -384,17 +378,11 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-debug@2.6.8, debug@^2.2.0:
+debug@2.6.8, debug@^2.1.3, debug@^2.2.0:
   version "2.6.8"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.8.tgz#e731531ca2ede27d188222427da17821d68ff4fc"
   dependencies:
     ms "2.0.0"
-
-debug@^2.1.3:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.0.tgz#bc596bcabe7617f11d9fa15361eded5608b8499b"
-  dependencies:
-    ms "0.7.2"
 
 debug@^3.0.0:
   version "3.0.0"
@@ -873,11 +861,11 @@ jsdoc2md-stats@^2.0.0:
   dependencies:
     app-usage-stats "^0.5.0"
 
-jsdoc@^3.5.3:
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/jsdoc/-/jsdoc-3.5.3.tgz#c8bb6a452548e3c778d4eff38f66ac20df2cac87"
+jsdoc@^3.5.4:
+  version "3.5.4"
+  resolved "https://registry.yarnpkg.com/jsdoc/-/jsdoc-3.5.4.tgz#ceeef7c4bac4335cb10ff41e3a0f58939a534428"
   dependencies:
-    babylon "~7.0.0-beta.16"
+    babylon "~7.0.0-beta.19"
     bluebird "~3.5.0"
     catharsis "~0.8.9"
     escape-string-regexp "~1.0.5"
@@ -1131,25 +1119,13 @@ most-subject@^5.3.0:
     "@most/prelude" "^1.4.1"
     most "^1.1.0"
 
-most@^1.1.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/most/-/most-1.5.0.tgz#fae0b44a11859ac8b7abdfd4017136d879d88353"
+most@^1.1.0, most@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/most/-/most-1.7.0.tgz#3f2478a5d6bf6bce687e6e4d8e973ca1a395cd1a"
   dependencies:
     "@most/multicast" "^1.2.5"
     "@most/prelude" "^1.4.0"
     symbol-observable "^1.0.2"
-
-most@~1.6.0:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/most/-/most-1.6.2.tgz#2b8d2bc633319be78844d8d459c9459d392fe2e0"
-  dependencies:
-    "@most/multicast" "^1.2.5"
-    "@most/prelude" "^1.4.0"
-    symbol-observable "^1.0.2"
-
-ms@0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.2.tgz#ae25cf2512b3885a1d95d7f037868d8431124765"
 
 ms@2.0.0:
   version "2.0.0"
@@ -1167,7 +1143,7 @@ mv@~2:
     ncp "~2.0.0"
     rimraf "~2.4.0"
 
-nan@2.3.5, nan@^2.3.3:
+nan@2.3.5, nan@2.x, nan@^2.3.3:
   version "2.3.5"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.3.5.tgz#822a0dc266290ce4cd3a12282ca3e7e364668a08"
 
@@ -1199,6 +1175,13 @@ node-gyp@3.4.0:
     semver "2.x || 3.x || 4 || 5"
     tar "^2.0.0"
     which "1"
+
+node-rdkafka@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/node-rdkafka/-/node-rdkafka-2.0.0.tgz#188b15d95a5d5eae09a5097b2e649b5877159fd9"
+  dependencies:
+    bindings "1.x"
+    nan "2.x"
 
 node-zookeeper-client@~0.2.2:
   version "0.2.2"
@@ -1272,7 +1255,7 @@ optimist@~0.3.5:
     wordwrap "~0.0.2"
 
 optional@^0.1.3:
-  version "0.1.3"
+  version v0.1.3
   resolved "https://registry.yarnpkg.com/optional/-/optional-0.1.3.tgz#f87537517b59a5e732cfd8f18e4f7eea7ab4761e"
 
 optionator@^0.8.1:
@@ -1458,9 +1441,9 @@ signal-exit@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-sinek@^5.4.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/sinek/-/sinek-5.4.0.tgz#f0fe2649b682b2a176066b6d5dfe41ff1ecf2e6f"
+sinek@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/sinek/-/sinek-6.1.1.tgz#fda8b1a3fc85fa0e62b79998f11e2dc9fe6ac814"
   dependencies:
     async "~2.5.0"
     bluebird "~3.5.0"
@@ -1468,6 +1451,8 @@ sinek@^5.4.0:
     kafka-node "^2.2.0"
     murmurhash "~0.0.2"
     uuid "~3.1.0"
+  optionalDependencies:
+    node-rdkafka "~2.0.0"
 
 snappy@^5.0.5:
   version "5.0.5"
