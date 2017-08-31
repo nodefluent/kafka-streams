@@ -26,4 +26,28 @@ const config = {
     }
 };
 
-module.exports = config;
+const nativeConfig = {
+    noptions: {
+        "metadata.broker.list": "localhost:9092",
+        "group.id": "kafka-streams-test-native",
+        "client.id": "kafka-streams-test-name-native",
+        "enable.auto.commit": true,
+        "event_cb": true,
+
+        "fetch.wait.max.ms": 10,
+        "heartbeat.interval.ms": 250,
+        "retry.backoff.ms": 250,
+        "auto.commit.interval.ms": 1000,
+        "fetch.min.bytes": 1,
+        "fetch.message.max.bytes": 1024 * 100
+    },
+    tconf: {
+        "auto.offset.reset": "earliest",
+        "request.required.acks": 0
+    }
+};
+
+module.exports = {
+    config,
+    nativeConfig
+};

@@ -6,9 +6,9 @@ const v8 = require("v8");
 const async = require("async");
 
 const {KafkaStreams, KafkaClient} = require("./../../index.js");
-const {config} = require("./../test-config.js");
+const {nativeConfig: config} = require("./../test-config.js");
 
-describe("Streams Integration", function() {
+describe("Streams Native Integration", function() {
 
     function getMemory(){
         let space = null;
@@ -64,7 +64,7 @@ describe("Streams Integration", function() {
             stream.writeToStream("hou 1");
 
             setTimeout(done, 10);
-        }, null);
+        }, e => console.error(e));
     });
 
     it("should be able to produce to three topics using a merged stream", function (done) {
@@ -93,10 +93,11 @@ describe("Streams Integration", function() {
     });
 
     it("should give kafka a few seconds", function(done){
-        setTimeout(done, 1000);
+        setTimeout(done, 1500);
     });
 
     it("should be able to count keys on third topic", function(done){
+        this.timeout(4000);
 
         const stream = kafkaStreams.getKStream(thirdTopic);
 
@@ -123,6 +124,7 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to count keys on fourth topic joining a local stream", function(done){
+        this.timeout(4000);
 
         const stream = kafkaStreams.getKStream(null);
         const stream2 = kafkaStreams.getKStream(fourthTopic);
@@ -171,6 +173,7 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to consume and join two kafka topics as streams", function(done){
+        this.timeout(4000);
 
         const firstStream = kafkaStreams.getKStream(inputTopic);
         const secondStream = kafkaStreams.getKStream(secondTopic);
@@ -205,7 +208,7 @@ describe("Streams Integration", function() {
             .filter(kv => kv.key == "two")
             .countByKey()
             .chainForEach(m => {
-              console.log(m);
+                console.log(m);
             });
 
         const mergedStream = firstStream.merge(secondStream);
@@ -233,10 +236,11 @@ describe("Streams Integration", function() {
     });
 
     it("should give kafka a few seconds again", function(done){
-        setTimeout(done, 1000);
+        setTimeout(done, 1500);
     });
 
     it("should be able to consume the freshly produced merge topic as table", function(done){
+        this.timeout(8000);
 
         const stream = kafkaStreams.getKTable(outputTopic, element => {
             return JSON.parse(element.value);
@@ -275,7 +279,7 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to investigate stats for kafka clients", function(done){
-       const stats = kafkaStreams.getStats();
+        const stats = kafkaStreams.getStats();
         assert.equal(stats.length, 14);
         done();
     });
@@ -349,8 +353,8 @@ describe("Streams Integration", function() {
         done();
     });
 
-    it("should be able to produce a million messages to a topic", function(done){
-        this.timeout(210000);
+    xit("should be able to produce a million messages to a topic", function(done){
+        this.timeout(21000);
 
         const partitionCount = isTravis ? 3 : 1;
         const stream  = kafkaStreams.getKStream(null);
@@ -411,13 +415,13 @@ describe("Streams Integration", function() {
         });
     });
 
-    it("should wait a few moments for messages to arrive", function(done){
+    xit("should wait a few moments for messages to arrive", function(done){
         this.timeout(5000);
         setTimeout(done, isTravis ? 4900 : 500);
     });
 
-    it("should be able to stream a million messages with attached operations", function(done){
-        this.timeout(210000);
+    xit("should be able to stream a million messages with attached operations", function(done){
+        this.timeout(21000);
 
         const stream = kafkaStreams.getKStream(trafficTopic);
 
@@ -435,20 +439,20 @@ describe("Streams Integration", function() {
             .tap(_ => {
                 count++;
             }).atThroughput(millionMessageCount, _ => {
-                console.log("consumed count: " + count);
-                clearInterval(intv);
+            console.log("consumed count: " + count);
+            clearInterval(intv);
 
-                Promise.all([stream.getStorage().getMin(), stream.getStorage().getMax()])
-                    .then(([min, max]) => {
-                        console.log(min, max);
+            Promise.all([stream.getStorage().getMin(), stream.getStorage().getMax()])
+                .then(([min, max]) => {
+                    console.log(min, max);
 
-                        assert.equal(millionMin, min);
-                        assert.equal(millionMax, max);
+                    assert.equal(millionMin, min);
+                    assert.equal(millionMax, max);
 
-                        done();
-                    });
+                    done();
+                });
 
-            }).forEach(_ => {});
+        }).forEach(_ => {});
 
         stream.start();
     });
