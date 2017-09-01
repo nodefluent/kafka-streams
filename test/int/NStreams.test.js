@@ -2,25 +2,12 @@
 
 const assert = require("assert");
 const uuid = require("uuid");
-const v8 = require("v8");
 const async = require("async");
 
 const {KafkaStreams, KafkaClient} = require("./../../index.js");
 const {nativeConfig: config} = require("./../test-config.js");
 
 describe("Streams Native Integration", function() {
-
-    function getMemory(){
-        let space = null;
-        v8.getHeapSpaceStatistics().forEach(_space => {
-            if(_space.space_name === "old_space"){
-                space = _space;
-            }
-        });
-        return space.space_used_size;
-    }
-
-    const startMemory = getMemory();
 
     const isTravis = !!process.env.KST_TOPIC || false;
     const roundId = process.env.KST_TOPIC || uuid.v4();
@@ -35,7 +22,6 @@ describe("Streams Native Integration", function() {
 
     const kafkaStreams = new KafkaStreams(config);
 
-    let subMemory = null;
     let millionMin = 1e4;
     let millionMax = 1;
 
@@ -92,12 +78,8 @@ describe("Streams Native Integration", function() {
         });
     });
 
-    it("should give kafka a few seconds", function(done){
-        setTimeout(done, 1500);
-    });
-
     it("should be able to count keys on third topic", function(done){
-        this.timeout(4000);
+        this.timeout(5000);
 
         const stream = kafkaStreams.getKStream(thirdTopic);
 
@@ -205,7 +187,7 @@ describe("Streams Native Integration", function() {
         secondStream
             .mapWrapKafkaPayload()
             .mapStringToKV()
-            .filter(kv => kv.key == "two")
+            .filter(kv => kv.key === "two")
             .countByKey()
             .chainForEach(m => {
                 console.log(m);
@@ -233,10 +215,6 @@ describe("Streams Native Integration", function() {
             secondStream.writeToStream("two 4");
             secondStream.writeToStream("four 1");
         });
-    });
-
-    it("should give kafka a few seconds again", function(done){
-        setTimeout(done, 1500);
     });
 
     it("should be able to consume the freshly produced merge topic as table", function(done){
@@ -285,7 +263,7 @@ describe("Streams Native Integration", function() {
     });
 
     it("should be able to reset the consumer config", function(done){
-        kafkaStreams.config.groupId += "-1"; //makes topics re-readable
+        kafkaStreams.config.noptions["group.id"] += "-1"; //makes topics re-readable
         setTimeout(done, 1);
     });
 
@@ -345,15 +323,7 @@ describe("Streams Native Integration", function() {
             });
     });
 
-    it("should be able to consume a decent amount of memory", function(done){
-        subMemory = getMemory();
-        const consumed = subMemory - startMemory;
-        console.log("consumed additional memory: " + consumed + " bytes");
-        assert(consumed < isTravis ? 20.e6 : 13.3e6, true);
-        done();
-    });
-
-    xit("should be able to produce a million messages to a topic", function(done){
+    it("should be able to produce a million messages to a topic", function(done){
         this.timeout(21000);
 
         const partitionCount = isTravis ? 3 : 1;
@@ -404,6 +374,7 @@ describe("Streams Native Integration", function() {
 
             const operations = Array(operationCount).fill(undefined);
             async.eachLimit(operations, 1, (_, callback) => {
+
                 sendBatch(batchSize, () => {
                     setTimeout(callback, 1000);
                 });
@@ -412,15 +383,10 @@ describe("Streams Native Integration", function() {
                 clearInterval(intv);
                 done();
             });
-        });
+        }, e => console.error(e));
     });
 
-    xit("should wait a few moments for messages to arrive", function(done){
-        this.timeout(5000);
-        setTimeout(done, isTravis ? 4900 : 500);
-    });
-
-    xit("should be able to stream a million messages with attached operations", function(done){
+    it("should be able to stream a million messages with attached operations", function(done){
         this.timeout(21000);
 
         const stream = kafkaStreams.getKStream(trafficTopic);
@@ -454,18 +420,6 @@ describe("Streams Native Integration", function() {
 
         }).forEach(_ => {});
 
-        stream.start();
-    });
-
-    it("should wait a few moments", function(done){
-        this.timeout(5000);
-        setTimeout(done, isTravis ? 4900 : 500);
-    });
-
-    it("should be able to consume a decent amount of memory after large consumption", function(done){
-        const consumed = getMemory() - subMemory;
-        console.log("consumed additional memory: " + consumed + " bytes");
-        assert(consumed < (isTravis ? 350e6 : 100e6), true);
-        done();
+        stream.start(null, e => console.error(e));
     });
 });
