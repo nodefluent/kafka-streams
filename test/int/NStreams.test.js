@@ -332,10 +332,6 @@ describe("Streams Native Integration", function() {
             .to(trafficTopic, partitionCount, stream.PRODUCE_TYPES.BUFFER_FORMAT);
 
         let count = 0;
-        const intv = setInterval(_ => {
-            console.log("produce count: " + count);
-            console.log("total published: " + stream.getStats().producer.totalPublished);
-        }, 2200);
 
         function getRandomInt(){
             const val = KafkaClient._getRandomIntInclusive(1e3, 1e8);
@@ -369,6 +365,11 @@ describe("Streams Native Integration", function() {
 
         stream.start().then(_ => {
 
+            const intv = setInterval(_ => {
+                console.log("produce count: " + count);
+                console.log("total published: " + stream.getStats().producer.totalPublished);
+            }, 2200);
+
             const batchSize = isTravis ? 10000 : 25000; // absolute max is 30 000 per second here
             const operationCount = millionMessageCount / batchSize;
 
@@ -383,7 +384,7 @@ describe("Streams Native Integration", function() {
                 clearInterval(intv);
                 done();
             });
-        }, e => console.error(e));
+        }).catch( e => console.error(e));
     });
 
     it("should be able to stream a million messages with attached operations", function(done){
@@ -392,9 +393,7 @@ describe("Streams Native Integration", function() {
         const stream = kafkaStreams.getKStream(trafficTopic);
 
         let count = 0;
-        const intv = setInterval(_ => {
-            console.log("consumed count: " + count);
-        }, 2000);
+        let intv = null;
 
         stream
             .map(m => m.value)
@@ -420,6 +419,10 @@ describe("Streams Native Integration", function() {
 
         }).forEach(_ => {});
 
-        stream.start(null, e => console.error(e));
+        stream.start().then(_ => {
+            intv = setInterval(_ => {
+                console.log("consumed count: " + count);
+            }, 2000);
+        }).catch(e => console.error(e));
     });
 });
