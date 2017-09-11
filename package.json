@@ -52,7 +52,7 @@
     "istanbul": "~0.4.2",
     "jsdoc": "^3.5.3",
     "jsdoc-to-markdown": "~3.0.0",
-    "log4bro": "~3.0.0",
+    "log4bro": "~3.1.0",
     "mocha": "~3.5.0",
     "proxyquire": "~1.8.0",
     "uuid": "~3.1.0"
