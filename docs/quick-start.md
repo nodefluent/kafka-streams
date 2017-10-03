@@ -12,6 +12,10 @@ these services elsewhere, make sure to adapt the config settings)
 
 # Configuration
 
+* NOTE: as of version 3.0.0 node-kafka-streams supports an additional `librdkafka` client,
+    that offers better performance, configuration tweaking and especially features like
+    SASL and Kerberos [checkout the native docs](native.md) for more details.
+
 ```es6
 {
     //zkConStr: "localhost:2181/",

@@ -28,12 +28,12 @@ const config = {
 
 const nativeConfig = {
     noptions: {
-
         "metadata.broker.list": "localhost:9092",
         "group.id": "kafka-streams-test-native",
         "client.id": "kafka-streams-test-name-native",
         "event_cb": true,
         "compression.codec": "snappy",
+        "api.version.request": true,
 
         "socket.keepalive.enable": true,
         "socket.blocking.max.ms": 100,

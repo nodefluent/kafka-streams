@@ -17,6 +17,9 @@ kafka-streams.js Documentation
 5. Documentation (is still WIP)
     * [HTML-Documentation](https://krystianity.github.io/kafka-streams/jsdoc/)
     * [MD-Documentation](doc.md)
+    * [Using the native client](native.md)
+    * [SSL support](ssl-sasl.md)
+    * [SASL and Kerberos](ssl-sasl.md)
 
 # 1. most.js
 

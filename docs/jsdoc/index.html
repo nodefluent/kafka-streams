@@ -43,8 +43,8 @@
 
 
     <section>
-        <article><h1>kafka-streams</h1><p><a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/krystianity/kafka-streams.svg" alt="Greenkeeper badge"></a></p>
-<p><a href="https://travis-ci.org/krystianity/kafka-streams"><img src="https://travis-ci.org/krystianity/kafka-streams.svg?branch=master" alt="Build Status"></a>
+        <article><h1>node-kafka-streams</h1><p><a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/nodefluent/kafka-streams.svg" alt="Greenkeeper badge"></a></p>
+<p><a href="https://travis-ci.org/nodefluent/kafka-streams"><img src="https://travis-ci.org/nodefluent/kafka-streams.svg?branch=master" alt="Build Status"></a>
 <a href="https://badge.fury.io/js/kafka-streams"><img src="https://badge.fury.io/js/kafka-streams.svg" alt="npm version"></a></p>
 <pre class="prettyprint source"><code>npm install --save kafka-streams</code></pre><pre class="prettyprint source lang-es6"><code>const {KafkaStreams} = require(&quot;kafka-streams&quot;);
 
@@ -57,9 +57,13 @@ const ktable = factory.getKTable(..);
 kstream.merge(ktable).filter(..).map(..).reduce(..).to(&quot;output-topic&quot;);</code></pre><h2>API Overview</h2><ul>
 <li><a href="docs/quick-start.md">Quick Start</a></li>
 <li><a href="docs/api.md">API Info</a></li>
-<li><a href="https://krystianity.github.io/kafka-streams/jsdoc/">Documentation</a></li>
+<li><a href="https://nodefluent.github.io/kafka-streams/jsdoc/">Documentation</a></li>
 <li><a href="docs/most-api.md">Operator descriptions</a></li>
-<li><a href="https://github.com/krystianity/kafka-streams/tree/master/examples">Examples</a></li>
+<li><a href="https://github.com/nodefluent/kafka-streams/tree/master/examples">Examples</a></li>
+</ul>
+<h2>You might also like</h2><ul>
+<li><a href="https://github.com/nodefluent/kafka-connect">node-kafka-connect</a></li>
+<li><a href="https://github.com/nodefluent/schema-registry">node-schema-registry</a></li>
 </ul>
 <h2>README Overview</h2><ul>
 <li><a href="#prerequisites">Prerequisites</a></li>
@@ -82,19 +86,17 @@ kstream.merge(ktable).filter(..).map(..).reduce(..).to(&quot;output-topic&quot;)
 <li>the goal of this project is to give at least the same options to
 a nodejs developer that kafka-streams provides for JVM developers</li>
 <li>stream-state processing, table representation, joins, aggregate etc.
-I am aiming for the easiest api access possible checkout the <a href="https://github.com/krystianity/kafka-streams/blob/master/examples/wordCount.js">word count example</a></li>
+I am aiming for the easiest api access possible checkout the <a href="https://github.com/nodefluent/kafka-streams/blob/master/examples/wordCount.js">word count example</a></li>
 </ul>
 <h2>Description</h2><p><a href="http://docs.confluent.io/3.0.0/streams">kafka-streams</a> :octopus: equivalent for nodejs :sparkles::turtle::rocket::sparkles:
 build on super fast :fire: observables using <a href="https://github.com/cujojs/most">most.js</a> :metal:</p>
-<p>ships with <a href="https://github.com/krystianity/node-sinek">sinek</a> :pray: for backpressure</p>
+<p>ships with <a href="https://github.com/nodefluent/node-sinek">sinek</a> :pray: for backpressure</p>
 <p>the lib also comes with a few <code>window</code> operations that are more similar to <a href="https://flink.apache.org/">Apache Flink</a>,
 yet they still feel natural in this api :squirrel:</p>
 <p>overwriteable local-storage solution allows for any kind of datastore e.g. RocksDB, Redis, Postgres..</p>
 <p>async (Promises) and sync stream operators e.g. <code>stream$.map()</code> or <code>stream$.asyncMap()</code></p>
 <p>super easy API :goberserk:</p>
-<p>the lib is based on <code>sinek</code>, which is based on kafka-node's <code>ConsumerGroups</code>
-therefore it still requires a zookeeper connection (dont worry, your offset will be stored
-in the kafka broker)</p>
+<p>the lib is based on <code>sinek</code>, which is based on kafka-node's <code>ConsumerGroups</code></p>
 <h2>Port Progress Overview</h2><ul>
 <li>[x] core structure</li>
 <li>[x] KStream base - stream as a changelog</li>
@@ -174,7 +176,8 @@ in the kafka broker)</p>
 <li>[x] max</li>
 <li>Want more? Feel free to open an issue :cop:</li>
 </ul>
-<h2>Join Operations</h2><h3>KStream Status</h3><ul>
+<h2>Join Operations</h2><p><a href="https://cwiki.apache.org/confluence/display/KAFKA/Kafka+Streams+Join+Semantics">Operation description</a></p>
+<h3>KStream Status</h3><ul>
 <li>[x] merge</li>
 <li>[ ] outerJoin</li>
 <li>[x] innerJoin</li>
@@ -208,13 +211,13 @@ in the kafka broker)</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="KafkaClient.html">KafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 30 2017 22:30:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 03 2017 18:13:51 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

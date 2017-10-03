@@ -1,4 +1,4 @@
-## Classes
+ Classes
 
 <dl>
 <dt><a href="#KeyCount">KeyCount</a></dt>
@@ -27,40 +27,40 @@ in a stream</p>
 
 <a name="KeyCount"></a>
 
-## KeyCount
+ KeyCount
 used to count keys in a stream
 
 **Kind**: global class  
 <a name="LastState"></a>
 
-## LastState
+ LastState
 used to hold the last state of key values
 in a stream e.g. building KTables
 
 **Kind**: global class  
 <a name="Max"></a>
 
-## Max
+ Max
 used to grab the highest value of key values
 in a stream
 
 **Kind**: global class  
 <a name="Min"></a>
 
-## Min
+ Min
 used grab the lowest value of
 key values in a stream
 
 **Kind**: global class  
 <a name="Sum"></a>
 
-## Sum
+ Sum
 used to sum up key values in a stream
 
 **Kind**: global class  
 <a name="Window"></a>
 
-## Window
+ Window
 used to build windows of key value states
 in a stream
 
