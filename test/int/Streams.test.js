@@ -315,7 +315,7 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to abort a running window", function(done){
-        this.timeout(5000);
+        this.timeout(10000);
 
         const inputStream = kafkaStreams.getKStream(null);
 
