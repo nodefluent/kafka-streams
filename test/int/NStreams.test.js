@@ -9,8 +9,8 @@ const {nativeConfig: config} = require("./../test-config.js");
 
 describe("Streams Native Integration", function() {
 
-    const isTravis = !!process.env.KST_TOPIC || false;
-    const roundId = process.env.KST_TOPIC || uuid.v4();
+    const isTravis = !!process.env.NKST_TOPIC || false;
+    const roundId = process.env.NKST_TOPIC || uuid.v4();
     const inputTopic = "ks-input-" + roundId;
     const secondTopic = "ks-second-" + roundId;
     const thirdTopic = "ks-third-" + roundId;
@@ -90,6 +90,7 @@ describe("Streams Native Integration", function() {
             .countByKey()
             .forEach(_ => {
                 count++;
+                console.log(_);
                 if(count === 6){
                     const data = stream.storage.state;
                     console.log(data);
@@ -323,10 +324,15 @@ describe("Streams Native Integration", function() {
             });
     });
 
+    it("should be able to kill all running clients before performance test", function(done){
+        kafkaStreams.closeAll();
+        setTimeout(done, 1500);
+    });
+
     it("should be able to produce a million messages to a topic", function(done){
         this.timeout(21000);
 
-        const partitionCount = isTravis ? 3 : 1;
+        const partitionCount = isTravis ? 3 : 1; //3 on travis, because the topic is created there
         const stream  = kafkaStreams.getKStream(null);
         stream
             .to(trafficTopic, partitionCount, stream.PRODUCE_TYPES.BUFFER_FORMAT);
@@ -390,6 +396,7 @@ describe("Streams Native Integration", function() {
     it("should be able to stream a million messages with attached operations", function(done){
         this.timeout(21000);
 
+        kafkaStreams.config.noptions["group.id"] += "-2";
         const stream = kafkaStreams.getKStream(trafficTopic);
 
         let count = 0;
