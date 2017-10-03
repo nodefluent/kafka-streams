@@ -352,8 +352,7 @@ describe("Streams Integration", function() {
     it("should be able to produce a million messages to a topic", function(done){
         this.timeout(210000);
 
-        //const partitionCount = isTravis ? 3 : 1;
-        const partitionCount = 1;
+        const partitionCount = isTravis ? 3 : 1;
         const stream  = kafkaStreams.getKStream(null);
         stream
             .to(trafficTopic, partitionCount, stream.PRODUCE_TYPES.BUFFER_FORMAT);
@@ -405,7 +404,7 @@ describe("Streams Integration", function() {
                     setTimeout(callback, 1000);
                 });
             }, _ => {
-                console.log("produce count-final: " + count);
+                console.log("produce count-final: " + stream.getStats().producer.totalPublished);
                 clearInterval(intv);
                 done();
             });
