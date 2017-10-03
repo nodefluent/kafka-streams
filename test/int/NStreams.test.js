@@ -330,7 +330,7 @@ describe("Streams Native Integration", function() {
     });
 
     it("should be able to produce a million messages to a topic", function(done){
-        this.timeout(21000);
+        this.timeout(35000);
 
         const partitionCount = isTravis ? 3 : 1; //3 on travis, because the topic is created there
         const stream  = kafkaStreams.getKStream(null);
@@ -376,19 +376,21 @@ describe("Streams Native Integration", function() {
                 console.log("total published: " + stream.getStats().producer.totalPublished);
             }, 2200);
 
-            const batchSize = isTravis ? 10000 : 25000; // absolute max is 30 000 per second here
+            const batchSize = isTravis ? 10000 : 25000;
             const operationCount = millionMessageCount / batchSize;
 
             const operations = Array(operationCount).fill(undefined);
             async.eachLimit(operations, 1, (_, callback) => {
 
                 sendBatch(batchSize, () => {
-                    setTimeout(callback, 1000);
+                    setTimeout(callback, 2000);
                 });
             }, _ => {
-                console.log("produce count-final: " + count);
-                clearInterval(intv);
-                done();
+                setTimeout(() => {
+                    console.log("produce count-final: " + count);
+                    clearInterval(intv);
+                    done();
+                }, 2000);
             });
         }).catch( e => console.error(e));
     });
