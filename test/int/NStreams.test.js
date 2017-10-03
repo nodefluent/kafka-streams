@@ -26,9 +26,10 @@ describe("Streams Native Integration", function() {
     let millionMax = 1;
 
     after(function(done){
-        kafkaStreams.closeAll();
-        console.log(`topic roundId: ks-*-${roundId}.`);
-        setTimeout(done, 500);
+        kafkaStreams.closeAll().then(() => {
+            console.log(`topic roundId: ks-*-${roundId}.`);
+            setTimeout(done, 500);
+        });
     });
 
     it("should be able to produce messages to topic", function (done) {
@@ -325,12 +326,12 @@ describe("Streams Native Integration", function() {
     });
 
     it("should be able to kill all running clients before performance test", function(done){
-        kafkaStreams.closeAll();
-        setTimeout(done, 1500);
+        kafkaStreams.closeAll().then(() => done());
     });
 
     it("should be able to produce a million messages to a topic", function(done){
-        this.timeout(35000);
+        const t = 35000;
+        this.timeout(t);
 
         //const partitionCount = isTravis ? 3 : 1; //3 on travis, because the topic is created there
         const partitionCount = 1;
@@ -377,6 +378,12 @@ describe("Streams Native Integration", function() {
                 console.log("total published: " + stream.getStats().producer.totalPublished);
             }, 2200);
 
+            setTimeout(() => {
+                if(intv){
+                    clearInterval(intv);
+                }
+            }, t);
+
             const batchSize = isTravis ? 10000 : 25000;
             const operationCount = millionMessageCount / batchSize;
 
@@ -397,7 +404,8 @@ describe("Streams Native Integration", function() {
     });
 
     it("should be able to stream a million messages with attached operations", function(done){
-        this.timeout(21000);
+        const t = 21000;
+        this.timeout(t);
 
         kafkaStreams.config.noptions["group.id"] += "-2";
         const stream = kafkaStreams.getKStream(trafficTopic);
@@ -434,5 +442,11 @@ describe("Streams Native Integration", function() {
                 console.log("consumed count: " + count);
             }, 2000);
         }).catch(e => console.error(e));
+
+        setTimeout(() => {
+            if(intv){
+                clearInterval(intv);
+            }
+        }, t);
     });
 });

@@ -40,9 +40,10 @@ describe("Streams Integration", function() {
     let millionMax = 1;
 
     after(function(done){
-        kafkaStreams.closeAll();
-        console.log(`topic roundId: ks-*-${roundId}.`);
-        setTimeout(done, 500);
+        kafkaStreams.closeAll().then(() => {
+            console.log(`topic roundId: ks-*-${roundId}.`);
+            setTimeout(done, 500);
+        });
     });
 
     it("should be able to produce messages to topic", function (done) {
@@ -350,7 +351,8 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to produce a million messages to a topic", function(done){
-        this.timeout(210000);
+        const t = 210000;
+        this.timeout(t);
 
         const partitionCount = isTravis ? 3 : 1;
         const stream  = kafkaStreams.getKStream(null);
@@ -409,6 +411,12 @@ describe("Streams Integration", function() {
                 done();
             });
         });
+
+        setTimeout(() => {
+            if(intv){
+                clearInterval(intv);
+            }
+        }, t);
     });
 
     it("should wait a few moments for messages to arrive", function(done){
@@ -417,7 +425,8 @@ describe("Streams Integration", function() {
     });
 
     it("should be able to stream a million messages with attached operations", function(done){
-        this.timeout(210000);
+        const t = 210000;
+        this.timeout(t);
 
         const stream = kafkaStreams.getKStream(trafficTopic);
 
@@ -451,6 +460,12 @@ describe("Streams Integration", function() {
             }).forEach(_ => {});
 
         stream.start();
+
+        setTimeout(() => {
+            if(intv){
+                clearInterval(intv);
+            }
+        }, t);
     });
 
     it("should wait a few moments", function(done){
