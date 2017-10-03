@@ -34,7 +34,7 @@ stream
 stream.start();
 
 //consume & produce for 5 seconds
-setTimeout(kafkaStreams.closeAll().bind(kafkaStreams), 5000);
+setTimeout(kafkaStreams.closeAll.bind(kafkaStreams), 5000);
 
 function keyValueMapperEtl(message){
     const elements = message.toLowerCase().split(" ");
