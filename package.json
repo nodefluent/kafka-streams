@@ -48,7 +48,7 @@
     "bluebird": "~3.5.0",
     "debug": "^3.1.0",
     "most": "^1.7.2",
-    "most-subject": "^5.3.0",
+    "most-subject": "^6.0.0",
     "sinek": "^6.2.2"
   },
   "devDependencies": {
