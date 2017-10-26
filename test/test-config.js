@@ -3,8 +3,8 @@
 const log4bro = require("log4bro");
 
 const config = {
-    //zkConStr: "localhost:2181/",
-    kafkaHost: "localhost:9092",
+    //zkConStr: "localhost:2181/", //can also connect to zookeeper instead of kafka (older clients)
+    kafkaHost: "localhost:9092", //connects directly to brokers
     logger: new log4bro({ level: "INFO" }),
     groupId: "kafka-streams-test",
     clientName: "kafka-streams-test-name",
@@ -28,7 +28,7 @@ const config = {
 
 const nativeConfig = {
     noptions: {
-        "metadata.broker.list": "localhost:9092",
+        "metadata.broker.list": "localhost:9092", //native client requires broker hosts to connect to
         "group.id": "kafka-streams-test-native",
         "client.id": "kafka-streams-test-name-native",
         "event_cb": true,
@@ -57,8 +57,8 @@ const nativeConfig = {
         "batch.num.messages": 10000
     },
     tconf: {
-        "auto.offset.reset": "earliest",
-        "request.required.acks": 1
+        "auto.offset.reset": "earliest", //consumer offset latest/earliest
+        "request.required.acks": 1 //producer requires ack
     }
 };
 
