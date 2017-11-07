@@ -52,7 +52,7 @@
     "sinek": "^6.2.2"
   },
   "devDependencies": {
-    "async": "~2.5.0",
+    "async": "~2.6.0",
     "istanbul": "~0.4.5",
     "jsdoc": "^3.5.5",
     "jsdoc-to-markdown": "~3.0.0",
