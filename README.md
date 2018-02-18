@@ -1,5 +1,7 @@
 # node-kafka-streams
 
+**Disclaimer:** We are working on a new release that treats Keys and Values of Kafka Messages just as the official Java Version does it. Please be patient. It will also allow to define partitions and keys during pipes to output topics.
+
 [![Greenkeeper badge](https://badges.greenkeeper.io/nodefluent/kafka-streams.svg)](https://greenkeeper.io/)
 
 [![Build Status](https://travis-ci.org/nodefluent/kafka-streams.svg?branch=master)](https://travis-ci.org/nodefluent/kafka-streams)
