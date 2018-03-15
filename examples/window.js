@@ -25,6 +25,6 @@ stream
     });
 
 //start the stream
-stream.start();
+consumeStream.start();
 
 //setTimeout(abort, 5000); // -> abort the window collection after 5 seconds
