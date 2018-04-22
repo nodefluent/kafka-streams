@@ -30,7 +30,8 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>KafkaStreams<span class="signature">(config, storageClass, storageOptions, disableStorageTest)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">stream object factory</div>
+            <div class="class-description">Stream object factory
+inhabits EventEmitter(events)</div>
         
     
 </header>
@@ -53,7 +54,7 @@
 
 
 <div class="description">
-    can be used as factory to get
+    Can be used as factory to get
 pre-build KStream and KTable instances
 injected with a KafkaClient instance
 and with a KStorage instance
@@ -240,7 +241,7 @@ and with a KStorage instance
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line11">line 11</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -348,7 +349,7 @@ that has every been created by this factory
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line135">line 135</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -527,7 +528,7 @@ based on most.js
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line89">line 89</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -706,7 +707,7 @@ representing the topic as change-log
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line72">line 72</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -907,7 +908,7 @@ representing the topic as table like stream
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line104">line 104</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -1017,7 +1018,7 @@ this could result in a large object
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line125">line 125</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -1079,13 +1080,13 @@ this could result in a large object
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 03 2017 18:13:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

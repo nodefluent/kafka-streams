@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>NativeKafkaClient<span class="signature">(topic, config)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>NativeKafkaClient<span class="signature">(topic, config, batchOptions)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="NativeKafkaClient"><span class="type-signature"></span>new NativeKafkaClient<span class="signature">(topic, config)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="NativeKafkaClient"><span class="type-signature"></span>new NativeKafkaClient<span class="signature">(topic, config, batchOptions)</span><span class="type-signature"></span></h4>
     
 
     
@@ -120,6 +120,24 @@ Sinek native kafka- Consumer and/or Producer
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>batchOptions</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -157,7 +175,7 @@ Sinek native kafka- Consumer and/or Producer
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NativeKafkaClient.js.html">NativeKafkaClient.js</a>, <a href="NativeKafkaClient.js.html#line20">line 20</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -211,7 +229,7 @@ Sinek native kafka- Consumer and/or Producer
     
 
     
-    <h4 class="name" id="buffer"><span class="type-signature"></span>buffer<span class="signature">(topic, identifier, payload)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="buffer"><span class="type-signature"></span>buffer<span class="signature">(topic, identifier, payload, _, partition, version, partitionKey)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
     
@@ -247,6 +265,8 @@ an uuid.v4() will be generated
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -267,6 +287,10 @@ an uuid.v4() will be generated
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last"></td>
         </tr>
@@ -284,6 +308,10 @@ an uuid.v4() will be generated
 
             
 
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"></td>
@@ -303,8 +331,108 @@ an uuid.v4() will be generated
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>partition</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>partitionKey</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
         </tr>
 
     
@@ -345,7 +473,7 @@ an uuid.v4() will be generated
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NativeKafkaClient.js.html">NativeKafkaClient.js</a>, <a href="NativeKafkaClient.js.html#line157">line 157</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line195">line 195</a>
     </li></ul></dd>
     
 
@@ -379,7 +507,7 @@ an uuid.v4() will be generated
     </dt>
     <dd>
         
-<span class="param-type">*</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -397,7 +525,7 @@ an uuid.v4() will be generated
     
 
     
-    <h4 class="name" id="bufferFormat"><span class="type-signature"></span>bufferFormat<span class="signature">(topic, identifier, payload, version, compressionType)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="bufferFormat"><span class="type-signature"></span>bufferFormat<span class="signature">(topic, identifier, payload, version, _, partitionKey, partition)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
     
@@ -528,14 +656,14 @@ an uuid.4() will be generated
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">optional</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>compressionType</code></td>
+                <td class="name"><code>_</code></td>
             
 
             <td class="type">
@@ -547,10 +675,60 @@ an uuid.4() will be generated
             
                 <td class="default">
                 
+                    null
+                
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">optional</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>partitionKey</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>partition</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
         </tr>
 
     
@@ -591,7 +769,7 @@ an uuid.4() will be generated
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NativeKafkaClient.js.html">NativeKafkaClient.js</a>, <a href="NativeKafkaClient.js.html#line177">line 177</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line217">line 217</a>
     </li></ul></dd>
     
 
@@ -625,7 +803,7 @@ an uuid.4() will be generated
     </dt>
     <dd>
         
-<span class="param-type">*</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -643,7 +821,7 @@ an uuid.4() will be generated
     
 
     
-    <h4 class="name" id="send"><span class="type-signature"></span>send<span class="signature">(topic, message)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="getProduceHandler"><span class="type-signature"></span>getProduceHandler<span class="signature">()</span><span class="type-signature"> &rarr; {null|EventEmitter}</span></h4>
     
 
     
@@ -651,9 +829,114 @@ an uuid.4() will be generated
 
 
 <div class="description">
-    simply produces a message or multiple on a topic
-if producerPartitionCount is > 1 it will randomize
-the target partition for the message/s
+    returns the produce handler instance if present
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line49">line 49</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">null</span>
+|
+
+<span class="param-type">EventEmitter</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="overwriteTopics"><span class="type-signature"></span>overwriteTopics<span class="signature">(topics)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    overwrites the topic
 </div>
 
 
@@ -689,28 +972,15 @@ the target partition for the message/s
 
         <tr>
             
-                <td class="name"><code>topic</code></td>
+                <td class="name"><code>topics</code></td>
             
 
             <td class="type">
             
-            </td>
+                
+<span class="param-type">Array.&lt;string></span>
 
-            
 
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
             
             </td>
 
@@ -759,7 +1029,263 @@ the target partition for the message/s
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NativeKafkaClient.js.html">NativeKafkaClient.js</a>, <a href="NativeKafkaClient.js.html#line136">line 136</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="send"><span class="type-signature"></span>send<span class="signature">(topicName, message, partition, key, partitionKey, opaqueKey)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    simply produces a message or multiple on a topic
+if producerPartitionCount is > 1 it will randomize
+the target partition for the message/s
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>topicName</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>partition</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>partitionKey</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>opaqueKey</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line173">line 173</a>
     </li></ul></dd>
     
 
@@ -793,13 +1319,149 @@ the target partition for the message/s
     </dt>
     <dd>
         
-<span class="param-type">*</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setProduceHandler"><span class="type-signature"></span>setProduceHandler<span class="signature">(handler)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    sets a handler for produce messages
+(emits whenever kafka messages are produced/delivered)
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">EventEmitter</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -987,7 +1649,7 @@ requires a topic's partition count during initialisation
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NativeKafkaClient.js.html">NativeKafkaClient.js</a>, <a href="NativeKafkaClient.js.html#line103">line 103</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -1198,7 +1860,7 @@ will await a kafka-producer-ready-event if started withProducer=true
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NativeKafkaClient.js.html">NativeKafkaClient.js</a>, <a href="NativeKafkaClient.js.html#line46">line 46</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -1242,13 +1904,13 @@ will await a kafka-producer-ready-event if started withProducer=true
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 03 2017 18:13:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

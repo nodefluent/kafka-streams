@@ -21,6 +21,8 @@
 - passing no config object to KafkaStreams will now throw
 - (internal) NativeKafka .send() does not handle array of messages anymore
 - (internal) NativeKafka produce method params have been altered slightly
+- stream events that run through .to will now be checked if they have a message schema,
+if they do, their fields (key, value, partition, ..) will be remapped to the produce config
 
 **Other**:
 

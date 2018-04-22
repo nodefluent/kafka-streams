@@ -30,7 +30,7 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>StreamDSL<span class="signature">(topicName, storage, kafka, isClone)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">stream base class</div>
+            <div class="class-description">Stream base class</div>
         
     
 </header>
@@ -99,6 +99,9 @@ and interacts with storages/actions and a kafka-client instance.
             
                 
 <span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -112,7 +115,7 @@ and interacts with storages/actions and a kafka-client instance.
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">can also be topics</td>
         </tr>
 
     
@@ -240,7 +243,7 @@ and interacts with storages/actions and a kafka-client instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line27">line 27</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -391,7 +394,7 @@ stream with all elements from both streams
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line729">line 729</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line907">line 907</a>
     </li></ul></dd>
     
 
@@ -542,7 +545,7 @@ combine = (e1, e2) -> e1 + e2
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line742">line 742</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line920">line 920</a>
     </li></ul></dd>
     
 
@@ -674,7 +677,7 @@ etl = v -> Promise
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line158">line 158</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line224">line 224</a>
     </li></ul></dd>
     
 
@@ -865,7 +868,7 @@ with the current message at count
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line393">line 393</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line571">line 571</a>
     </li></ul></dd>
     
 
@@ -1044,7 +1047,7 @@ you probably would not want to use this in production
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line182">line 182</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line248">line 248</a>
     </li></ul></dd>
     
 
@@ -1229,7 +1232,7 @@ you probably would not want to use this in production
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line584">line 584</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line762">line 762</a>
     </li></ul></dd>
     
 
@@ -1377,7 +1380,7 @@ you probably would not want to use this in production
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line492">line 492</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line670">line 670</a>
     </li></ul></dd>
     
 
@@ -1558,7 +1561,7 @@ requires events to have a present key/value field
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line654">line 654</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line832">line 832</a>
     </li></ul></dd>
     
 
@@ -1593,6 +1596,111 @@ requires events to have a present key/value field
     <dd>
         
 <span class="param-type"><a href="StreamDSL.html">StreamDSL</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createAndSetProduceHandler"><span class="type-signature"></span>createAndSetProduceHandler<span class="signature">()</span><span class="type-signature"> &rarr; {module:events.internal}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    creates (and returns) and sets a produce handler
+for this stream instance
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line162">line 162</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">module:events.internal</span>
 
 
     </dd>
@@ -1707,7 +1815,7 @@ only the last event
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line634">line 634</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line812">line 812</a>
     </li></ul></dd>
     
 
@@ -1855,7 +1963,7 @@ only the last event
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line623">line 623</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line801">line 801</a>
     </li></ul></dd>
     
 
@@ -1960,7 +2068,7 @@ without iterator, returns a promise
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line603">line 603</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line781">line 781</a>
     </li></ul></dd>
     
 
@@ -2114,7 +2222,7 @@ pred = v -> boolean
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line215">line 215</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line281">line 281</a>
     </li></ul></dd>
     
 
@@ -2265,7 +2373,7 @@ eff = v -> void
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line171">line 171</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line237">line 237</a>
     </li></ul></dd>
     
 
@@ -2304,6 +2412,162 @@ eff = v -> void
     <dd>
         
 <span class="param-type">*</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="from"><span class="type-signature"></span>from<span class="signature">(topicName)</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    add more topic/s to the consumer
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>topicName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line189">line 189</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="StreamDSL.html">StreamDSL</a></span>
 
 
     </dd>
@@ -2373,7 +2637,7 @@ eff = v -> void
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line112">line 112</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line126">line 126</a>
     </li></ul></dd>
     
 
@@ -2482,7 +2746,7 @@ about the internal kafka clients
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line87">line 87</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line94">line 94</a>
     </li></ul></dd>
     
 
@@ -2586,7 +2850,7 @@ about the internal kafka clients
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line95">line 95</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -2735,7 +2999,7 @@ etl = v -> v2
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line146">line 146</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line212">line 212</a>
     </li></ul></dd>
     
 
@@ -2918,7 +3182,217 @@ default is 0,1
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line296">line 296</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line362">line 362</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="StreamDSL.html">StreamDSL</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="mapBufferKeyToString"><span class="type-signature"></span>mapBufferKeyToString<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    maps an object type event with a Buffer key field
+to an object event with a string key field
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line437">line 437</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="StreamDSL.html">StreamDSL</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="mapBufferValueToString"><span class="type-signature"></span>mapBufferValueToString<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    maps an object type event with a Buffer value field
+to an object event with a string value field
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line463">line 463</a>
     </li></ul></dd>
     
 
@@ -3023,7 +3497,7 @@ default is 0,1
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line442">line 442</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line620">line 620</a>
     </li></ul></dd>
     
 
@@ -3075,7 +3549,114 @@ default is 0,1
     
 
     
-    <h4 class="name" id="mapParse"><span class="type-signature"></span>mapParse<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
+    <h4 class="name" id="mapJSONConvenience"><span class="type-signature"></span>mapJSONConvenience<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    takes a buffer kafka message
+and turns it into a json representation
+buffer key -> string
+buffer value -> string -> object
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line517">line 517</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="StreamDSL.html">StreamDSL</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="mapJSONParse"><span class="type-signature"></span>mapJSONParse<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
     
 
     
@@ -3129,7 +3710,7 @@ if its type is an object
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line333">line 333</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line399">line 399</a>
     </li></ul></dd>
     
 
@@ -3234,7 +3815,7 @@ if its type is object
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line354">line 354</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line420">line 420</a>
     </li></ul></dd>
     
 
@@ -3393,7 +3974,7 @@ default is space
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line275">line 275</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line341">line 341</a>
     </li></ul></dd>
     
 
@@ -3600,7 +4181,112 @@ default is " " and 0,1
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line321">line 321</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line387">line 387</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="StreamDSL.html">StreamDSL</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="mapStringValueToJSONObject"><span class="type-signature"></span>mapStringValueToJSONObject<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    maps an object type event with a string value field
+to an object event with (parsed) object value field
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line489">line 489</a>
     </li></ul></dd>
     
 
@@ -3783,7 +4469,7 @@ e.g. getId = message -> message.id
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line420">line 420</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line598">line 598</a>
     </li></ul></dd>
     
 
@@ -3835,7 +4521,7 @@ e.g. getId = message -> message.id
     
 
     
-    <h4 class="name" id="mapWrapKafkaPayload"><span class="type-signature"></span>mapWrapKafkaPayload<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
+    <h4 class="name" id="mapWrapKafkaValue"><span class="type-signature"></span>mapWrapKafkaValue<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
     
 
     
@@ -3888,7 +4574,7 @@ right to its payload value
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line371">line 371</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line549">line 549</a>
     </li></ul></dd>
     
 
@@ -4072,7 +4758,7 @@ latest value which is stored
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line700">line 700</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line878">line 878</a>
     </li></ul></dd>
     
 
@@ -4256,7 +4942,7 @@ latest value which is stored
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line684">line 684</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line862">line 862</a>
     </li></ul></dd>
     
 
@@ -4423,7 +5109,7 @@ will return a promise
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line572">line 572</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line750">line 750</a>
     </li></ul></dd>
     
 
@@ -4577,7 +5263,7 @@ and replaces the internal stream with the merged new stream
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line122">line 122</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -4726,7 +5412,7 @@ starting with the provided initial value.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line504">line 504</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line682">line 682</a>
     </li></ul></dd>
     
 
@@ -4767,6 +5453,273 @@ starting with the provided initial value.
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setKafkaStreamsReference"><span class="type-signature"></span>setKafkaStreamsReference<span class="signature">(reference)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    overwrites the internal kafkaStreams reference
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>reference</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line172">line 172</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setProduceHandler"><span class="type-signature"></span>setProduceHandler<span class="signature">(handler)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    sets a handler for produce messages
+(emits whenever kafka messages are produced/delivered)
+events: produced, delivered
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:events.internal</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line148">line 148</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4875,7 +5828,7 @@ signal$ must be a most stream instance
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line560">line 560</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line738">line 738</a>
     </li></ul></dd>
     
 
@@ -5023,7 +5976,7 @@ signal$ must be a most stream instance
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line246">line 246</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line312">line 312</a>
     </li></ul></dd>
     
 
@@ -5128,7 +6081,7 @@ be aware that this might take a lot of memory
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line225">line 225</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line291">line 291</a>
     </li></ul></dd>
     
 
@@ -5277,7 +6230,7 @@ equals = (a,b) -> boolean
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line236">line 236</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line302">line 302</a>
     </li></ul></dd>
     
 
@@ -5426,7 +6379,7 @@ returns false
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line538">line 538</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line716">line 716</a>
     </li></ul></dd>
     
 
@@ -5592,7 +6545,7 @@ returns false
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line515">line 515</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line693">line 693</a>
     </li></ul></dd>
     
 
@@ -5696,7 +6649,7 @@ returns false
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line78">line 78</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line85">line 85</a>
     </li></ul></dd>
     
 
@@ -5883,7 +6836,7 @@ requires events to have a present key/value field
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line668">line 668</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line846">line 846</a>
     </li></ul></dd>
     
 
@@ -6032,7 +6985,7 @@ and omits the rest
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line257">line 257</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line323">line 323</a>
     </li></ul></dd>
     
 
@@ -6182,7 +7135,7 @@ m -> !!m
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line527">line 527</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line705">line 705</a>
     </li></ul></dd>
     
 
@@ -6333,7 +7286,7 @@ errors in eff will break stream
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line203">line 203</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line269">line 269</a>
     </li></ul></dd>
     
 
@@ -6464,7 +7417,7 @@ throttlePeriod = index count omit
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line613">line 613</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line791">line 791</a>
     </li></ul></dd>
     
 
@@ -6612,7 +7565,7 @@ throttlePeriod = index count omit
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line470">line 470</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line648">line 648</a>
     </li></ul></dd>
     
 
@@ -6734,7 +7687,7 @@ returns a promise
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">optional</td>
         </tr>
 
     
@@ -6763,7 +7716,7 @@ returns a promise
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">optional</td>
         </tr>
 
     
@@ -6792,7 +7745,7 @@ returns a promise
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">optional</td>
         </tr>
 
     
@@ -6821,7 +7774,7 @@ returns a promise
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">optional</td>
         </tr>
 
     
@@ -6850,7 +7803,7 @@ returns a promise
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">optional</td>
         </tr>
 
     
@@ -6879,7 +7832,7 @@ returns a promise
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last">optional</td>
         </tr>
 
     
@@ -6920,7 +7873,7 @@ returns a promise
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line798">line 798</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line976">line 976</a>
     </li></ul></dd>
     
 
@@ -7069,7 +8022,156 @@ signal$ must be a most stream instance
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line549">line 549</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line727">line 727</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="StreamDSL.html">StreamDSL</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="wrapAsKafkaValue"><span class="type-signature"></span>wrapAsKafkaValue<span class="signature">(topic)</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    wraps an event value inside a kafka message object
+the event value will be used as value of the kafka message
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>topic</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">optional</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line530">line 530</a>
     </li></ul></dd>
     
 
@@ -7171,6 +8273,14 @@ to the internal stream$
 
             <td class="type">
             
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Array.&lt;Object></span>
+
+
+            
             </td>
 
             
@@ -7218,7 +8328,7 @@ to the internal stream$
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StreamDSL.js.html">StreamDSL.js</a>, <a href="StreamDSL.js.html#line104">line 104</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -7262,13 +8372,13 @@ to the internal stream$
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 03 2017 18:13:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

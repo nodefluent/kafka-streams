@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: NativeKafkaClient.js</title>
+    <title>JSDoc: Source: client/NativeKafkaClient.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: NativeKafkaClient.js</h1>
+    <h1 class="page-title">Source: client/NativeKafkaClient.js</h1>
 
     
 
@@ -44,18 +44,46 @@ class NativeKafkaClient extends KafkaClient {
      * Sinek native kafka- Consumer and/or Producer
      * @param topic
      * @param config
+     * @param batchOptions - optional
      */
-    constructor(topic, config){
+    constructor(topic, config, batchOptions = undefined){
         super();
 
         this.topic = topic;
         this.config = config;
+        this.batchOptions = batchOptions;
 
         this.consumer = null;
         this.producer = null;
 
         this.produceTopic = null;
         this.producePartitionCount = 1;
+        this._produceHandler = null;
+    }
+
+    /**
+     * sets a handler for produce messages
+     * (emits whenever kafka messages are produced/delivered)
+     * @param handler {EventEmitter}
+     */
+    setProduceHandler(handler){
+        this._produceHandler = handler;
+    }
+
+    /**
+     * returns the produce handler instance if present
+     * @returns {null|EventEmitter}
+     */
+    getProduceHandler(){
+        return this._produceHandler;
+    }
+
+    /**
+     * overwrites the topic
+     * @param topics {Array&lt;string>}
+     */
+    overwriteTopics(topics){
+        this.topic = topics;
     }
 
     adjustDefaultPartitionCount(partitionCount = 1){
@@ -78,9 +106,14 @@ class NativeKafkaClient extends KafkaClient {
             return;
         }
 
+        //passing batch options will always result in backpressure mode
+        if(this.batchOptions){
+            withBackPressure = true;
+        }
+
         kafkaErrorCallback = kafkaErrorCallback || NOOP;
 
-        this.consumer = new NConsumer([this.topic], this.config);
+        this.consumer = new NConsumer(this.topic, this.config);
 
         this.consumer.on("ready", readyCallback || NOOP);
         this.consumer.on("error", kafkaErrorCallback);
@@ -89,7 +122,7 @@ class NativeKafkaClient extends KafkaClient {
         super.once("kafka-producer-ready", () => {
 
             const streamOptions = {
-                asString: true,
+                asString: false,
                 asJSON: false
             };
 
@@ -100,14 +133,12 @@ class NativeKafkaClient extends KafkaClient {
 
                 if (withBackPressure) {
                     this.consumer.consume((message, done) => {
-                        //message.key = message.key.toString("utf8");
                         super.emit("message", message);
                         done();
-                    }).catch(e => kafkaErrorCallback(e));
+                    }, false, false, this.batchOptions).catch(e => kafkaErrorCallback(e));
                 } else {
                     this.consumer.consume().catch(e => kafkaErrorCallback(e));
                     this.consumer.on("message", message => {
-                        //message.key = message.key.toString("utf8");
                         super.emit("message", message);
                     });
                 }
@@ -153,24 +184,27 @@ class NativeKafkaClient extends KafkaClient {
         }
     }
 
+    //async send(topicName, message, _partition = null, _key = null, _partitionKey = null, _opaqueKey = null)
+
     /**
      * simply produces a message or multiple on a topic
      * if producerPartitionCount is > 1 it will randomize
      * the target partition for the message/s
-     * @param topic
+     * @param topicName
      * @param message
-     * @returns {*}
+     * @param partition - optional
+     * @param key - optional
+     * @param partitionKey - optional
+     * @param opaqueKey - optional
+     * @returns {Promise&lt;void>}
      */
-    send(topic, message){
+    send(topicName, message, partition = null, key = null, partitionKey = null, opaqueKey = null){
 
         if(!this.producer){
             return Promise.reject("producer is not yet setup.");
         }
 
-        const sends = (Array.isArray(message) ? message : [message])
-            .map(m => this.producer.send(topic, m, null, null));
-
-        return Promise.all(sends);
+        return this.producer.send(topicName, message, partition, key, partitionKey, opaqueKey);
     }
 
     /**
@@ -180,15 +214,19 @@ class NativeKafkaClient extends KafkaClient {
      * @param topic
      * @param identifier
      * @param payload
-     * @returns {*}
+     * @param _ - optional
+     * @param partition - optional
+     * @param version - optional
+     * @param partitionKey - optional
+     * @returns {Promise&lt;void>}
      */
-    buffer(topic, identifier, payload){
+    buffer(topic, identifier, payload, _ = null, partition = null, version = null, partitionKey = null){
 
         if(!this.producer){
             return Promise.reject("producer is not yet setup.");
         }
 
-        return this.producer.buffer(topic, identifier, payload);
+        return this.producer.buffer(topic, identifier, payload, partition, version, partitionKey);
     }
 
     /**
@@ -198,11 +236,13 @@ class NativeKafkaClient extends KafkaClient {
      * @param topic
      * @param identifier
      * @param payload
-     * @param version
-     * @param compressionType
-     * @returns {*}
+     * @param version - optional
+     * @param _ - optional
+     * @param partitionKey - optional
+     * @param partition - optional
+     * @returns {Promise&lt;void>}
      */
-    bufferFormat(topic, identifier, payload, version = 1){
+    bufferFormat(topic, identifier, payload, version = 1, _ = null, partitionKey = null, partition = null){
 
         if(!this.producer){
             return Promise.reject("producer is not yet setup.");
@@ -212,15 +252,12 @@ class NativeKafkaClient extends KafkaClient {
             identifier = uuid.v4();
         }
 
-        return this.producer.bufferFormatPublish(topic, identifier, payload, version);
+        return this.producer.bufferFormatPublish(topic, identifier, payload, version, undefined, partitionKey, partition);
     }
 
     pause(){
 
-        /*
-        if(this.consumer){
-            this.consumer.pause();
-        } */
+        //no consumer pause
 
         if(this.producer){
             this.producer.pause();
@@ -229,10 +266,7 @@ class NativeKafkaClient extends KafkaClient {
 
     resume(){
 
-        /*
-        if(this.consumer){
-            this.consumer.resume();
-        } */
+       //no consumer resume
 
         if(this.producer){
             this.producer.resume();
@@ -253,12 +287,10 @@ class NativeKafkaClient extends KafkaClient {
 
         if (this.consumer) {
             this.consumer.close(commit);
-            //this.consumer = null;
         }
 
         if (this.producer) {
             this.producer.close();
-            //this.producer = null;
         }
     }
 
@@ -283,13 +315,13 @@ module.exports = NativeKafkaClient;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 03 2017 18:13:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

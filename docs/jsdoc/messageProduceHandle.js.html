@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: messageProduceHandle.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: messageProduceHandle.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+
+const debug = require("debug")("kafka-streams:mph");
+const PRODUCE_TYPES = require("./produceTypes.js");
+
+/**
+ * returns true if the message is an object
+ * with key and value fields
+ * @param message {Object}
+ * @returns {boolean}
+ */
+const hasKVStructure = message => {
+
+    if(message &amp;&amp;
+        typeof message === "object" &amp;&amp;
+        typeof message.key !== "undefined" &amp;&amp;
+        typeof message.value !== "undefined"){
+        return true;
+    }
+
+    return false;
+};
+
+/**
+ * wraps a kafka message in the correct type format to its
+ * kafka (js or native) instance method's promise return value
+ * @param produceType
+ * @param kafka
+ * @param compressionType
+ * @param topic
+ * @param partition
+ * @param key
+ * @param value
+ * @param partitionKey - optional
+ * @param opaqueKey - optional
+ * @returns {Promise&lt;void>}
+ */
+const produceTypeSelection = (produceType, kafka, compressionType, topic, partition, key, value, partitionKey = null, opaqueKey = null) => {
+
+    debug("producing", produceType, topic, partition, key, partitionKey, opaqueKey, value);
+
+    //compressionType is only passed for the JS client, the native client will ignore it
+    //on the other hand partitionKey, opaqueKey and partition are ignored by the JS client
+
+    let promise = null;
+    switch(produceType){
+
+        case PRODUCE_TYPES.SEND:
+            promise = kafka.send(topic, value, partition, key, partitionKey, opaqueKey);
+            break;
+
+        case PRODUCE_TYPES.BUFFER:
+            promise = kafka.buffer(topic, key, value, compressionType, partition, version, partitionKey);
+            break;
+
+        case PRODUCE_TYPES.BUFFER_FORMAT:
+            promise = kafka.bufferFormat(topic, key, value, version, compressionType, partitionKey, partition);
+            break;
+
+        default:
+            throw new Error(`${produceType} is an unknown produceType.`);
+    }
+
+    return promise;
+};
+
+/**
+ * This method handles any outgoing event from a stream
+ * producing it to kafka (if the .to dsl was used)
+ * @param kafka
+ * @param message
+ * @param outputTopicName
+ * @param produceType
+ * @param compressionType
+ * @param version
+ * @param producerErrorCallback
+ * @return {Promise&lt;void>}
+ */
+const messageProduceHandle = (kafka, message, outputTopicName, produceType, compressionType, version, producerErrorCallback) => {
+
+    let _topic = outputTopicName;
+    let _key = null;
+    let _version = version;
+    let _partition = null;
+    let _partitionKey = null;
+    let _opaqueKey = null;
+    let _value = message;
+
+    //overwrite default values or configured values
+    //with on demand message settings
+    if(hasKVStructure(message)){
+
+        _key = message.key;
+
+        //overwrite default topic, with per messag topic
+        if(message.topic){
+            _topic = message.topc;
+        }
+
+        if(typeof message.version !== "undefined"){
+            _version = message.version;
+        }
+
+        if(typeof message.partition !== "undefined"){
+            _partition = message.partition;
+        }
+
+        if(typeof message.partitionKey !== "undefined"){
+            _partitionKey = message.partitionKey;
+        }
+
+        if(typeof message.opaqueKey !== "undefined"){
+            _opaqueKey = message.opaqueKey;
+        }
+
+        _value = message.value;
+    }
+
+    const kafkaMessage = {
+        produceType,
+        compressionType,
+        topic: _topic,
+        partition: _partition,
+        key: _key,
+        value: _value,
+        partitionKey: _partitionKey,
+        opaqueKey: _opaqueKey
+    };
+
+    const produceHandler = kafka.getProduceHandler();
+    if(produceHandler){
+        produceHandler.emit("produced", kafkaMessage);
+    }
+
+    return produceTypeSelection(
+
+        produceType,
+        kafka,
+        compressionType,
+
+        _topic,
+        _partition,
+        _key,
+        _value,
+        _partitionKey,
+        _opaqueKey
+
+    ).then(() => {
+        if(produceHandler){
+            produceHandler.emit("delivered", kafkaMessage);
+        }
+    }).catch(error => {
+        if(producerErrorCallback){
+            producerErrorCallback(error);
+        }
+    });
+};
+
+module.exports = {
+    messageProduceHandle
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

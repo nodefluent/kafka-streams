@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: StreamDSL.js</title>
+    <title>JSDoc: Source: dsl/StreamDSL.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: StreamDSL.js</h1>
+    <h1 class="page-title">Source: dsl/StreamDSL.js</h1>
 
     
 
@@ -34,30 +34,25 @@ const Promise = require("bluebird");
 const uuid = require("uuid");
 const debug = require("debug")("kafka-streams:streamdsl");
 
-const KStorage = require("./KStorage.js");
-const KafkaClient =  require("./KafkaClient.js");
-const {KeyCount, Sum, Max, Min} = require("./actions");
+const KStorage = require("../KStorage.js");
+const KafkaClient =  require("../client/KafkaClient.js");
+const {KeyCount, Sum, Max, Min} = require("../actions/index.js");
+const {messageProduceHandle} = require("../messageProduceHandle.js");
+const PRODUCE_TYPES = require("../produceTypes.js");
 
 const NOOP = () => {};
 const MESSAGE = "message";
-
-const PRODUCE_TYPES = {
-    SEND: "send",
-    BUFFER: "buffer",
-    BUFFER_FORMAT: "buffer_format"
-};
-
 const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
 
 /**
- * stream base class
+ * Stream base class
  */
 class StreamDSL {
 
     /**
      * Stream base class that wraps around a private most.js stream$
      * and interacts with storages/actions and a kafka-client instance.
-     * @param {string} topicName
+     * @param {string|Array&lt;string>} topicName - can also be topics
      * @param {KStorage} storage
      * @param {KafkaClient} kafka
      * @param {boolean} isClone
@@ -74,7 +69,19 @@ class StreamDSL {
             throw new Error("storage hsa to be an instance of KStorage.");
         }
 
-        this.topicName = topicName || ""; //empty topic name is allowed for produce only streams
+        //convenience
+        if(!topicName){
+            this.noTopicProvided = true;
+        } else {
+            this.noTopicProvided = false;
+
+            if(!Array.isArray(topicName)){
+                topicName = [topicName];
+            }
+        }
+
+        //no topics is allowed for produce only streams
+        this.topicName = topicName || [];
 
         this.kafka = kafka;
         this.storage = storage;
@@ -104,7 +111,7 @@ class StreamDSL {
      * dummy, should be overwritten
      */
     start(){
-        return Promise.reject("when inherting StreamDSL, the start method should be overwritten with connector logic.");
+        return Promise.reject("When inherting StreamDSL, the start method should be overwritten with connector logic.");
     }
 
     /**
@@ -127,10 +134,17 @@ class StreamDSL {
     /**
      * can be used to manually write message/events
      * to the internal stream$
-     * @param message
+     * @param message {Object|Array&lt;Object>}
      */
     writeToStream(message){
-        this._ee.emit("message", message);
+
+        if(!Array.isArray(message)){
+            return this._ee.emit("message", message);
+        }
+
+        message.forEach(_message => {
+            this._ee.emit("message", _message);
+        });
     }
 
     /**
@@ -153,6 +167,36 @@ class StreamDSL {
         this.stream$ = most.merge(newStream$, most.fromEvent(MESSAGE, this._ee));
     }
 
+    /**
+     * sets a handler for produce messages
+     * (emits whenever kafka messages are produced/delivered)
+     * events: produced, delivered
+     * @param handler {module:events.internal}
+     */
+    setProduceHandler(handler){
+
+        if(!handler || !(handler instanceof EventEmitter)){
+            throw new Error("ProduceHandler must be an instance of EventEmitter (events).");
+        }
+
+        this.kafka.setProduceHandler(handler);
+    }
+
+    /**
+     * creates (and returns) and sets a produce handler
+     * for this stream instance
+     * @returns {module:events.internal}
+     */
+    createAndSetProduceHandler(){
+        const ee = new EventEmitter();
+        this.setProduceHandler(ee);
+        return ee;
+    }
+
+    /**
+     * overwrites the internal kafkaStreams reference
+     * @param reference
+     */
     setKafkaStreamsReference(reference){
         this._kafkaStreams = reference;
     }
@@ -164,6 +208,28 @@ class StreamDSL {
      *  ##           ##
      *   #           #
      */
+
+    /**
+     * add more topic/s to the consumer
+     * @param topicName {string|Array&lt;string>}
+     * @returns {StreamDSL}
+     */
+    from(topicName){
+
+        if(!Array.isArray(topicName)){
+            topicName = [topicName];
+        }
+
+        topicName.forEach(topic => {
+            this.topicName.push(topic);
+        });
+
+        if(this.noTopicProvided){
+            this.noTopicProvided = false;
+        }
+
+        return this;
+    }
 
     /**
      * simple synchronous map function
@@ -358,7 +424,7 @@ class StreamDSL {
      * (if parsing fails, the error object will be returned)
      * @returns {StreamDSL}
      */
-    mapParse(){
+    mapJSONParse(){
 
         return this.map(string => {
 
@@ -392,11 +458,123 @@ class StreamDSL {
     }
 
     /**
+     * maps an object type event with a Buffer key field
+     * to an object event with a string key field
+     * @returns {StreamDSL}
+     */
+    mapBufferKeyToString(){
+
+        return this.map(object => {
+
+            if(typeof object !== "object" || !object.key){
+                return object;
+            }
+
+            try {
+                const key = object.key.toString("utf8");
+                if(key){
+                    object.key = key;
+                }
+            } catch(_){
+                //empty
+            }
+
+            return object;
+        });
+    }
+
+    /**
+     * maps an object type event with a Buffer value field
+     * to an object event with a string value field
+     * @returns {StreamDSL}
+     */
+    mapBufferValueToString(){
+
+        return this.map(object => {
+
+            if(typeof object !== "object" || !object.value){
+                return object;
+            }
+
+            try {
+                const value = object.value.toString("utf8");
+                if(value){
+                    object.value = value;
+                }
+            } catch(_){
+                //empty
+            }
+
+            return object;
+        });
+    }
+
+    /**
+     * maps an object type event with a string value field
+     * to an object event with (parsed) object value field
+     * @returns {StreamDSL}
+     */
+    mapStringValueToJSONObject(){
+
+        return this.map(object => {
+
+            if(typeof object !== "object" || !object.value){
+                return object;
+            }
+
+            try {
+                const value = JSON.parse(object.value);
+                if(value){
+                    object.value = value;
+                }
+            } catch(_){
+                //empty
+            }
+
+            return object;
+        });
+    }
+
+    /**
+     * takes a buffer kafka message
+     * and turns it into a json representation
+     * buffer key -> string
+     * buffer value -> string -> object
+     * @returns {StreamDSL}
+     */
+    mapJSONConvenience(){
+        return this
+            .mapBufferKeyToString()
+            .mapBufferValueToString()
+            .mapStringValueToJSONObject();
+    }
+
+    /**
+     * wraps an event value inside a kafka message object
+     * the event value will be used as value of the kafka message
+     * @param topic - optional
+     * @returns {StreamDSL}
+     */
+    wrapAsKafkaValue(topic = undefined){
+
+        return this.map(any => {
+            return {
+                opaqueKey: null,
+                partitionKey: null,
+                partition: null,
+                key: null,
+                value: any,
+                topic
+            };
+        });
+    }
+
+    /**
      * maps every stream event's kafka message
      * right to its payload value
      * @returns {StreamDSL}
      */
-    mapWrapKafkaPayload(){
+    mapWrapKafkaValue(){
 
        return this.map(message => {
 
@@ -815,15 +993,15 @@ class StreamDSL {
      * the stream$ result to be produced to the given topic name
      * if the instance is a clone, this function call will have to setup a kafka producer
      * returns a promise
-     * @param {string} topic
-     * @param {number} outputPartitionsCount
-     * @param {string} produceType
-     * @param {number} version
-     * @param {number} compressionType
-     * @param {function} producerErrorCallback
+     * @param {string} topic - optional
+     * @param {number} outputPartitionsCount - optional
+     * @param {string} produceType - optional
+     * @param {number} version - optional
+     * @param {number} compressionType - optional
+     * @param {function} producerErrorCallback - optional
      * @returns {Promise.&lt;boolean>}
      */
-    to(topic, outputPartitionsCount = 1, produceType = "send", version = 1, compressionType = 0, producerErrorCallback = null){
+    to(topic = undefined, outputPartitionsCount = 1, produceType = "send", version = 1, compressionType = 0, producerErrorCallback = null){
         return new Promise(resolve => {
 
             if(this.produceAsTopic){
@@ -860,30 +1038,16 @@ class StreamDSL {
                 resolve, producerErrorCallback || NOOP);
 
             this.forEach(message => {
-
-                let promise = null;
-                switch(this.produceType){
-
-                    case PRODUCE_TYPES.SEND:
-                        promise = this.kafka.send(this.outputTopicName, message);
-                        break;
-
-                    case PRODUCE_TYPES.BUFFER:
-                        promise = this.kafka.buffer(this.outputTopicName, null, message, compressionType);
-                        break;
-
-                    case PRODUCE_TYPES.BUFFER_FORMAT:
-                        promise = this.kafka.bufferFormat(this.outputTopicName, null, message, version, compressionType);
-                        break;
-                }
-
-                promise.catch(e => {
-                    if(producerErrorCallback){
-                        producerErrorCallback(e);
-                    }
-                });
+                messageProduceHandle(
+                    this.kafka,
+                    message,
+                    this.outputTopicName,
+                    this.produceType,
+                    this.produceCompressionType,
+                    this.produceVersion,
+                    producerErrorCallback
+                );
             });
-
         });
     }
 }
@@ -899,13 +1063,13 @@ module.exports = StreamDSL;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 03 2017 18:13:51 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
