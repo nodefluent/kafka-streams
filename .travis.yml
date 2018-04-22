@@ -5,29 +5,17 @@ env:
   global:
   - ZOOKEEPER_PEERS=localhost:2181
   - KAFKA_PEERS=localhost:9092
-  - KST_TOPIC=travis
-  - NKST_TOPIC=ntravis
   - CXX=g++-4.8
 
 before_install:
-- wget http://www.us.apache.org/dist/kafka/0.10.2.0/kafka_2.10-0.10.2.0.tgz -O kafka.tgz
+- wget http://www.us.apache.org/dist/kafka/1.1.0/kafka_2.12-1.1.0.tgz -O kafka.tgz
 - mkdir -p kafka && tar xzf kafka.tgz -C kafka --strip-components 1
 - nohup bash -c "cd kafka && bin/zookeeper-server-start.sh config/zookeeper.properties &"
 - nohup bash -c "cd kafka && bin/kafka-server-start.sh config/server.properties &"
-- sleep 8
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-input-travis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-second-travis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-third-travis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-fourth-travis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-output-travis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 3 --replication-factor 1 --topic ks-traffic-travis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-input-ntravis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-second-ntravis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-third-ntravis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-fourth-ntravis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ks-output-ntravis --zookeeper localhost:2181
-- kafka/bin/kafka-topics.sh --create --partitions 3 --replication-factor 1 --topic ks-traffic-ntravis --zookeeper localhost:2181
-- sleep 1
+- sleep 12
+- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic my-input-topic --zookeeper localhost:2181
+- kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic my-output-topic --zookeeper localhost:2181
+- sleep 2
 
 addons:
   apt:

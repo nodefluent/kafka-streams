@@ -21,9 +21,10 @@ const {KafkaStreams} = require("./../index.js");
 const {nativeConfig: config} = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
-const stream = kafkaStreams.getKStream("my-input-topic");
+const stream = kafkaStreams.getKStream();
 
 stream
+    .from("my-input-topic")
     .map(keyValueMapperEtl)
     .countByKey("key", "count")
     .filter(kv => kv.count >= 3)

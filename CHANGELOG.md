@@ -1,5 +1,36 @@
 # kafka-streams CHANGELOG
 
+## 2018-20-04, Version 4.0.0
+
+**ADDITIONAL FEATURES**:
+
+- KafkaStreams inherits event emitter ("closed" event)
+- you can now pass multiple topics to the .getKStream() function
+- there is now a .from("topic"|["topics"]) dsl function to subscribe
+- mapJSONConvenience, mapStringValueToJSONObject, mapBufferValueToString, mapBufferKeyToString
+- wrapAsKafkaValue
+- you can now pass batchOptions for the native consumer to via config.batchOptions
+- passing batchOptions enforces backpressure mode
+- added setProduceHandler and createAndSetProduceHandler methods to register for message delivery
+
+**BREAKING CHANGES**:
+
+- raw events are no streamed with key and value buffers
+- mapParse has been renamed to mapJSONParse
+- mapWrapKafkaPayload has been renamed to mapWrapKafkaValue
+- passing no config object to KafkaStreams will now throw
+- (internal) NativeKafka .send() does not handle array of messages anymore
+- (internal) NativeKafka produce method params have been altered slightly
+
+**Other**:
+
+* dropped old crappy/flakey int tests
+* added new e2e and unit tests
+* all produce activies have been bundled in messageProduceHandle
+* folder structure has been refactored
+* updated documentation
+* added kafka message schemes documentation
+
 ## 2017-10-03, Version 3.0.0
 
 * Updated dependencies

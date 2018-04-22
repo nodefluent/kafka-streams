@@ -15,7 +15,8 @@ kafka-streams.js Documentation
    * [Using the examples](#the-examples)
 
 5. Documentation (is still WIP)
-    * [HTML-Documentation](https://krystianity.github.io/kafka-streams/jsdoc/)
+    * [Dealing with Message Schemas](handling-messages-schemas.md)
+    * [HTML-Documentation](https://nodefluent.github.io/kafka-streams/jsdoc/)
     * [MD-Documentation](doc.md)
     * [Using the native client](native.md)
     * [SSL support](ssl-sasl.md)

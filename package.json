@@ -1,13 +1,15 @@
 {
   "name": "kafka-streams",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "kafka-streams for Node.js",
   "main": "index.js",
   "scripts": {
     "word-count": "node ./examples/wordCount.js",
-    "obs-test": "mocha test/unit/Observable.test.js",
-    "test-unit": "_mocha --recursive -R spec test/unit",
-    "test-int": "istanbul cover _mocha -- --recursive --timeout 12500 --exit -R spec test/int/ && istanbul check-coverage --statements 60",
+    "obs-test": "_mocha test/unit/Observable.test.js",
+    "test-unit": "_mocha --recursive --exit -R spec test/unit",
+    "test-int": "_mocha --recursive --timeout 22500 --exit -R spec test/int",
+    "test-int:debug": "DEBUG=sinek:*,kafka-streams:* _mocha --recursive --timeout 22500 --exit -R spec test/int",
+    "test-int:cov": "istanbul cover _mocha -- --recursive --timeout 22500 --exit -R spec test/int/ && istanbul check-coverage --statements 60",
     "test": "npm run test-unit && npm run test-int",
     "jsdoc": "rm -r ./docs/jsdoc && jsdoc ./lib --recurse -R ./README.md -d ./docs/jsdoc",
     "jsdoc2md": "rm ./docs/doc.md && jsdoc2md -f ./lib/**/*.js -d > ./docs/doc.md",
@@ -45,20 +47,19 @@
   },
   "homepage": "https://github.com/nodefluent/kafka-streams#readme",
   "dependencies": {
-    "bluebird": "~3.5.0",
-    "debug": "^3.1.0",
-    "most": "^1.7.2",
-    "most-subject": "^5.3.0",
-    "sinek": "^6.2.2"
+    "bluebird": "~3.5.1",
+    "debug": "~3.1.0",
+    "most": "~1.7.3",
+    "most-subject": "~6.0.0",
+    "sinek": "~6.15.2"
   },
   "devDependencies": {
     "async": "~2.6.0",
-    "istanbul": "~0.4.5",
-    "jsdoc": "^3.5.5",
-    "jsdoc-to-markdown": "~3.0.0",
-    "log4bro": "~3.3.0",
-    "mocha": "~4.0.0",
-    "proxyquire": "~1.8.0",
-    "uuid": "~3.1.0"
+    "jsdoc": "~3.5.5",
+    "jsdoc-to-markdown": "~4.0.1",
+    "log4bro": "~3.7.0",
+    "mocha": "~5.1.1",
+    "proxyquire": "~2.0.1",
+    "uuid": "~3.2.1"
   }
 }

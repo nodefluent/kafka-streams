@@ -1,9 +1,6 @@
 # node-kafka-streams
 
-**Disclaimer:** We are working on a new release that treats Keys and Values of Kafka Messages just as the official Java Version does it. Please be patient. It will also allow to define partitions and keys during pipes to output topics.
-
 [![Greenkeeper badge](https://badges.greenkeeper.io/nodefluent/kafka-streams.svg)](https://greenkeeper.io/)
-
 [![Build Status](https://travis-ci.org/nodefluent/kafka-streams.svg?branch=master)](https://travis-ci.org/nodefluent/kafka-streams)
 [![npm version](https://badge.fury.io/js/kafka-streams.svg)](https://badge.fury.io/js/kafka-streams)
 
@@ -18,14 +15,17 @@ const config = require("./config.json");
 const factory = new KafkaStreams(config);
 
 const kstream = factory.getKStream("input-topic");
-const ktable = factory.getKTable(..);
+const ktable = factory.getKTable(/* .. */);
 
-kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
+kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to("output-topic");
 ```
+
+> CHANGES: The latest version brings a lot of changes, please check [here](CHANGELOG.md) before updating.
 
 ## API Overview
 
 * [Quick Start](docs/quick-start.md)
+* [Message 'to' and 'from' Apache Kafka](docs/handling-messages-schemas.md)
 * [API Info](docs/api.md)
 * [Documentation](https://nodefluent.github.io/kafka-streams/jsdoc/)
 * [Operator descriptions](docs/most-api.md)
@@ -52,8 +52,8 @@ kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
 * [FAQ - More](#more)
 
 ## Prerequisites
-- kafka broker should be version `>= 0.9.x`, suggested: `>= 0.10.x`
-- nodejs should be version `>= 6.10`, suggested: `>= 8.6.x`
+- kafka broker should be version `>= 0.11.x`
+- Node.js should be version `>= 8.x.x`
 
 ## Aim of this Library
 
@@ -201,6 +201,8 @@ the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
 ### KStream
 
 - [x] window
+- [ ] advanced window
+- [ ] rolling window
 
 # More
 

@@ -1,29 +1,12 @@
 "use strict";
 
-const log4bro = require("log4bro");
-
-const config = {
-    //zkConStr: "localhost:2181/", //can also connect to zookeeper instead of kafka (older clients)
-    kafkaHost: "localhost:9092", //connects directly to brokers
-    logger: new log4bro({ level: "INFO" }),
-    groupId: "kafka-streams-test",
-    clientName: "kafka-streams-test-name",
-    workerPerPartition: 1,
-    options: {
-        sessionTimeout: 8000,
-        protocol: ["roundrobin"],
-        fromOffset: "earliest", //latest
-        fetchMaxBytes: 1024 * 100,
-        fetchMinBytes: 1,
-        fetchMaxWaitMs: 10,
-        heartbeatInterval: 250,
-        retryMinTimeout: 250,
-        autoCommit: true,
-        autoCommitIntervalMs: 1000,
-        requireAcks: 0,
-        //ackTimeoutMs: 100,
-        //partitionerType: 3
-    }
+//dont use these settings for production, it will set your broker on fire..
+const batchOptions = {
+    batchSize: 5,
+    commitEveryNBatch: 1,
+    concurrency: 1,
+    commitSync: false,
+    noBatchCommits: false
 };
 
 const nativeConfig = {
@@ -57,12 +40,12 @@ const nativeConfig = {
         "batch.num.messages": 10000
     },
     tconf: {
-        "auto.offset.reset": "earliest", //consumer offset latest/earliest
-        "request.required.acks": 1 //producer requires ack
-    }
+        "auto.offset.reset": "earliest",
+        "request.required.acks": 1
+    },
+    batchOptions
 };
 
 module.exports = {
-    config,
     nativeConfig
 };
