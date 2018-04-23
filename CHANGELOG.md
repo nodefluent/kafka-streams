@@ -1,5 +1,9 @@
 # kafka-streams CHANGELOG
 
+## 2018-23-04, Version 4.0.1
+
+* fixed empty produce topic from starting consumer even if not needed
+
 ## 2018-20-04, Version 4.0.0
 
 **ADDITIONAL FEATURES**:
