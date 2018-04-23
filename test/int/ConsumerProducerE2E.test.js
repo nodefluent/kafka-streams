@@ -50,7 +50,8 @@ describe("E2E INT", () => {
         stream.to(topic);
 
         let count = 0;
-        stream.createAndSetProduceHandler().on("delivered", () => {
+        stream.createAndSetProduceHandler().on("delivered", message => {
+            console.log(message.value);
             count++;
             if(count === messages.length){
                 setTimeout(done, 250);
@@ -58,6 +59,7 @@ describe("E2E INT", () => {
         });
 
         stream.start().then(() => {
+            console.log("started");
             stream.writeToStream(messages);
         });
     });

@@ -1,5 +1,18 @@
 # kafka-streams CHANGELOG
 
+## 2018-23-04, Version 4.1.0
+
+* added ability to process a different Kafka configuration for producing via `.to()` if the first parameter
+is an object. Pass an object to `.to({outputKafkaConfig: {}})` (in case you are not starting a consumer with your stream)
+* added ability to process a different Kafka configuration for producing via `.start()`. Pass an object to
+`.start({outputKafkaConfig: {}})` (works for KStream and KTable) in case you are starting a consumer and producer on the
+same stream.
+
+## 2018-23-04, Version 4.0.2
+
+* fixed typo in messageProduceHandler that caused errors during on demand message production
+* now passing version in messageProduceHandler
+
 ## 2018-23-04, Version 4.0.1
 
 * fixed empty produce topic from starting consumer even if not needed
