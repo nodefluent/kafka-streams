@@ -1,5 +1,9 @@
 # kafka-streams CHANGELOG
 
+## 2018-18-05, Version 4.2.0
+
+* added new DSL function most.awaitPromises
+
 ## 2018-23-04, Version 4.1.0
 
 * added ability to process a different Kafka configuration for producing via `.to()` if the first parameter
