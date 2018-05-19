@@ -58,7 +58,7 @@
     "jsdoc": "~3.5.5",
     "jsdoc-to-markdown": "~4.0.1",
     "log4bro": "~3.7.0",
-    "mocha": "~5.1.1",
+    "mocha": "~5.2.0",
     "proxyquire": "~2.0.1",
     "uuid": "~3.2.1"
   }
