@@ -1,5 +1,11 @@
 # kafka-streams CHANGELOG
 
+## 2018-31-05, Version 4.3.0
+
+* added concatMap dsl method
+* added getNewMostFrom methhod
+* added example consomeOneProduceTwo
+
 ## 2018-18-05, Version 4.2.0
 
 * added new DSL function most.awaitPromises
