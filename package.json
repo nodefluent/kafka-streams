@@ -51,7 +51,7 @@
     "debug": "~3.1.0",
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
-    "sinek": "~6.15.2"
+    "sinek": "~6.16.0"
   },
   "devDependencies": {
     "async": "~2.6.0",
