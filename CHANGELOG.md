@@ -1,5 +1,11 @@
 # kafka-streams CHANGELOG
 
+## 2018-15-06, Version 4.4.0
+
+* updated dependencies
+* new sinek version brings latest node-rdkafka and kafka-node as well as
+message value and key buffer encoding for javascript client
+
 ## 2018-31-05, Version 4.3.0
 
 * added concatMap dsl method
