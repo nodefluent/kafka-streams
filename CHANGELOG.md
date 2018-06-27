@@ -1,5 +1,10 @@
 # kafka-streams CHANGELOG
 
+## 2018-27-06, Version 4.5.0
+
+* updated depdendencies
+* new sinek version brings additional metadata methods
+
 ## 2018-15-06, Version 4.4.0
 
 * updated dependencies
