@@ -53,7 +53,7 @@
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
     "npm-check-updates": "^2.14.2",
-    "sinek": "~6.18.0"
+    "sinek": "~6.19.0"
   },
   "devDependencies": {
     "async": "~2.6.1",
