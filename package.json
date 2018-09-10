@@ -1,7 +1,8 @@
 {
   "name": "kafka-streams",
-  "version": "4.5.0",
+  "version": "4.6.0",
   "description": "kafka-streams for Node.js",
+  "typings": "index.d.ts",
   "main": "index.js",
   "scripts": {
     "word-count": "node ./examples/wordCount.js",
@@ -16,7 +17,8 @@
     "docs": "npm run jsdoc && npm run jsdoc2md",
     "kafka:start": "./kafka-setup/start.sh",
     "kafka:stop": "./kafka-setup/stop.sh",
-    "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f"
+    "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f",
+    "ts": "tsc ./index.d.ts"
   },
   "repository": {
     "type": "git",
@@ -47,13 +49,13 @@
   },
   "homepage": "https://github.com/nodefluent/kafka-streams#readme",
   "dependencies": {
-    "bluebird": "~3.5.1",
+    "bluebird": "~3.5.2",
     "debug": "~3.1.0",
     "global": "^4.3.2",
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
     "npm-check-updates": "^2.14.2",
-    "sinek": "~6.18.0"
+    "sinek": "~6.22.0"
   },
   "devDependencies": {
     "async": "~2.6.1",
@@ -61,7 +63,7 @@
     "jsdoc-to-markdown": "~4.0.1",
     "log4bro": "~3.7.1",
     "mocha": "~5.2.0",
-    "proxyquire": "~2.0.1",
-    "uuid": "~3.3.0"
+    "proxyquire": "~2.1.0",
+    "uuid": "~3.3.2"
   }
 }

@@ -1,5 +1,15 @@
 # kafka-streams CHANGELOG
 
+## 2018-10-09, Version 4.6.0
+
+* added typescript declarations
+* updated dependencies:
+
+sinek        →  ~6.22.0
+proxyquire   →  ~2.1.0
+bluebird     →  ~3.5.2
+uuid         →  ~3.3.2
+
 ## 2018-27-06, Version 4.5.0
 
 * updated depdendencies
