@@ -1,5 +1,9 @@
 # kafka-streams CHANGELOG
 
+## 2018-11-09, Version 4.6.1
+
+* added return type for .to() call
+
 ## 2018-10-09, Version 4.6.0
 
 * added KStream.branch() etl method

@@ -123,7 +123,8 @@ declare module "kafka-streams" {
         min(fieldName: string, minField?: string): StreamDSL;
         max(fieldName: string, maxField?: string): StreamDSL;
         to(topic: string, outputPartitionsCount?: number, produceType?: "send" | "buffer" | "bufferFormat",
-            version?: number, compressionType?: number, producerErrorCallback?: (error: Error) => void, outputKafkaConfig?: IKafkaStreamsConfig): StreamDSL;
+            version?: number, compressionType?: number, producerErrorCallback?: (error: Error) => void,
+            outputKafkaConfig?: IKafkaStreamsConfig): Promise<boolean>;
     }
 
     export class KStream extends StreamDSL {
