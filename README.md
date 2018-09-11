@@ -181,6 +181,7 @@ the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
 - [ ] outerJoin
 - [x] innerJoin
 - [ ] leftJoin
+- [x] branch
 
 ### KTable Status
 

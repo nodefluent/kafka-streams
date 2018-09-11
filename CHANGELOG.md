@@ -2,6 +2,7 @@
 
 ## 2018-10-09, Version 4.6.0
 
+* added KStream.branch() etl method
 * added typescript declarations
 * updated dependencies:
 
