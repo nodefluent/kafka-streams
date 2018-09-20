@@ -1,5 +1,9 @@
 # kafka-streams CHANGELOG
 
+## 2018-20-09, Version 4.6.2
+
+* shipping fix for a bug in node-sinek
+
 ## 2018-11-09, Version 4.6.1
 
 * added return type for .to() call
