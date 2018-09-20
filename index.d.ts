@@ -131,6 +131,7 @@ declare module "kafka-streams" {
         constructor(topicName: string, storage?: KStorage, kafka?: KafkaClient, isClone?: boolean);
         start(kafkaReadyCallback?: () => void, kafkaErrorCallback?: (error: Error) => void,
             withBackPressure?: boolean, outputKafkaConfig?: IKafkaStreamsConfig): Promise<void>;
+        start({ outputKafkaConfig: IKafkaStreamsConfig }): Promise<void>;
         innerJoin(stream: KStream, key?: string, windowed?: boolean, combine?: Function): KStream;
         merge(stream: KStream): KStream;
         fromMost(stream$: any): KStream;
