@@ -39,3 +39,4 @@ jspm_packages
 .idea/
 logs/
 certs/
+.vscode/*.sql
