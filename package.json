@@ -1,6 +1,6 @@
 {
   "name": "kafka-streams",
-  "version": "4.6.1",
+  "version": "4.6.3",
   "description": "kafka-streams for Node.js",
   "typings": "index.d.ts",
   "main": "index.js",
@@ -50,12 +50,12 @@
   "homepage": "https://github.com/nodefluent/kafka-streams#readme",
   "dependencies": {
     "bluebird": "~3.5.2",
-    "debug": "~3.2.1",
+    "debug": "~4.0.1",
     "global": "^4.3.2",
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
     "npm-check-updates": "^2.14.2",
-    "sinek": "~6.22.0"
+    "sinek": "~6.22.2"
   },
   "devDependencies": {
     "async": "~2.6.1",
