@@ -1,12 +1,16 @@
 # kafka-streams CHANGELOG
 
+## 2018-11-20, Version 4.6.3
+
+* made topic optional in ts definition for .to() call
+
 ## 2018-20-09, Version 4.6.2
 
 * shipping fix for a bug in node-sinek
 
 ## 2018-11-09, Version 4.6.1
 
-* added return type for .to() call
+* added return type for .to() call in ts definition
 
 ## 2018-10-09, Version 4.6.0
 
