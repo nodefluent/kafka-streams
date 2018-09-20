@@ -1,9 +1,9 @@
 "use strict";
 
 const Promise = require("bluebird");
-const KafkaClient = require("./../../lib/KafkaClient.js");
+const JSKafkaClient = require("../../lib/client/JSKafkaClient.js");
 
-class FakeKafka extends KafkaClient {
+class FakeKafka extends JSKafkaClient {
 
     constructor(topic, config = {}){
         super(topic, config);

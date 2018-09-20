@@ -1,7 +1,7 @@
 "use strict";
 
 const {KafkaStreams} = require("./../index.js");
-const config = require("./../test/test-config.js");
+const {nativeConfig: config} = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
 const consumeStream = kafkaStreams.getKStream("my-input-topic");
@@ -25,6 +25,6 @@ stream
     });
 
 //start the stream
-stream.start();
+consumeStream.start();
 
 //setTimeout(abort, 5000); // -> abort the window collection after 5 seconds

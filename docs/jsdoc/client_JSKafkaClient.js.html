@@ -1,12 +1,42 @@
-"use strict";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: client/JSKafkaClient.js</title>
 
-const EventEmitter = require("events");
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: client/JSKafkaClient.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+
 const uuid = require("uuid");
 const {Kafka, PartitionDrainer, Drainer, Publisher} = require("sinek");
+const debug = require("debug")("kafka-streams:jsclient");
+
+const KafkaClient = require("./KafkaClient.js");
 
 const NOOP = () => {};
 
-class KafkaClient extends EventEmitter {
+class JSKafkaClient extends KafkaClient {
 
     /**
      * KafkaClient (EventEmitter)
@@ -29,6 +59,32 @@ class KafkaClient extends EventEmitter {
 
         this.produceTopic = null;
         this.producePartitionCount = 1;
+        this._produceHandler = null;
+    }
+
+    /**
+     * sets a handler for produce messages
+     * (emits whenever kafka messages are produced/delivered)
+     * @param handler {EventEmitter}
+     */
+    setProduceHandler(handler){
+        this._produceHandler = handler;
+    }
+
+    /**
+     * returns the produce handler instance if present
+     * @returns {null|EventEmitter}
+     */
+    getProduceHandler(){
+        return this._produceHandler;
+    }
+
+    /**
+     * overwrites the topic
+     * @param topics {Array&lt;string>}
+     */
+    overwriteTopics(topics){
+        this.topic = topics;
     }
 
     /**
@@ -64,10 +120,16 @@ class KafkaClient extends EventEmitter {
 
         this.kafkaConsumerClient = new Kafka(conStr, logger, conStr === kafkaHost);
 
-        this.kafkaConsumerClient.on("ready", readyCallback || NOOP);
+        this.kafkaConsumerClient.on("ready", () => {
+            debug("consumer ready");
+
+            if(readyCallback){
+                readyCallback();
+            }
+        });
         this.kafkaConsumerClient.on("error", kafkaErrorCallback || NOOP);
 
-        this.kafkaConsumerClient.becomeConsumer([this.topic], groupId, options || {});
+        this.kafkaConsumerClient.becomeConsumer(this.topic, groupId, options || {});
 
         if(withBackPressure){
             this.consumer = new PartitionDrainer(this.kafkaConsumerClient, workerPerPartition || 1, false, false);
@@ -79,7 +141,12 @@ class KafkaClient extends EventEmitter {
         super.once("kafka-producer-ready", () => {
 
             if(withBackPressure){
-                this.consumer.drain(this.topic, (message, done) => {
+
+                if(this.topic.length > 1){
+                    throw new Error("JS Client does not support multiple topics in backpressure mode.");
+                }
+
+                this.consumer.drain(this.topic[0], (message, done) => {
                     super.emit("message", message);
                     done();
                 }).catch(e => kafkaErrorCallback(e));
@@ -131,6 +198,7 @@ class KafkaClient extends EventEmitter {
 
             //consumer is awaiting producer
             this.kafkaProducerClient.on("ready", () => {
+                debug("producer ready");
                 super.emit("kafka-producer-ready", true);
                 if(readyCallback){
                     readyCallback();
@@ -159,7 +227,7 @@ class KafkaClient extends EventEmitter {
         }
 
         let partition = -1;
-        if(this.producePartitionCount < 2){
+        if(this.producePartitionCount &lt; 2){
             partition = 0;
         } else {
             partition = KafkaClient._getRandomIntInclusive(0, this.producePartitionCount);
@@ -273,12 +341,29 @@ class KafkaClient extends EventEmitter {
             this.consumer = null;
         }
     }
-
-    static _getRandomIntInclusive(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
 }
 
-module.exports = KafkaClient;
+module.exports = JSKafkaClient;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

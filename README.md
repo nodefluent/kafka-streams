@@ -1,7 +1,6 @@
 # node-kafka-streams
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/nodefluent/kafka-streams.svg)](https://greenkeeper.io/)
-
 [![Build Status](https://travis-ci.org/nodefluent/kafka-streams.svg?branch=master)](https://travis-ci.org/nodefluent/kafka-streams)
 [![npm version](https://badge.fury.io/js/kafka-streams.svg)](https://badge.fury.io/js/kafka-streams)
 
@@ -9,30 +8,35 @@
 npm install --save kafka-streams
 ```
 
-```es6
+```javascript
 const {KafkaStreams} = require("kafka-streams");
 
 const config = require("./config.json");
 const factory = new KafkaStreams(config);
 
 const kstream = factory.getKStream("input-topic");
-const ktable = factory.getKTable(..);
+const ktable = factory.getKTable(/* .. */);
 
-kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
+kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to("output-topic");
 ```
+
+> CHANGES: The latest version brings a lot of changes, please check [here](CHANGELOG.md) before updating.
 
 ## API Overview
 
 * [Quick Start](docs/quick-start.md)
+* [Message 'to' and 'from' Apache Kafka](docs/handling-messages-schemas.md)
 * [API Info](docs/api.md)
 * [Documentation](https://nodefluent.github.io/kafka-streams/jsdoc/)
 * [Operator descriptions](docs/most-api.md)
 * [Examples](https://github.com/nodefluent/kafka-streams/tree/master/examples)
+* [Native Client](docs/native.md) | [SSL, SASL, Kerberos](docs/ssl-sasl.md)
 
 ## You might also like
 
 * [node-kafka-connect](https://github.com/nodefluent/kafka-connect)
 * [node-schema-registry](https://github.com/nodefluent/schema-registry)
+* [node-kafka-rest-ui](https://github.com/nodefluent/kafka-rest-ui)
 
 ## README Overview
 
@@ -48,8 +52,8 @@ kstream.merge(ktable).filter(..).map(..).reduce(..).to("output-topic");
 * [FAQ - More](#more)
 
 ## Prerequisites
-- kafka broker should be version `>= 0.9.x`
-- nodejs should be version `>= 6.10`
+- kafka broker should be version `>= 0.11.x`
+- Node.js should be version `>= 8.x.x`
 
 ## Aim of this Library
 
@@ -65,6 +69,8 @@ I am aiming for the easiest api access possible checkout the [word count example
 build on super fast :fire: observables using [most.js](https://github.com/cujojs/most) :metal:
 
 ships with [sinek](https://github.com/nodefluent/node-sinek) :pray: for backpressure
+
+comes with js and native Kafka client, for more performance and SSL, SASL and Kerberos features
 
 the lib also comes with a few `window` operations that are more similar to [Apache Flink](https://flink.apache.org/),
 yet they still feel natural in this api :squirrel:
@@ -97,12 +103,17 @@ the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
 - [x] KTable replay to Kafka (produce)
 - [x] stream for topic message production only
 - [x] sinek implementation
-- [ ] backpressure mode for KafkaClient
+- [x] backpressure mode for KafkaClient
 - [x] auto-json payloads (read-map/write-map)
 - [x] auto producer partition and keyed-message handling
 - [x] documentation
 - [x] API description
 - [ ] higher join & combine examples
+- [x] embed native client `librdkafka` for more performance
+- [x] SSL
+- [x] SASL
+- [x] Kerberos
+
 
 ## Operator Implementations
 
@@ -170,6 +181,7 @@ the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
 - [ ] outerJoin
 - [x] innerJoin
 - [ ] leftJoin
+- [x] branch
 
 ### KTable Status
 
@@ -190,6 +202,8 @@ the lib is based on `sinek`, which is based on kafka-node's `ConsumerGroups`
 ### KStream
 
 - [x] window
+- [ ] advanced window
+- [ ] rolling window
 
 # More
 
@@ -199,7 +213,7 @@ Yes.
 
 ## Are we ready for production yet?
 
-No, please have some more patience :smile:
+Probably, yes. :smile:
 
 ## Even More
 

@@ -12,6 +12,11 @@ these services elsewhere, make sure to adapt the config settings)
 
 # Configuration
 
+* NOTE: as of version 3.0.0 node-kafka-streams supports an additional `librdkafka` client,
+    that offers better performance, configuration tweaking and especially features like
+    SASL and Kerberos [checkout the native docs](native.md) for more details.
+    **We really want to encourage you to always use the native clients if possible.**
+
 ```es6
 {
     //zkConStr: "localhost:2181/",
@@ -77,9 +82,16 @@ stream.start().then(() => {
     console.log("streamed failed to start: " + error);
 });
 ```
+
 * Using the factory as base, its simple to create new streams, you can pass a
 topic name as string to `getKStream()` and calling `.start()` (which returns a Promise,
 that will resolve when the Kafka Client is connected & ready to consume messages).
+
+* Please Note: that you do not have to pass a topic to `getKStream()` anymore,
+you can also simply call `stream.from("topicName")` later. (Also multiple times
+to stream from multiple Kafka topics).
+
+* We highly suggest to read the [Message Schemas to and from Kafka guide](handling-messages-schemas.md)
 
 ```es6
 //format of an incoming kafka message (equals to kafka-node's format)
@@ -187,7 +199,6 @@ table.start().then(() => {
 Via `.getTable().then(table => {})` you can also trigger a replay of all KV pairs in the table at any time after completion by calling `.replay()`.
 
 * A table can be merged with a KStream or another KTable, keep in mind that when merging 2 KTables their storages will be merged, resulting a combination of both internal KStorage maps. Where the left hand table's values might be overwritten by the right hand side, if both contain the equal keys.
-
 
 * Aggregate Operations TODO
 * Window Operations TODO

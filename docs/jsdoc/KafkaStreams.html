@@ -28,9 +28,10 @@
 
 <header>
     
-        <h2>KafkaStreams</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>KafkaStreams<span class="signature">(config, storageClass, storageOptions, disableStorageTest)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">stream object factory</div>
+            <div class="class-description">Stream object factory
+inhabits EventEmitter(events)</div>
         
     
 </header>
@@ -44,14 +45,16 @@
     <h2>Constructor</h2>
     
 
+    
     <h4 class="name" id="KafkaStreams"><span class="type-signature"></span>new KafkaStreams<span class="signature">(config, storageClass, storageOptions, disableStorageTest)</span><span class="type-signature"></span></h4>
+    
 
     
 
 
 
 <div class="description">
-    can be used as factory to get
+    Can be used as factory to get
 pre-build KStream and KTable instances
 injected with a KafkaClient instance
 and with a KStorage instance
@@ -238,7 +241,7 @@ and with a KStorage instance
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line11">line 11</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -264,6 +267,8 @@ and with a KStorage instance
 
 
 
+
+
     
     </div>
 
@@ -273,7 +278,9 @@ and with a KStorage instance
 
     
 
-     
+    
+
+    
 
     
 
@@ -287,7 +294,9 @@ and with a KStorage instance
 
     
 
-    <h4 class="name" id="closeAll"><span class="type-signature"></span>closeAll<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    <h4 class="name" id="closeAll"><span class="type-signature"></span>closeAll<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    
 
     
 
@@ -340,7 +349,7 @@ that has every been created by this factory
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line120">line 120</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -363,6 +372,26 @@ that has every been created by this factory
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
 
 
@@ -371,7 +400,188 @@ that has every been created by this factory
 
     
 
+    
+    <h4 class="name" id="fromMost"><span class="type-signature"></span>fromMost<span class="signature">(stream$, storage)</span><span class="type-signature"> &rarr; {<a href="KStream.html">KStream</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    get a new KStream instance
+based on most.js
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>stream$</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>storage</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="KStream.html">KStream</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="getKStream"><span class="type-signature"></span>getKStream<span class="signature">(topic, storage)</span><span class="type-signature"> &rarr; {<a href="KStream.html">KStream</a>}</span></h4>
+    
 
     
 
@@ -497,7 +707,7 @@ representing the topic as change-log
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line72">line 72</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -541,12 +751,16 @@ representing the topic as change-log
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="getKTable"><span class="type-signature"></span>getKTable<span class="signature">(topic, keyMapETL, storage)</span><span class="type-signature"> &rarr; {<a href="KTable.html">KTable</a>}</span></h4>
+    
 
     
 
@@ -694,7 +908,7 @@ representing the topic as table like stream
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line90">line 90</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -738,12 +952,16 @@ representing the topic as table like stream
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="getStats"><span class="type-signature"></span>getStats<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
 
     
 
@@ -800,7 +1018,7 @@ this could result in a large object
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line111">line 111</a>
+        <a href="KafkaStreams.js.html">KafkaStreams.js</a>, <a href="KafkaStreams.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -844,6 +1062,8 @@ this could result in a large object
 
 
 
+
+
         
     
 
@@ -860,13 +1080,13 @@ this could result in a large object
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="KafkaClient.html">KafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 30 2017 22:30:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

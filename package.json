@@ -1,17 +1,24 @@
 {
   "name": "kafka-streams",
-  "version": "2.2.0",
-  "description": "kafka-streams for nodejs",
+  "version": "4.6.1",
+  "description": "kafka-streams for Node.js",
+  "typings": "index.d.ts",
   "main": "index.js",
   "scripts": {
     "word-count": "node ./examples/wordCount.js",
-    "obs-test": "mocha test/unit/Observable.test.js",
-    "test-unit": "_mocha --recursive -R spec test/unit",
-    "test-int": "istanbul cover _mocha -- --recursive --timeout 12500 -R spec test/int && istanbul check-coverage --statements 60",
+    "obs-test": "_mocha test/unit/Observable.test.js",
+    "test-unit": "_mocha --recursive --exit -R spec test/unit",
+    "test-int": "_mocha --recursive --timeout 22500 --exit -R spec test/int",
+    "test-int:debug": "DEBUG=sinek:*,kafka-streams:* _mocha --recursive --timeout 22500 --exit -R spec test/int",
+    "test-int:cov": "istanbul cover _mocha -- --recursive --timeout 22500 --exit -R spec test/int/ && istanbul check-coverage --statements 60",
     "test": "npm run test-unit && npm run test-int",
     "jsdoc": "rm -r ./docs/jsdoc && jsdoc ./lib --recurse -R ./README.md -d ./docs/jsdoc",
     "jsdoc2md": "rm ./docs/doc.md && jsdoc2md -f ./lib/**/*.js -d > ./docs/doc.md",
-    "docs": "npm run jsdoc && npm run jsdoc2md"
+    "docs": "npm run jsdoc && npm run jsdoc2md",
+    "kafka:start": "./kafka-setup/start.sh",
+    "kafka:stop": "./kafka-setup/stop.sh",
+    "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f",
+    "ts": "tsc ./index.d.ts"
   },
   "repository": {
     "type": "git",
@@ -42,19 +49,21 @@
   },
   "homepage": "https://github.com/nodefluent/kafka-streams#readme",
   "dependencies": {
-    "bluebird": "~3.5.0",
-    "most": "~1.5.0",
-    "most-subject": "^5.3.0",
-    "sinek": "^5.2.0"
+    "bluebird": "~3.5.2",
+    "debug": "~3.2.1",
+    "global": "^4.3.2",
+    "most": "~1.7.3",
+    "most-subject": "~6.0.0",
+    "npm-check-updates": "^2.14.2",
+    "sinek": "~6.22.0"
   },
   "devDependencies": {
-    "async": "~2.5.0",
-    "istanbul": "~0.4.2",
-    "jsdoc": "^3.5.3",
-    "jsdoc-to-markdown": "~3.0.0",
-    "log4bro": "~3.0.0",
-    "mocha": "~3.5.0",
-    "proxyquire": "~1.8.0",
-    "uuid": "~3.1.0"
+    "async": "~2.6.1",
+    "jsdoc": "~3.5.5",
+    "jsdoc-to-markdown": "~4.0.1",
+    "log4bro": "~3.7.1",
+    "mocha": "~5.2.0",
+    "proxyquire": "~2.1.0",
+    "uuid": "~3.3.2"
   }
 }

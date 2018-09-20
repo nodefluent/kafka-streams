@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: client/NativeKafkaClient.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: client/NativeKafkaClient.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+
+const uuid = require("uuid");
+const {NConsumer, NProducer} = require("sinek");
+const debug = require("debug")("kafka-streams:nativeclient");
+
+const KafkaClient = require("./KafkaClient.js");
+
+const NOOP = () => {};
+
+class NativeKafkaClient extends KafkaClient {
+
+    /**
+     * NativeKafkaClient (EventEmitter)
+     * that wraps an internal instance of a
+     * Sinek native kafka- Consumer and/or Producer
+     * @param topic
+     * @param config
+     * @param batchOptions - optional
+     */
+    constructor(topic, config, batchOptions = undefined){
+        super();
+
+        this.topic = topic;
+        this.config = config;
+        this.batchOptions = batchOptions;
+
+        this.consumer = null;
+        this.producer = null;
+
+        this.produceTopic = null;
+        this.producePartitionCount = 1;
+        this._produceHandler = null;
+    }
+
+    /**
+     * sets a handler for produce messages
+     * (emits whenever kafka messages are produced/delivered)
+     * @param handler {EventEmitter}
+     */
+    setProduceHandler(handler){
+        this._produceHandler = handler;
+    }
+
+    /**
+     * returns the produce handler instance if present
+     * @returns {null|EventEmitter}
+     */
+    getProduceHandler(){
+        return this._produceHandler;
+    }
+
+    /**
+     * overwrites the topic
+     * @param topics {Array&lt;string>}
+     */
+    overwriteTopics(topics){
+        this.topic = topics;
+    }
+
+    adjustDefaultPartitionCount(partitionCount = 1){
+        this.producePartitionCount = partitionCount;
+        this.producer.defaultPartitionCount = partitionCount;
+    }
+
+    /**
+     * starts a new kafka consumer
+     * will await a kafka-producer-ready-event if started withProducer=true
+     * @param readyCallback
+     * @param kafkaErrorCallback
+     * @param withProducer
+     * @param withBackPressure
+     */
+    start(readyCallback = null, kafkaErrorCallback = null, withProducer = false, withBackPressure = false){
+
+        //might be possible if the parent stream is build to produce messages only
+        if(!this.topic){
+            return;
+        }
+
+        //passing batch options will always result in backpressure mode
+        if(this.batchOptions){
+            withBackPressure = true;
+        }
+
+        kafkaErrorCallback = kafkaErrorCallback || NOOP;
+
+        this.consumer = new NConsumer(this.topic, this.config);
+
+        this.consumer.on("ready", readyCallback || NOOP);
+        this.consumer.on("error", kafkaErrorCallback);
+
+        //consumer has to wait for producer
+        super.once("kafka-producer-ready", () => {
+
+            const streamOptions = {
+                asString: false,
+                asJSON: false
+            };
+
+            //if backpressure is desired, we cannot connect in streaming mode
+            //if it is not we automatically connect in stream mode
+            this.consumer.connect(!withBackPressure, streamOptions).then(() => {
+                debug("consumer ready");
+
+                if (withBackPressure) {
+                    this.consumer.consume((message, done) => {
+                        super.emit("message", message);
+                        done();
+                    }, false, false, this.batchOptions).catch(e => kafkaErrorCallback(e));
+                } else {
+                    this.consumer.consume().catch(e => kafkaErrorCallback(e));
+                    this.consumer.on("message", message => {
+                        super.emit("message", message);
+                    });
+                }
+            }).catch(e => kafkaErrorCallback(e));
+        });
+
+        if(!withProducer){
+            super.emit("kafka-producer-ready", true);
+        }
+    }
+
+    /**
+     * starts a new kafka-producer
+     * will fire kafka-producer-ready-event
+     * requires a topic's partition count during initialisation
+     * @param produceTopic
+     * @param partitions
+     * @param readyCallback
+     * @param kafkaErrorCallback
+     */
+    setupProducer(produceTopic, partitions = 1, readyCallback = null, kafkaErrorCallback = null){
+
+        this.produceTopic = produceTopic || this.produceTopic;
+        this.producePartitionCount = partitions;
+
+        kafkaErrorCallback = kafkaErrorCallback || NOOP;
+
+        //might be possible if the parent stream is build to produce messages only
+        if(!this.producer){
+            this.producer = new NProducer(this.config, [this.produceTopic], this.producePartitionCount);
+
+            //consumer is awaiting producer
+            this.producer.on("ready", () => {
+                debug("producer ready");
+                super.emit("kafka-producer-ready", true);
+                if(readyCallback){
+                    readyCallback();
+                }
+            });
+
+            this.producer.on("error", kafkaErrorCallback);
+            this.producer.connect().catch(e => kafkaErrorCallback(e));
+        }
+    }
+
+    //async send(topicName, message, _partition = null, _key = null, _partitionKey = null, _opaqueKey = null)
+
+    /**
+     * simply produces a message or multiple on a topic
+     * if producerPartitionCount is > 1 it will randomize
+     * the target partition for the message/s
+     * @param topicName
+     * @param message
+     * @param partition - optional
+     * @param key - optional
+     * @param partitionKey - optional
+     * @param opaqueKey - optional
+     * @returns {Promise&lt;void>}
+     */
+    send(topicName, message, partition = null, key = null, partitionKey = null, opaqueKey = null){
+
+        if(!this.producer){
+            return Promise.reject("producer is not yet setup.");
+        }
+
+        return this.producer.send(topicName, message, partition, key, partitionKey, opaqueKey);
+    }
+
+    /**
+     * buffers a keyed message to be send
+     * a keyed message needs an identifier, if none is provided
+     * an uuid.v4() will be generated
+     * @param topic
+     * @param identifier
+     * @param payload
+     * @param _ - optional
+     * @param partition - optional
+     * @param version - optional
+     * @param partitionKey - optional
+     * @returns {Promise&lt;void>}
+     */
+    buffer(topic, identifier, payload, _ = null, partition = null, version = null, partitionKey = null){
+
+        if(!this.producer){
+            return Promise.reject("producer is not yet setup.");
+        }
+
+        return this.producer.buffer(topic, identifier, payload, partition, version, partitionKey);
+    }
+
+    /**
+     * buffers a keyed message in (a base json format) to be send
+     * a keyed message needs an identifier, if none is provided
+     * an uuid.4() will be generated
+     * @param topic
+     * @param identifier
+     * @param payload
+     * @param version - optional
+     * @param _ - optional
+     * @param partitionKey - optional
+     * @param partition - optional
+     * @returns {Promise&lt;void>}
+     */
+    bufferFormat(topic, identifier, payload, version = 1, _ = null, partitionKey = null, partition = null){
+
+        if(!this.producer){
+            return Promise.reject("producer is not yet setup.");
+        }
+
+        if(!identifier){
+            identifier = uuid.v4();
+        }
+
+        return this.producer.bufferFormatPublish(topic, identifier, payload, version, undefined, partitionKey, partition);
+    }
+
+    pause(){
+
+        //no consumer pause
+
+        if(this.producer){
+            this.producer.pause();
+        }
+    }
+
+    resume(){
+
+       //no consumer resume
+
+        if(this.producer){
+            this.producer.resume();
+        }
+    }
+
+    getStats(){
+        return {
+            inTopic: this.topic ? this.topic : null,
+            consumer: this.consumer ? this.consumer.getStats() : null,
+
+            outTopic: this.produceTopic ? this.produceTopic : null,
+            producer: this.producer ? this.producer.getStats() : null
+        };
+    }
+
+    close(commit = false){
+
+        if (this.consumer) {
+            this.consumer.close(commit);
+        }
+
+        if (this.producer) {
+            this.producer.close();
+        }
+    }
+
+    //required by KTable
+    closeConsumer(commit = false){
+
+        if(this.consumer){
+            this.consumer.close(commit);
+            this.consumer = null;
+        }
+    }
+}
+
+module.exports = NativeKafkaClient;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

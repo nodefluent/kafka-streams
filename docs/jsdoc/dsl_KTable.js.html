@@ -1,13 +1,41 @@
-"use strict";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dsl/KTable.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dsl/KTable.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
 
 const EventEmitter = require("events");
 const most = require("most");
 const Promise = require("bluebird");
 
 const StreamDSL = require("./StreamDSL.js");
-const {LastState} = require("./actions");
-const KStream = require("./KStream.js");
-const StorageMerger = require("./StorageMerger.js");
+const {LastState} = require("../actions/index");
+const StorageMerger = require("../StorageMerger.js");
+const {messageProduceHandle} = require("../messageProduceHandle.js");
 
 const MESSAGE = "message";
 const NOOP = () => {};
@@ -63,9 +91,9 @@ class KTable extends StreamDSL {
      */
     start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure = false){
 
-        if(arguments.length < 2){
-            return new Promise(resolve => {
-                this._start(resolve, kafkaErrorCallback, withBackPressure);
+        if(arguments.length &lt; 2){
+            return new Promise((resolve, reject) => {
+                this._start(resolve, reject, withBackPressure);
             });
         }
 
@@ -80,7 +108,7 @@ class KTable extends StreamDSL {
 
         this.started = true;
 
-        if(!this.topicName && !this.produceAsTopic){
+        if(!this.topicName &amp;&amp; !this.produceAsTopic){
             return kafkaReadyCallback(); //possibly a good idea to skip finalise()
         }
 
@@ -97,21 +125,24 @@ class KTable extends StreamDSL {
                 case "consumer": consumerReady = true; break;
             }
 
-            //consumer && producer
-            if(producerReady && consumerReady && kafkaReadyCallback){
+            //consumer &amp;&amp; producer
+            if(producerReady &amp;&amp; consumerReady &amp;&amp; kafkaReadyCallback){
                 kafkaReadyCallback();
             }
 
             //consumer only
-            if(!this.produceAsTopic && consumerReady && kafkaReadyCallback){
+            if(!this.produceAsTopic &amp;&amp; consumerReady &amp;&amp; kafkaReadyCallback){
                 kafkaReadyCallback();
             }
 
             //producer only
-            if(this.produceAsTopic && producerReady && kafkaReadyCallback && !this.kafka.topic){
+            if(this.produceAsTopic &amp;&amp; producerReady &amp;&amp; kafkaReadyCallback &amp;&amp; !this.kafka.topic){
                 kafkaReadyCallback();
             }
         };
+
+        //overwrite kafka topics
+        this.kafka.overwriteTopics(this.topicName);
 
         this.kafka.on(MESSAGE, msg => {
 
@@ -130,34 +161,16 @@ class KTable extends StreamDSL {
                 kafkaErrorCallback);
 
             super.forEach(message => {
-
-                let promise = null;
-                switch(this.produceType){
-
-                    case this.PRODUCE_TYPES.SEND:
-                        promise = this.kafka.send(this.outputTopicName, message);
-                        break;
-
-                    case this.PRODUCE_TYPES.BUFFER:
-                        promise = this.kafka.buffer(this.outputTopicName, null, message, this.produceCompressionType);
-                        break;
-
-                    case this.PRODUCE_TYPES.BUFFER_FORMAT:
-                        promise = this.kafka.bufferFormat(this.outputTopicName, null, message, this.produceVersion,
-                            this.produceCompressionType);
-                        break;
-
-                    default:
-                        throw new Error(`${this.produceType} is an unknown produceType.`);
-                }
-
-                promise.catch(e => {
-                    if(kafkaErrorCallback){
-                        kafkaErrorCallback(e);
-                    }
-                });
+                messageProduceHandle(
+                    this.kafka,
+                    message,
+                    this.outputTopicName,
+                    this.produceType,
+                    this.produceCompressionType,
+                    this.produceVersion,
+                    kafkaErrorCallback
+                );
             });
-
         }
     }
 
@@ -281,7 +294,7 @@ class KTable extends StreamDSL {
 
     /**
      * returns the state of the internal KStorage
-     * @returns {Promise<object>}
+     * @returns {Promise&lt;object>}
      */
     getTable(){
         return this.storage.getState();
@@ -310,7 +323,7 @@ class KTable extends StreamDSL {
      * can be used with KStream or KTable instances
      * returns a Promise with a NEW KTable instance
      * @param {StreamDSL} stream
-     * @returns {Promise.<KTable>}
+     * @returns {Promise.&lt;KTable>}
      */
     merge(stream){
 
@@ -350,7 +363,7 @@ class KTable extends StreamDSL {
      * as only joins and window operations return new stream instances
      * you might need a clone sometimes, which can be accomplished
      * using this function
-     * @returns {Promise.<KTable>}
+     * @returns {Promise.&lt;KTable>}
      */
     clone(){
         const newStream$ = this.stream$.tap(NOOP);
@@ -361,7 +374,7 @@ class KTable extends StreamDSL {
      * closes the internal stream
      * and all kafka open connections
      * as well as KStorage connections
-     * @returns {Promise.<boolean>}
+     * @returns {Promise.&lt;boolean>}
      */
     close(){
         this.stream$ = this.stream$.take(0);
@@ -372,3 +385,26 @@ class KTable extends StreamDSL {
 }
 
 module.exports = KTable;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
