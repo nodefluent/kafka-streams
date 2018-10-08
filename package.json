@@ -1,6 +1,6 @@
 {
   "name": "kafka-streams",
-  "version": "4.6.3",
+  "version": "4.7.0",
   "description": "kafka-streams for Node.js",
   "typings": "index.d.ts",
   "main": "index.js",
@@ -54,8 +54,7 @@
     "global": "^4.3.2",
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
-    "npm-check-updates": "^2.14.2",
-    "sinek": "~6.22.2"
+    "sinek": "~6.22.3"
   },
   "devDependencies": {
     "async": "~2.6.1",
