@@ -50,7 +50,7 @@
   "homepage": "https://github.com/nodefluent/kafka-streams#readme",
   "dependencies": {
     "bluebird": "~3.5.2",
-    "debug": "~4.0.1",
+    "debug": "~4.1.0",
     "global": "^4.3.2",
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
