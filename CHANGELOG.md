@@ -1,6 +1,12 @@
 # kafka-streams CHANGELOG
 
-## 2018-11-20, Version 4.6.3
+## 2018-08-10, Version 4.6.4
+
+* removed ncu as dependency, should not have been added after all
+* alloing "auto" as partition count param for .to() call
+* upgraded sinek from 6.22.2 to 6.22.3
+
+## 2018-21-09, Version 4.6.3
 
 * made topic optional in ts definition for .to() call
 

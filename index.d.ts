@@ -122,7 +122,7 @@ declare module "kafka-streams" {
         sumByKey(key: string, fieldName: string, sumField: boolean): StreamDSL;
         min(fieldName: string, minField?: string): StreamDSL;
         max(fieldName: string, maxField?: string): StreamDSL;
-        to(topic?: string, outputPartitionsCount?: number | 'auto', produceType?: "send" | "buffer" | "bufferFormat",
+        to(topic?: string, outputPartitionsCount?: number | "auto", produceType?: "send" | "buffer" | "bufferFormat",
             version?: number, compressionType?: number, producerErrorCallback?: (error: Error) => void,
             outputKafkaConfig?: IKafkaStreamsConfig): Promise<boolean>;
     }
