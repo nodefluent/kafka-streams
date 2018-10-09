@@ -1,5 +1,9 @@
 # kafka-streams CHANGELOG
 
+## 2018-09-10, Version 4.6.5
+
+* again fix on type declaration for .to() **sorry**
+
 ## 2018-08-10, Version 4.6.4
 
 * removed ncu as dependency, should not have been added after all
