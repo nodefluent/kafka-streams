@@ -1,6 +1,6 @@
 {
   "name": "kafka-streams",
-  "version": "4.6.5",
+  "version": "4.7.0",
   "description": "kafka-streams for Node.js",
   "typings": "index.d.ts",
   "main": "index.js",
@@ -18,7 +18,8 @@
     "kafka:start": "./kafka-setup/start.sh",
     "kafka:stop": "./kafka-setup/stop.sh",
     "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f",
-    "ts": "tsc ./index.d.ts"
+    "ts": "tsc ./index.d.ts",
+    "yarn:openssl": "LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' yarn"
   },
   "repository": {
     "type": "git",
@@ -50,11 +51,11 @@
   "homepage": "https://github.com/nodefluent/kafka-streams#readme",
   "dependencies": {
     "bluebird": "~3.5.2",
-    "debug": "~4.0.1",
+    "debug": "~4.1.0",
     "global": "^4.3.2",
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
-    "sinek": "~6.22.3"
+    "sinek": "~6.23.3"
   },
   "devDependencies": {
     "async": "~2.6.1",

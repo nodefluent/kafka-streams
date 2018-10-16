@@ -1,5 +1,10 @@
 # kafka-streams CHANGELOG
 
+## 2018-09-10, Version 4.7.0
+
+* now referencing new kafka client type (advanced configs) declarations
+* upgrade dependencies (kafka clients)
+
 ## 2018-09-10, Version 4.6.5
 
 * again fix on type declaration for .to() **sorry**

@@ -5,3 +5,6 @@ logs
 test
 examples
 kafka-setup
+.editorconfig
+.travis.yml
+.gitignore
