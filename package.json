@@ -54,7 +54,7 @@
     "global": "^4.3.2",
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
-    "sinek": "~6.22.3"
+    "sinek": "~6.23.0"
   },
   "devDependencies": {
     "async": "~2.6.1",
