@@ -166,7 +166,7 @@ declare module "kafka-streams" {
     }
 
     export class Window {
-        constructor(container: [], collect: boolean);
+        constructor(container: any[], collect: boolean);
         getStream(): KStream;
         execute(element: any, leaveEncapsulated: boolean): void;
         writeToStream(): void;
