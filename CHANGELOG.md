@@ -1,5 +1,12 @@
 # kafka-streams CHANGELOG
 
+## 2019-09-01, Version 4.8.0
+
+* fixed bug in type declarations
+* fixed typo in quick-start docu
+* fixed bug in window (createSubject; most-subject switched from async to create..)
+* upgraded dependencies (newest native client)
+
 ## 2018-09-10, Version 4.7.0
 
 * now referencing new kafka client type (advanced configs) declarations
