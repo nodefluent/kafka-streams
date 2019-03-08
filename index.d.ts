@@ -184,7 +184,7 @@ declare module "kafka-streams" {
         createAndSetProduceHandler(): any;
         setKafkaStreamsReference(reference: KafkaStreams): void;
         from(topic: string | Array<string>): StreamDSL;
-        awaitPromises(etl: (value: Promise<any>) => any): StreamDSL;
+        awaitPromises(etl?: (value: Promise<any>) => any): StreamDSL;
         map(etl: (value: any) => any): StreamDSL;
         asyncMap(etl: (value: any) => Promise<any>): StreamDSL;
         concatMap(etl: (valueForStream: any) => any): StreamDSL;
