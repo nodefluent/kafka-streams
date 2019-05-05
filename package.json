@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "async": "~2.6.1",
-    "jsdoc": "~3.5.5",
+    "jsdoc": "~3.6.0",
     "jsdoc-to-markdown": "~4.0.1",
     "log4bro": "~3.7.1",
     "mocha": "~5.2.0",
