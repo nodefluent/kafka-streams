@@ -15,34 +15,52 @@
     the output topic would then look like this:
 
     "fruit 3"
+
+    (yet for the sake of this example, there is a second stream that is used to produce
+    to the topic)
 */
 
 const { KafkaStreams } = require("./../index.js");
 const { nativeConfig: config } = require("./../test/test-config.js");
+
+const keyMapperEtl = (kafkaMessage) => {
+    const value = kafkaMessage.value.toString("utf8");
+    const elements = value.toLowerCase().split(" ");
+    return {
+        someField: elements[0],
+    };
+};
 
 const kafkaStreams = new KafkaStreams(config);
 const stream = kafkaStreams.getKStream();
 
 stream
     .from("my-input-topic")
-    .map(keyValueMapperEtl)
-    .countByKey("key", "count")
+    .map(keyMapperEtl)
+    .countByKey("someField", "count")
     .filter(kv => kv.count >= 3)
-    .map(kv => kv.key + " " + kv.count)
+    .map(kv => kv.someField + " " + kv.count)
     .tap(kv => console.log(kv))
     .to("my-output-topic");
 
-stream.start();
+const inputStream = kafkaStreams.getKStream();
+inputStream.to("my-input-topic");
 
-//consume & produce for 5 seconds
-setTimeout(kafkaStreams.closeAll.bind(kafkaStreams), 5000);
+const produceInterval = setInterval(() => {
+    inputStream.writeToStream("kah vow");
+}, 100);
 
-function keyValueMapperEtl(message) {
-    const elements = message.toLowerCase().split(" ");
-    return {
-        key: elements[0],
-        value: elements[1]
-    };
-}
+Promise.all([
+    stream.start(),
+    inputStream.start()
+]).then(() => {
+    console.log("started..");
+    // produce & consume for 5 seconds
+    setTimeout(() => {
+        clearInterval(produceInterval);
+        kafkaStreams.closeAll();
+        console.log("stopped..");
+    }, 5000);
+});
 
 //# alternatively checkout ../test/unit/WordCount.test.js for a working example without kafka broker

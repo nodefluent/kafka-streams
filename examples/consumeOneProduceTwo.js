@@ -26,6 +26,4 @@ stream
     })
     .to("out_topic", 30, "buffer");
 
-
-
-
+stream.start();

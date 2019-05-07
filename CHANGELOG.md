@@ -1,5 +1,17 @@
 # kafka-streams CHANGELOG
 
+## 2019-05-07, Version 4.9.0
+
+* upgraded dependencies
+* fixed bug where kstream merge was not passing kafkaStreams reference
+* fixed code formatting
+* fixed word-count example
+* fixed produceToTopic example
+* fixed consumeOneProduceTwo example
+* adjusted consumeFromTopic example
+* ported most-subject back to 5.3.0 to fix major window bug
+* fixed window example
+
 ## 2019-09-01, Version 4.8.0
 
 * fixed bug in type declarations

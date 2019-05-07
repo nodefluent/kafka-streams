@@ -23,5 +23,5 @@ stream.start().then(_ => {
     ]);
 
     //wait a few ms and close all connections
-    setTimeout(kafkaStreams.closeAll.bind(kafkaStreams), 100);
+    setTimeout(kafkaStreams.closeAll.bind(kafkaStreams), 1000);
 });

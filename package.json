@@ -1,69 +1,77 @@
 {
-  "name": "kafka-streams",
-  "version": "4.8.0",
-  "description": "kafka-streams for Node.js",
-  "typings": "index.d.ts",
-  "main": "index.js",
-  "scripts": {
-    "word-count": "node ./examples/wordCount.js",
-    "obs-test": "_mocha test/unit/Observable.test.js",
-    "test-unit": "_mocha --recursive --exit -R spec test/unit",
-    "test-int": "_mocha --recursive --timeout 22500 --exit -R spec test/int",
-    "test-int:debug": "DEBUG=sinek:*,kafka-streams:* _mocha --recursive --timeout 22500 --exit -R spec test/int",
-    "test-int:cov": "istanbul cover _mocha -- --recursive --timeout 22500 --exit -R spec test/int/ && istanbul check-coverage --statements 60",
-    "test": "npm run test-unit && npm run test-int",
-    "jsdoc": "rm -r ./docs/jsdoc && jsdoc ./lib --recurse -R ./README.md -d ./docs/jsdoc",
-    "jsdoc2md": "rm ./docs/doc.md && jsdoc2md -f ./lib/**/*.js -d > ./docs/doc.md",
-    "docs": "npm run jsdoc && npm run jsdoc2md",
-    "kafka:start": "./kafka-setup/start.sh",
-    "kafka:stop": "./kafka-setup/stop.sh",
-    "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f",
-    "ts": "tsc ./index.d.ts",
-    "yarn:openssl": "LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' yarn"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nodefluent/kafka-streams.git"
-  },
-  "keywords": [
-    "kafka-streams",
-    "kafka",
-    "streams",
-    "streaming",
-    "topics",
-    "produce",
-    "consume",
-    "merge",
-    "join",
-    "map",
-    "flat",
-    "filter",
-    "reduce",
-    "flink",
-    "window",
-    "combine"
-  ],
-  "author": "Christian Froehlingsdorf <chris@5cf.de>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/nodefluent/kafka-streams/issues"
-  },
-  "homepage": "https://github.com/nodefluent/kafka-streams#readme",
-  "dependencies": {
-    "bluebird": "~3.5.4",
-    "debug": "~4.1.1",
-    "global": "^4.3.2",
-    "most": "~1.7.3",
-    "most-subject": "~6.0.0",
-    "sinek": "~7.29.3"
-  },
-  "devDependencies": {
-    "async": "~2.6.2",
-    "jsdoc": "~3.6.1",
-    "jsdoc-to-markdown": "~4.0.1",
-    "log4bro": "~3.9.0",
-    "mocha": "~6.1.4",
-    "proxyquire": "~2.1.0",
-    "uuid": "~3.3.2"
-  }
+    "name": "kafka-streams",
+    "version": "4.9.0",
+    "description": "kafka-streams for Node.js",
+    "typings": "index.d.ts",
+    "main": "index.js",
+    "scripts": {
+        "consumeFromTopic": "node ./examples/consumeFromTopic.js",
+        "consumeOneProduceTwo": "node ./examples/consumeOneProduceTwo.js",
+        "fieldSum": "node ./examples/fieldSum.js",
+        "mergeTopics": "node ./examples/mergeTopics.js",
+        "produceToTopic": "node ./examples/produceToTopic.js",
+        "topicAsTable": "node ./examples/topicAsTable.js",
+        "window": "node ./examples/window.js",
+        "wordCount": "node ./examples/wordCount.js",
+        "word-count": "yarn wordCount",
+        "obs-test": "_mocha test/unit/Observable.test.js",
+        "test-unit": "_mocha --recursive --exit -R spec test/unit",
+        "test-int": "_mocha --recursive --timeout 22500 --exit -R spec test/int",
+        "test-int:debug": "DEBUG=sinek:*,kafka-streams:* _mocha --recursive --timeout 22500 --exit -R spec test/int",
+        "test-int:cov": "istanbul cover _mocha -- --recursive --timeout 22500 --exit -R spec test/int/ && istanbul check-coverage --statements 60",
+        "test": "npm run test-unit && npm run test-int",
+        "jsdoc": "rm -r ./docs/jsdoc && jsdoc ./lib --recurse -R ./README.md -d ./docs/jsdoc",
+        "jsdoc2md": "rm ./docs/doc.md && jsdoc2md -f ./lib/**/*.js -d > ./docs/doc.md",
+        "docs": "npm run jsdoc && npm run jsdoc2md",
+        "kafka:start": "./kafka-setup/start.sh",
+        "kafka:stop": "./kafka-setup/stop.sh",
+        "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f",
+        "ts": "tsc ./index.d.ts",
+        "yarn:openssl": "LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' yarn"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nodefluent/kafka-streams.git"
+    },
+    "keywords": [
+        "kafka-streams",
+        "kafka",
+        "streams",
+        "streaming",
+        "topics",
+        "produce",
+        "consume",
+        "merge",
+        "join",
+        "map",
+        "flat",
+        "filter",
+        "reduce",
+        "flink",
+        "window",
+        "combine"
+    ],
+    "author": "Christian Froehlingsdorf <chris@5cf.de>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/nodefluent/kafka-streams/issues"
+    },
+    "homepage": "https://github.com/nodefluent/kafka-streams#readme",
+    "dependencies": {
+        "bluebird": "~3.5.4",
+        "debug": "~4.1.1",
+        "global": "^4.3.2",
+        "most": "~1.7.3",
+        "most-subject": "~5.3.0",
+        "sinek": "~7.29.3"
+    },
+    "devDependencies": {
+        "async": "~2.6.2",
+        "jsdoc": "~3.6.1",
+        "jsdoc-to-markdown": "~4.0.1",
+        "log4bro": "~3.9.0",
+        "mocha": "~6.1.4",
+        "proxyquire": "~2.1.0",
+        "uuid": "~3.3.2"
+    }
 }

@@ -103,20 +103,20 @@ declare module "kafka-streams" {
         groupId?: string;
         workerPerPartition?: number;
         options?: {
-          sessionTimeout?: number;
-          protocol?: [string];
-          fromOffset?: string;
-          fetchMaxBytes?: number;
-          fetchMinBytes?: number;
-          fetchMaxWaitMs?: number;
-          heartbeatInterval?: number;
-          retryMinTimeout?: number;
-          requireAcks?: number;
-          ackTimeoutMs?: number;
-          partitionerType?: number;
-       };
-       health?: KafkaHealthConfig;
-       tconf?: {
+            sessionTimeout?: number;
+            protocol?: [string];
+            fromOffset?: string;
+            fetchMaxBytes?: number;
+            fetchMinBytes?: number;
+            fetchMaxWaitMs?: number;
+            heartbeatInterval?: number;
+            retryMinTimeout?: number;
+            requireAcks?: number;
+            ackTimeoutMs?: number;
+            partitionerType?: number;
+        };
+        health?: KafkaHealthConfig;
+        tconf?: {
             "auto.commit.enable"?: boolean;
             "auto.commit.interval.ms"?: number;
             "auto.offset.reset"?: "smallest" | "earliest" | "beginning" | "largest" | "latest" | "end" | "error";
@@ -128,23 +128,23 @@ declare module "kafka-streams" {
             "request.timeout.ms"?: number;
             "message.timeout.ms"?: number;
             "produce.offset.report"?: boolean;
-       };
-       noptions?: CommonKafkaOptions;
+        };
+        noptions?: CommonKafkaOptions;
     }
 
     export interface KafkaStreamsConfig extends CombinedKafkaConfig {
-     batchOptions?: {
-        batchSize: number;
-        commitEveryNBatch: number;
-        concurrency: number;
-        commitSync: boolean;
-        noBatchCommits: boolean;
-     };
+        batchOptions?: {
+            batchSize: number;
+            commitEveryNBatch: number;
+            concurrency: number;
+            commitSync: boolean;
+            noBatchCommits: boolean;
+        };
     }
 
-    export class KafkaClient {}
-    export class JSKafkaClient extends KafkaClient {}
-    export class NativeKafkaClient extends KafkaClient {}
+    export class KafkaClient { }
+    export class JSKafkaClient extends KafkaClient { }
+    export class NativeKafkaClient extends KafkaClient { }
 
     export interface Storage {
         set(key: any, value: any): Promise<any>;
@@ -176,14 +176,14 @@ declare module "kafka-streams" {
         constructor(topicName: string, storage?: KStorage, kafka?: KafkaClient, isClone?: boolean);
         getStats(): any;
         getStorage(): KStorage;
-        writeToStream(message: any | Array<any>): void;
+        writeToStream(message: any | Array<any>): void;
         getMost(): any;
         getNewMostFrom(array: Array<any>): any;
         replaceInternalObservable(newStream$: any): void;
         setProduceHandler(handler: any): void;
         createAndSetProduceHandler(): any;
         setKafkaStreamsReference(reference: KafkaStreams): void;
-        from(topic: string | Array<string>): StreamDSL;
+        from(topic: string | Array<string>): StreamDSL;
         awaitPromises(etl: (value: Promise<any>) => any): StreamDSL;
         map(etl: (value: any) => any): StreamDSL;
         asyncMap(etl: (value: any) => Promise<any>): StreamDSL;
@@ -243,13 +243,13 @@ declare module "kafka-streams" {
         merge(stream: KStream): KStream;
         fromMost(stream$: any): KStream;
         clone(): KStream;
-        window(from: number, to: number, etl?: null | ((message: any) => any), encapsulated?: boolean): {window: Window, abort: () => void, stream: KStream};
+        window(from: number, to: number, etl?: null | ((message: any) => any), encapsulated?: boolean): { window: Window, abort: () => void, stream: KStream };
         branch(preds: (message: any) => boolean[]): KStream[];
         close(): Promise<boolean>;
     }
 
     export class KTable extends StreamDSL {
-        constructor(topicName: string, keyMapETL: (message: any) => {key: any, value: any}, storage?: KStorage, kafka?: KafkaClient, isClone?: boolean);
+        constructor(topicName: string, keyMapETL: (message: any) => { key: any, value: any }, storage?: KStorage, kafka?: KafkaClient, isClone?: boolean);
         start(kafkaReadyCallback?: () => void, kafkaErrorCallback?: (error: Error) => void,
             withBackPressure?: boolean, outputKafkaConfig?: KafkaStreamsConfig): Promise<void>;
         writeToTableStream(message: any): void;
@@ -265,15 +265,15 @@ declare module "kafka-streams" {
 
     export class KafkaStreams {
 
-        constructor(config: KafkaStreamsConfig, storageClass?: new() => KStorage, storageOptions?: object,
+        constructor(config: KafkaStreamsConfig, storageClass?: new () => KStorage, storageOptions?: object,
             disableStorageTest?: boolean);
 
-        static checkStorageClass(storageClass: new() => KStorage): void;
+        static checkStorageClass(storageClass: new () => KStorage): void;
         getKafkaClient(topic: string): KafkaClient;
         getStorage(): KStorage;
-        getKStream(topic?: string, storage?: new() => KStorage): KStream;
-        fromMost($stream: any, storage?: new() => KStorage): KStream;
-        getKTable(topic: string, keyMapETL: Function, storage: new() => KStorage): KTable;
+        getKStream(topic?: string, storage?: new () => KStorage): KStream;
+        fromMost($stream: any, storage?: new () => KStorage): KStream;
+        getKTable(topic: string, keyMapETL: Function, storage: new () => KStorage): KTable;
         getStats(): Array<object>;
         closeAll(): Promise<Array<boolean>>;
     }

@@ -1,12 +1,12 @@
 "use strict";
 
-const { create } = require("most-subject");
+const { async: createSubject } = require("most-subject");
 
 describe("Subject UNIT", function () {
 
     it("should be able to observe", function () {
 
-        const subject$ = create();
+        const subject$ = createSubject();
 
         setTimeout(() => {
             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach(event => subject$.next(event));

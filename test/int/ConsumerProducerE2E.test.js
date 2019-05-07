@@ -61,6 +61,8 @@ describe("E2E INT", () => {
         stream.start().then(() => {
             console.log("started");
             stream.writeToStream(messages);
+        }).catch((error) => {
+            done(error);
         });
     });
 

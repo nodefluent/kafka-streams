@@ -52,7 +52,7 @@ kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to("output
 * [FAQ - More](#more)
 
 ## Prerequisites
-- kafka broker should be version `>= 0.11.x`
+- Kafka broker should be version `>= 0.11.x`
 - Node.js should be version `>= 8.x.x`
 
 ## Aim of this Library
