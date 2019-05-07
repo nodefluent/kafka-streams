@@ -17,8 +17,8 @@
     "fruit 3"
 */
 
-const {KafkaStreams} = require("./../index.js");
-const {nativeConfig: config} = require("./../test/test-config.js");
+const { KafkaStreams } = require("./../index.js");
+const { nativeConfig: config } = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
 const stream = kafkaStreams.getKStream();
@@ -37,7 +37,7 @@ stream.start();
 //consume & produce for 5 seconds
 setTimeout(kafkaStreams.closeAll.bind(kafkaStreams), 5000);
 
-function keyValueMapperEtl(message){
+function keyValueMapperEtl(message) {
     const elements = message.toLowerCase().split(" ");
     return {
         key: elements[0],

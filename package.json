@@ -50,19 +50,19 @@
   },
   "homepage": "https://github.com/nodefluent/kafka-streams#readme",
   "dependencies": {
-    "bluebird": "~3.5.3",
+    "bluebird": "~3.5.4",
     "debug": "~4.1.1",
     "global": "^4.3.2",
     "most": "~1.7.3",
     "most-subject": "~6.0.0",
-    "sinek": "~6.24.0"
+    "sinek": "~7.29.3"
   },
   "devDependencies": {
-    "async": "~2.6.1",
-    "jsdoc": "~3.5.5",
+    "async": "~2.6.2",
+    "jsdoc": "~3.6.1",
     "jsdoc-to-markdown": "~4.0.1",
-    "log4bro": "~3.7.1",
-    "mocha": "~5.2.0",
+    "log4bro": "~3.9.0",
+    "mocha": "~6.1.4",
     "proxyquire": "~2.1.0",
     "uuid": "~3.3.2"
   }

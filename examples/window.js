@@ -1,7 +1,7 @@
 "use strict";
 
-const {KafkaStreams} = require("./../index.js");
-const {nativeConfig: config} = require("./../test/test-config.js");
+const { KafkaStreams } = require("./../index.js");
+const { nativeConfig: config } = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
 const consumeStream = kafkaStreams.getKStream("my-input-topic");
@@ -13,7 +13,7 @@ const to = Date.now() + windowPeriod;
 //window will collect messages that fall in the period range
 //a message with a timestamp larger or equal to "to" will end the window
 //and emit all collected messages on the returned stream
-const {stream, abort} = consumeStream.window(from, to);
+const { stream, abort } = consumeStream.window(from, to);
 
 stream
     .take(10) //take the first 10 messages from within the window and close the stream

@@ -19,8 +19,8 @@
  "vegetable lettuce"
 */
 
-const {KafkaStreams} = require("./../index.js");
-const {nativeConfig: config} = require("./../test/test-config.js");
+const { KafkaStreams } = require("./../index.js");
+const { nativeConfig: config } = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
 
@@ -29,7 +29,7 @@ const kafkaStreams = new KafkaStreams(config);
 //as tables can only be built on key-value pairs
 const table = kafkaStreams.getKTable("my-input-topic", keyValueMapperEtl);
 
-function keyValueMapperEtl(message){
+function keyValueMapperEtl(message) {
     const elements = message.value.toLowerCase().split(" ");
     return {
         key: elements[0],

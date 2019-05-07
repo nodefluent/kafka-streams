@@ -1,7 +1,7 @@
 "use strict";
 
-const {KafkaStreams} = require("./../index.js");
-const {nativeConfig: config} = require("./../test/test-config.js");
+const { KafkaStreams } = require("./../index.js");
+const { nativeConfig: config } = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
 const stream = kafkaStreams.getKStream(null);
