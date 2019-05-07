@@ -3,14 +3,14 @@
 const assert = require("assert");
 const proxyquire = require("proxyquire");
 
-const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
+const { KafkaFactoryStub } = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
-describe("Join UNIT", function() {
+describe("Join UNIT", function () {
 
-    describe("KStream <-> KStream", function(){
+    describe("KStream <-> KStream", function () {
 
         it("should be able to inner join kstreams", function (done) {
 
@@ -21,7 +21,7 @@ describe("Join UNIT", function() {
             parent
                 .mapStringToKV()
                 .map(event => {
-                    if(event && event.key == "other"){
+                    if (event && event.key == "other") {
                         event.otherKey = event.key;
                     }
                     return event;
@@ -31,7 +31,7 @@ describe("Join UNIT", function() {
             side
                 .mapStringToKV()
                 .map(event => {
-                    if(event && event.key == "other"){
+                    if (event && event.key == "other") {
                         event.otherKey = event.key;
                     }
                     return event;

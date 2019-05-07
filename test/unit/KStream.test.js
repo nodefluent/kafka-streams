@@ -3,14 +3,14 @@
 const assert = require("assert");
 const proxyquire = require("proxyquire");
 
-const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
+const { KafkaFactoryStub } = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
-describe("KStream UNIT", function() {
+describe("KStream UNIT", function () {
 
-    describe("KStream branching", function(){
+    describe("KStream branching", function () {
 
         it("should be able to branch kstream into kstreams", function (done) {
 
@@ -18,7 +18,7 @@ describe("KStream UNIT", function() {
             const streams = new KafkaStreams({});
 
             const parent = streams.getKStream(null);
-            
+
             const [
                 streamA,
                 streamB,
@@ -28,10 +28,10 @@ describe("KStream UNIT", function() {
                 (message) => message.startsWith("b"),
                 (message) => !!message
             ]);
-        
+
             const outputA = [];
             streamA.forEach((a) => outputA.push(a));
-            
+
             const outputB = [];
             streamB.forEach((b) => outputB.push(b));
 

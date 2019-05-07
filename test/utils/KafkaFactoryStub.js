@@ -4,10 +4,10 @@ const FakeKafka = require("./FakeKafka.js");
 
 class KafkaFactoryStub {
 
-    constructor(){
+    constructor() {
 
         //SINGLETON
-        if(KafkaFactoryStub.instance){
+        if (KafkaFactoryStub.instance) {
             return KafkaFactoryStub.instance;
         }
 
@@ -18,7 +18,7 @@ class KafkaFactoryStub {
         return this;
     }
 
-    getKafkaClient(topic){
+    getKafkaClient(topic) {
         console.log("KafkaFactoryStub creating KafkaClient for " + topic);
         const kafka = new FakeKafka(topic);
         this.lastConsumer = kafka;
@@ -27,4 +27,4 @@ class KafkaFactoryStub {
     }
 }
 
-module.exports = {KafkaFactoryStub};
+module.exports = { KafkaFactoryStub };

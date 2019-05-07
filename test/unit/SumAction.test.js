@@ -3,22 +3,22 @@
 const assert = require("assert");
 const proxyquire = require("proxyquire");
 
-const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
+const { KafkaFactoryStub } = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
-describe("Sum-Action UNIT", function() {
+describe("Sum-Action UNIT", function () {
 
     it("should be able to sum values", function (done) {
 
         const factory = new KafkaFactoryStub();
 
-        function etl_ValueFlatten(value){
+        function etl_ValueFlatten(value) {
             return value.toLowerCase().split(" ");
         }
 
-        function etl_KeyValueMapper(elements){
+        function etl_KeyValueMapper(elements) {
             return {
                 key: elements[0],
                 value: elements[1]

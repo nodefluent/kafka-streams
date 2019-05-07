@@ -6,35 +6,35 @@ const assert = require("assert");
 
 class FakeKafka extends EventEmitter {
 
-    constructor(){
+    constructor() {
         super();
     }
 
-    fake(){
+    fake() {
         this.emit("message", "one 1");
-        this.emit("message","two 1");
-        this.emit("message","three 1");
-        this.emit("message","two 2");
-        this.emit("message","one 2");
+        this.emit("message", "two 1");
+        this.emit("message", "three 1");
+        this.emit("message", "two 2");
+        this.emit("message", "one 2");
         this.emit("message", "two 3");
     }
 
-    fake2(){
+    fake2() {
         this.emit("message", "hi 1");
-        this.emit("message","hu 1");
-        this.emit("message","hi 2");
+        this.emit("message", "hu 1");
+        this.emit("message", "hi 2");
     }
 }
 
-describe("Observable2 UNIT", function(){
+describe("Observable2 UNIT", function () {
 
-    it("should be able to observe", function(done){
+    it("should be able to observe", function (done) {
 
         const countMap = {};
-        function slowKeyCount(value){
+        function slowKeyCount(value) {
             return new Promise(resolve => {
 
-                if(countMap[value.key]){
+                if (countMap[value.key]) {
                     countMap[value.key]++;
                 } else {
                     countMap[value.key] = 1;
@@ -48,7 +48,7 @@ describe("Observable2 UNIT", function(){
             });
         }
 
-        function toKV(m){
+        function toKV(m) {
             m = m.toLowerCase().split(" ");
             return {
                 key: m[0],

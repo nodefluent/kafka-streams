@@ -3,29 +3,29 @@
 const assert = require("assert");
 const proxyquire = require("proxyquire");
 
-const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
+const { KafkaFactoryStub } = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
-describe("WordCount UNIT", function() {
+describe("WordCount UNIT", function () {
 
     it("should be able to count words", function (done) {
 
         const factory = new KafkaFactoryStub();
 
-        function etl_ValueFlatten(value){
+        function etl_ValueFlatten(value) {
             return value.toLowerCase().split(" ");
         }
 
-        function etl_KeyValueMapper(elements){
+        function etl_KeyValueMapper(elements) {
             return {
                 key: elements[0],
                 value: elements[1]
             };
         }
 
-        function etl_deflate(value){
+        function etl_deflate(value) {
             return value.count;
         }
 
@@ -44,7 +44,7 @@ describe("WordCount UNIT", function() {
         source.start();
 
         factory.lastConsumer.fakeIncomingMessages([
-           "if bla", "if xta", "bla 1", "if blup",
+            "if bla", "if xta", "bla 1", "if blup",
             "blup 2", "if hihi", "bla 2", "if five",
             "bla third", "blup second derp"
         ]); // if = 5, bla = 3, blup = 2

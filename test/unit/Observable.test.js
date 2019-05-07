@@ -5,28 +5,28 @@ const most = require("most");
 
 class FakeKafka extends EventEmitter {
 
-    constructor(){
+    constructor() {
         super();
     }
 
-    fake(){
+    fake() {
         this.emit("message", "mY value");
-        this.emit("message","mY value2");
-        this.emit("message","JuRi value1");
-        this.emit("message","mY value3");
-        this.emit("message","JuRi value2");
+        this.emit("message", "mY value2");
+        this.emit("message", "JuRi value1");
+        this.emit("message", "mY value3");
+        this.emit("message", "JuRi value2");
     }
 }
 
-describe("Observable UNIT", function(){
+describe("Observable UNIT", function () {
 
-    it("should be able to observe", function(done){
+    it("should be able to observe", function (done) {
 
         const countMap = {};
-        function slowKeyCount(value){
+        function slowKeyCount(value) {
             return new Promise(resolve => {
 
-                if(countMap[value.key]){
+                if (countMap[value.key]) {
                     countMap[value.key]++;
                 } else {
                     countMap[value.key] = 1;
@@ -43,7 +43,7 @@ describe("Observable UNIT", function(){
 
         const stream$ = most.fromEvent("message", kafka)
             .map(value => value.toLowerCase().split(" "))
-            .map(value => ({ key: value[0], "value": value [1]}))
+            .map(value => ({ key: value[0], "value": value[1] }))
             .flatMap(value => most.fromPromise(slowKeyCount(value)))
             .recoverWith(err => {
                 console.log(err);

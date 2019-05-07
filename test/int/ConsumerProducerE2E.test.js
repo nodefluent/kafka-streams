@@ -1,7 +1,7 @@
 "use strict";
 
-const {KafkaStreams} = require("./../../index.js");
-const {nativeConfig: config} = require("./../test-config.js");
+const { KafkaStreams } = require("./../../index.js");
+const { nativeConfig: config } = require("./../test-config.js");
 
 const keyValueMapperEtl = (message) => {
     console.log(message);
@@ -53,7 +53,7 @@ describe("E2E INT", () => {
         stream.createAndSetProduceHandler().on("delivered", message => {
             console.log(message.value);
             count++;
-            if(count === messages.length){
+            if (count === messages.length) {
                 setTimeout(done, 250);
             }
         });
@@ -80,14 +80,14 @@ describe("E2E INT", () => {
             .countByKey("key", "count")
             .filter(kv => kv.count >= 2)
             .map(kv => kv.key + " " + kv.count)
-            .tap(_ => {})
+            .tap(_ => { })
             .wrapAsKafkaValue()
             .to(outputTopic);
 
         let count = 0;
         stream.createAndSetProduceHandler().on("delivered", () => {
             count++;
-            if(count === 2){
+            if (count === 2) {
                 setTimeout(done, 250);
             }
         });
@@ -109,7 +109,7 @@ describe("E2E INT", () => {
             .mapJSONConvenience() //buffer -> json
             .tap(_ => {
                 count++;
-                if(count === 2){
+                if (count === 2) {
                     setTimeout(done, 100);
                 }
             })

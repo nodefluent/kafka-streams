@@ -3,18 +3,18 @@
 const assert = require("assert");
 const proxyquire = require("proxyquire");
 
-const {KafkaFactoryStub} = require("./../utils/KafkaFactoryStub.js");
+const { KafkaFactoryStub } = require("./../utils/KafkaFactoryStub.js");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
-describe("KTable UNIT", function() {
+describe("KTable UNIT", function () {
 
     it("should be able to represent a table from a stream", function (done) {
 
         const factory = new KafkaFactoryStub();
 
-        function etl_KeyValueMapper(message){
+        function etl_KeyValueMapper(message) {
             const elements = message.toLowerCase().split(" ");
             return {
                 key: elements[0],
@@ -56,7 +56,7 @@ describe("KTable UNIT", function() {
                     source.forEach(kv => {
                         console.log(kv);
                         replays[kv.key] = kv.value;
-                        if(Object.keys(replays).length === 3){
+                        if (Object.keys(replays).length === 3) {
 
                             assert.equal(replays.derp, 7);
                             assert.equal(replays.derpa, 7);
@@ -84,7 +84,7 @@ describe("KTable UNIT", function() {
         intv = setInterval(() => {
             intervalCount++;
             factory.lastConsumer.fakeIncomingMessages([
-                "derpa " + intervalCount, "derp "  + intervalCount, "derpb " + intervalCount
+                "derpa " + intervalCount, "derp " + intervalCount, "derpb " + intervalCount
             ]);
         }, 2);
     });
