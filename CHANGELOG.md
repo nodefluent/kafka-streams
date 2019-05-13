@@ -1,5 +1,16 @@
 # kafka-streams CHANGELOG
 
+## 2019-05-13, Version 4.10.0
+
+* fixed typo that broke window functionality
+* correctly handling rejection of .to() promise call
+* correctly handling produce errors (make sure to sub `kafkaStreams.on("error", (error) => {...});`)
+* `KStream.branch([...])` now returns stream clones that consist of deeply cloned events
+* `KStream.clone(cloneObjects = false, cloneDeep = false)` now offers optional parameters to clone the stream events,
+otherwise mutating the origin stream will alter the cloned stream's objects
+* hardened the StreamDSL JSON convenience methods
+* other small refactorings
+
 ## 2019-05-07, Version 4.9.0
 
 * upgraded dependencies

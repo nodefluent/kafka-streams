@@ -32,6 +32,11 @@ const keyMapperEtl = (kafkaMessage) => {
 };
 
 const kafkaStreams = new KafkaStreams(config);
+
+kafkaStreams.on("error", (error) => {
+    console.log("Error occured:", error.message);
+});
+
 const stream = kafkaStreams.getKStream();
 
 stream

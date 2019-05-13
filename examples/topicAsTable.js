@@ -24,6 +24,10 @@ const { nativeConfig: config } = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
 
+kafkaStreams.on("error", (error) => {
+    console.log("Error occured:", error.message);
+});
+
 //creating a ktable requires a function that can be
 //used to turn the kafka messages into key-value objects
 //as tables can only be built on key-value pairs

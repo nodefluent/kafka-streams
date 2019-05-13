@@ -4,6 +4,11 @@ const { KafkaStreams } = require("./../index.js");
 const { nativeConfig: config } = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
+
+kafkaStreams.on("error", (error) => {
+    console.log("Error occured:", error.message);
+});
+
 const consumeStream = kafkaStreams.getKStream("my-input-topic");
 
 const windowPeriod = 30 * 1000; // 30 seconds

@@ -6,6 +6,10 @@ const { nativeConfig: config } = require("./../test/test-config.js");
 const kafkaStreams = new KafkaStreams(config);
 const stream = kafkaStreams.getKStream("my-input-topic");
 
+kafkaStreams.on("error", (error) => {
+    console.log("Error occured:", error.message);
+});
+
 //adding a side effect call to the stream via tap
 stream.forEach((message) => {
     console.log("key", message.key ? message.key.toString("utf8") : null);

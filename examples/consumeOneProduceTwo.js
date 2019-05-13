@@ -6,6 +6,10 @@ const { nativeConfig: config } = require("./../test/test-config.js");
 const kafkaStreams = new KafkaStreams(config);
 const stream = kafkaStreams.getKStream();
 
+kafkaStreams.on("error", (error) => {
+    console.log("Error occured:", error.message);
+});
+
 stream
     .from("input_topic")
     .mapJSONConvenience()

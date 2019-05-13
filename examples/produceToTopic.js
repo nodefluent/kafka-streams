@@ -4,6 +4,11 @@ const { KafkaStreams } = require("./../index.js");
 const { nativeConfig: config } = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
+
+kafkaStreams.on("error", (error) => {
+    console.log("Error occured:", error.message);
+});
+
 const stream = kafkaStreams.getKStream(null);
 //creating a stream without topic is possible
 //no consumer will be created during stream.start()

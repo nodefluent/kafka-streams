@@ -5,6 +5,10 @@ const { nativeConfig: config } = require("./../test/test-config.js");
 
 const kafkaStreams = new KafkaStreams(config);
 
+kafkaStreams.on("error", (error) => {
+    console.log("Error occured:", error.message);
+});
+
 const stream1 = kafkaStreams.getKStream("my-input-topic-1");
 const stream2 = kafkaStreams.getKStream("my-input-topic-2");
 const stream3 = kafkaStreams.getKStream("my-input-topic-3");

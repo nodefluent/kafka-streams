@@ -6,6 +6,10 @@ const { nativeConfig: config } = require("./../test/test-config.js");
 const kafkaStreams = new KafkaStreams(config);
 const stream = kafkaStreams.getKStream("my-input-topic");
 
+kafkaStreams.on("error", (error) => {
+    console.log("Error occured:", error.message);
+});
+
 stream
     .mapStringToKV(" ", 0, 1) //string to key-value object; args: delimiter, key-index, value-index
     .sumByKey("key", "value", "sum")
