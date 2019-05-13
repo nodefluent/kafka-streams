@@ -51,12 +51,12 @@ class KafkaStreams extends EventEmitter {
      * @param {object} storageOptions
      * @param {boolean} disableStorageTest
      */
-    constructor(config, storageClass = null, storageOptions = {}, disableStorageTest = false){
+    constructor(config, storageClass = null, storageOptions = {}, disableStorageTest = false) {
         super();
 
         this.config = config;
 
-        if(!this.config || typeof this.config !== "object"){
+        if (!this.config || typeof this.config !== "object") {
             throw new Error("Config must be a valid object.");
         }
 
@@ -67,32 +67,32 @@ class KafkaStreams extends EventEmitter {
         this.kafkaClients = [];
         this.storages = [];
 
-        if(!disableStorageTest){
+        if (!disableStorageTest) {
             KafkaStreams.checkStorageClass(this.storageClass);
         }
     }
 
-    static checkStorageClass(storageClass){
+    static checkStorageClass(storageClass) {
 
         let test = null;
         try {
             test = new storageClass();
-        } catch(_){
+        } catch (_) {
             throw new Error("storageClass should be a constructor.");
         }
 
-        if(!(test instanceof KStorage)){
+        if (!(test instanceof KStorage)) {
             throw new Error("storageClass should be a constructor that extends KStorage.");
         }
     }
 
-    getKafkaClient(topic){
+    getKafkaClient(topic) {
         const client = this.factory.getKafkaClient(topic);
         this.kafkaClients.push(client);
         return client;
     }
 
-    getStorage(){
+    getStorage() {
         const storage = new this.storageClass(this.storageOptions);
         this.storages.push(storage);
         return storage;
@@ -105,7 +105,7 @@ class KafkaStreams extends EventEmitter {
      * @param storage
      * @returns {KStream}
      */
-    getKStream(topic, storage = null){
+    getKStream(topic, storage = null) {
 
         const kstream = new KStream(topic,
             storage || this.getStorage(),
@@ -122,7 +122,7 @@ class KafkaStreams extends EventEmitter {
      * @param storage
      * @returns {KStream}
      */
-    fromMost(stream$, storage = null){
+    fromMost(stream$, storage = null) {
         const kstream = this.getKStream(null, storage);
         kstream.replaceInternalObservable(stream$);
         return kstream;
@@ -136,7 +136,7 @@ class KafkaStreams extends EventEmitter {
      * @param storage
      * @returns {KTable}
      */
-    getKTable(topic, keyMapETL, storage = null){
+    getKTable(topic, keyMapETL, storage = null) {
 
         const ktable = new KTable(topic,
             keyMapETL,
@@ -157,7 +157,7 @@ class KafkaStreams extends EventEmitter {
      * this could result in a large object
      * @returns {Array}
      */
-    getStats(){
+    getStats() {
         return this.kafkaClients.map(kafkaClient => kafkaClient.getStats());
     }
 
@@ -167,7 +167,7 @@ class KafkaStreams extends EventEmitter {
      * that has every been created by this factory
      * @returns {Promise}
      */
-    closeAll(){
+    closeAll() {
         return Promise.all(this.kafkaClients.map(client => {
             return new Promise(resolve => {
                 client.close();
@@ -195,13 +195,13 @@ module.exports = KafkaStreams;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Mon May 13 2019 09:55:08 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

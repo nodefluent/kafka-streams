@@ -35,12 +35,12 @@ const uuid = require("uuid");
 const debug = require("debug")("kafka-streams:streamdsl");
 
 const KStorage = require("../KStorage.js");
-const KafkaClient =  require("../client/KafkaClient.js");
-const {KeyCount, Sum, Max, Min} = require("../actions/index.js");
-const {messageProduceHandle} = require("../messageProduceHandle.js");
+const KafkaClient = require("../client/KafkaClient.js");
+const { KeyCount, Sum, Max, Min } = require("../actions/index.js");
+const { messageProduceHandle } = require("../messageProduceHandle.js");
 const PRODUCE_TYPES = require("../produceTypes.js");
 
-const NOOP = () => {};
+const NOOP = () => { };
 const MESSAGE = "message";
 const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
 
@@ -59,23 +59,23 @@ class StreamDSL {
      */
     constructor(topicName, storage = null, kafka = null, isClone = false) {
 
-        debug("stream-dsl from clone", isClone, "for ", topicName);
+        debug("stream-dsl from clone", isClone, "for", topicName);
 
-        if(!isClone &amp;&amp; (!kafka || !(kafka instanceof KafkaClient))){
+        if (!isClone &amp;&amp; (!kafka || !(kafka instanceof KafkaClient))) {
             throw new Error("kafka has to be an instance of KafkaClient.");
         }
 
-        if(!storage || !(storage instanceof KStorage)){
+        if (!storage || !(storage instanceof KStorage)) {
             throw new Error("storage hsa to be an instance of KStorage.");
         }
 
         //convenience
-        if(!topicName){
+        if (!topicName) {
             this.noTopicProvided = true;
         } else {
             this.noTopicProvided = false;
 
-            if(!Array.isArray(topicName)){
+            if (!Array.isArray(topicName)) {
                 topicName = [topicName];
             }
         }
@@ -87,7 +87,7 @@ class StreamDSL {
         this.storage = storage;
         this.isClone = isClone;
 
-        if(!(this.storage instanceof KStorage)){
+        if (!(this.storage instanceof KStorage)) {
             throw new Error("storage must be an instance of KStorage.");
         }
 
@@ -110,7 +110,7 @@ class StreamDSL {
     /**
      * dummy, should be overwritten
      */
-    start(){
+    start() {
         return Promise.reject("When inherting StreamDSL, the start method should be overwritten with connector logic.");
     }
 
@@ -119,7 +119,7 @@ class StreamDSL {
      * about the internal kafka clients
      * @returns {object}
      */
-    getStats(){
+    getStats() {
         return this.kafka ? this.kafka.getStats() : null
     }
 
@@ -136,9 +136,9 @@ class StreamDSL {
      * to the internal stream$
      * @param message {Object|Array&lt;Object>}
      */
-    writeToStream(message){
+    writeToStream(message) {
 
-        if(!Array.isArray(message)){
+        if (!Array.isArray(message)) {
             return this._ee.emit("message", message);
         }
 
@@ -151,8 +151,18 @@ class StreamDSL {
      * returns the internal most.js stream
      * @returns {Object} most.js stream
      */
-    getMost(){
+    getMost() {
         return this.stream$;
+    }
+
+    /**
+     * returns a new most stream from the
+     * given array
+     * @param array
+     * @returns {Stream&lt;any>}
+     */
+    getNewMostFrom(array = []) {
+        return most.from(array);
     }
 
     /**
@@ -161,7 +171,7 @@ class StreamDSL {
      * and replaces the internal stream with the merged new stream
      * @param newStream$
      */
-    replaceInternalObservable(newStream$){
+    replaceInternalObservable(newStream$) {
         this._ee.removeAllListeners(MESSAGE);
         this._ee = new EventEmitter();
         this.stream$ = most.merge(newStream$, most.fromEvent(MESSAGE, this._ee));
@@ -173,9 +183,9 @@ class StreamDSL {
      * events: produced, delivered
      * @param handler {module:events.internal}
      */
-    setProduceHandler(handler){
+    setProduceHandler(handler) {
 
-        if(!handler || !(handler instanceof EventEmitter)){
+        if (!handler || !(handler instanceof EventEmitter)) {
             throw new Error("ProduceHandler must be an instance of EventEmitter (events).");
         }
 
@@ -187,7 +197,7 @@ class StreamDSL {
      * for this stream instance
      * @returns {module:events.internal}
      */
-    createAndSetProduceHandler(){
+    createAndSetProduceHandler() {
         const ee = new EventEmitter();
         this.setProduceHandler(ee);
         return ee;
@@ -197,7 +207,7 @@ class StreamDSL {
      * overwrites the internal kafkaStreams reference
      * @param reference
      */
-    setKafkaStreamsReference(reference){
+    setKafkaStreamsReference(reference) {
         this._kafkaStreams = reference;
     }
 
@@ -214,9 +224,9 @@ class StreamDSL {
      * @param topicName {string|Array&lt;string>}
      * @returns {StreamDSL}
      */
-    from(topicName){
+    from(topicName) {
 
-        if(!Array.isArray(topicName)){
+        if (!Array.isArray(topicName)) {
             topicName = [topicName];
         }
 
@@ -224,10 +234,21 @@ class StreamDSL {
             this.topicName.push(topic);
         });
 
-        if(this.noTopicProvided){
+        if (this.noTopicProvided) {
             this.noTopicProvided = false;
         }
 
+        return this;
+    }
+
+    /**
+     * given a stream of promises, returns stream containing the fulfillment values
+     * etl = Promise -> v
+     * @param etl
+     * @returns {StreamDSL}
+     */
+    awaitPromises(etl) {
+        this.stream$ = this.stream$.awaitPromises(etl);
         return this;
     }
 
@@ -237,7 +258,7 @@ class StreamDSL {
      * @param etl
      * @returns {StreamDSL}
      */
-    map(etl){
+    map(etl) {
         this.stream$ = this.stream$.map(etl);
         return this;
     }
@@ -249,8 +270,20 @@ class StreamDSL {
      * @param etl
      * @returns {StreamDSL}
      */
-    asyncMap(etl){
+    asyncMap(etl) {
         this.stream$ = this.stream$.flatMap(value => most.fromPromise(etl(value)));
+        return this;
+    }
+
+    /**
+     * transform each etl in stream into a stream,
+     * and then concatenate it onto the end of the resulting stream.
+     * etl = v -> stream(v2)
+     * @param etl
+     * @returns {StreamDSL}
+     */
+    concatMap(etl) {
+        this.stream$ = this.stream$.concatMap(etl);
         return this;
     }
 
@@ -262,25 +295,25 @@ class StreamDSL {
      * @param eff
      * @returns Promise{*}
      */
-    forEach(eff){
+    forEach(eff) {
         return this.stream$.forEach(eff);
     }
 
-  /**
-   * runs forEach on a multicast stream
-   * you probably would not want to use this in production
-   * @param eff
-   * @param callback
-   * @returns {StreamDSL}
-   */
-    chainForEach(eff, callback = null){
+    /**
+     * runs forEach on a multicast stream
+     * you probably would not want to use this in production
+     * @param eff
+     * @param callback
+     * @returns {StreamDSL}
+     */
+    chainForEach(eff, callback = null) {
         this.stream$ = this.stream$.multicast();
         this.stream$.forEach(eff).then(r => {
-            if(callback){
+            if (callback) {
                 callback(null, r);
             }
         }, e => {
-            if(callback){
+            if (callback) {
                 callback(e);
             }
         });
@@ -294,7 +327,7 @@ class StreamDSL {
      * errors in eff will break stream
      * @param eff
      */
-    tap(eff){
+    tap(eff) {
         this.stream$ = this.stream$.tap(eff);
         return this;
     }
@@ -306,7 +339,7 @@ class StreamDSL {
      * @param pred
      * @returns {StreamDSL}
      */
-    filter(pred){
+    filter(pred) {
         this.stream$ = this.stream$.filter(pred);
         return this;
     }
@@ -316,7 +349,7 @@ class StreamDSL {
      * be aware that this might take a lot of memory
      * @returns {StreamDSL}
      */
-    skipRepeats(){
+    skipRepeats() {
         this.stream$ = this.stream$.skipRepeats();
         return this;
     }
@@ -327,7 +360,7 @@ class StreamDSL {
      * @param equals
      * @returns {StreamDSL}
      */
-    skipRepeatsWith(equals){
+    skipRepeatsWith(equals) {
         this.stream$ = this.stream$.skipRepeatsWith(equals);
         return this;
     }
@@ -337,7 +370,7 @@ class StreamDSL {
      * @param count
      * @returns {StreamDSL}
      */
-    skip(count){
+    skip(count) {
         this.stream$ = this.stream$.skip(count);
         return this;
     }
@@ -348,12 +381,12 @@ class StreamDSL {
      * @param count
      * @returns {StreamDSL}
      */
-    take(count){
+    take(count) {
         this.stream$ = this.stream$.take(count);
         return this;
     }
 
-    multicast(){
+    multicast() {
         this.stream$ = this.stream$.multicast();
         return this;
     }
@@ -366,11 +399,11 @@ class StreamDSL {
      * @param delimiter
      * @returns {StreamDSL}
      */
-    mapStringToArray(delimiter = " "){
+    mapStringToArray(delimiter = " ") {
 
         return this.map(element => {
 
-            if(!element || typeof element !== "string"){
+            if (!element || typeof element !== "string") {
                 return element;
             }
 
@@ -387,11 +420,11 @@ class StreamDSL {
      * @param valueIndex
      * @returns {StreamDSL}
      */
-    mapArrayToKV(keyIndex = 0, valueIndex = 1){
+    mapArrayToKV(keyIndex = 0, valueIndex = 1) {
 
         return this.map(element => {
 
-            if(!Array.isArray(element)){
+            if (!Array.isArray(element)) {
                 return element;
             }
 
@@ -412,7 +445,7 @@ class StreamDSL {
      * @param valueIndex
      * @returns {StreamDSL}
      */
-    mapStringToKV(delimiter = " ", keyIndex = 0, valueIndex = 1){
+    mapStringToKV(delimiter = " ", keyIndex = 0, valueIndex = 1) {
         this.mapStringToArray(delimiter);
         this.mapArrayToKV(keyIndex, valueIndex);
         return this;
@@ -424,17 +457,17 @@ class StreamDSL {
      * (if parsing fails, the error object will be returned)
      * @returns {StreamDSL}
      */
-    mapJSONParse(){
+    mapJSONParse() {
 
         return this.map(string => {
 
-            if(typeof string !== "string"){
+            if (typeof string !== "string") {
                 return string;
             }
 
             try {
                 return JSON.parse(string);
-            } catch(e){
+            } catch (e) {
                 return e;
             }
         });
@@ -445,11 +478,11 @@ class StreamDSL {
      * if its type is object
      * @returns {StreamDSL}
      */
-    mapStringify(){
+    mapStringify() {
 
         return this.map(object => {
 
-            if(typeof object !== "object"){
+            if (typeof object !== "object") {
                 return object;
             }
 
@@ -462,20 +495,24 @@ class StreamDSL {
      * to an object event with a string key field
      * @returns {StreamDSL}
      */
-    mapBufferKeyToString(){
+    mapBufferKeyToString() {
 
         return this.map(object => {
 
-            if(typeof object !== "object" || !object.key){
+            if (typeof object !== "object" || !object.key) {
+                return object;
+            }
+
+            if (Buffer.isBuffer(object.key)) {
                 return object;
             }
 
             try {
                 const key = object.key.toString("utf8");
-                if(key){
+                if (key) {
                     object.key = key;
                 }
-            } catch(_){
+            } catch (_) {
                 //empty
             }
 
@@ -488,20 +525,24 @@ class StreamDSL {
      * to an object event with a string value field
      * @returns {StreamDSL}
      */
-    mapBufferValueToString(){
+    mapBufferValueToString() {
 
         return this.map(object => {
 
-            if(typeof object !== "object" || !object.value){
+            if (typeof object !== "object" || !object.value) {
+                return object;
+            }
+
+            if (typeof object.value === "string") {
                 return object;
             }
 
             try {
                 const value = object.value.toString("utf8");
-                if(value){
+                if (value) {
                     object.value = value;
                 }
-            } catch(_){
+            } catch (_) {
                 //empty
             }
 
@@ -514,20 +555,24 @@ class StreamDSL {
      * to an object event with (parsed) object value field
      * @returns {StreamDSL}
      */
-    mapStringValueToJSONObject(){
+    mapStringValueToJSONObject() {
 
         return this.map(object => {
 
-            if(typeof object !== "object" || !object.value){
+            if (typeof object !== "object" || !object.value) {
+                return object;
+            }
+
+            if (typeof object.value === "object") {
                 return object;
             }
 
             try {
                 const value = JSON.parse(object.value);
-                if(value){
+                if (value) {
                     object.value = value;
                 }
-            } catch(_){
+            } catch (_) {
                 //empty
             }
 
@@ -542,7 +587,7 @@ class StreamDSL {
      * buffer value -> string -> object
      * @returns {StreamDSL}
      */
-    mapJSONConvenience(){
+    mapJSONConvenience() {
         return this
             .mapBufferKeyToString()
             .mapBufferValueToString()
@@ -555,7 +600,7 @@ class StreamDSL {
      * @param topic - optional
      * @returns {StreamDSL}
      */
-    wrapAsKafkaValue(topic = undefined){
+    wrapAsKafkaValue(topic = undefined) {
 
         return this.map(any => {
             return {
@@ -574,12 +619,12 @@ class StreamDSL {
      * right to its payload value
      * @returns {StreamDSL}
      */
-    mapWrapKafkaValue(){
+    mapWrapKafkaValue() {
 
-       return this.map(message => {
+        return this.map(message => {
 
-            if(typeof message === "object" &amp;&amp;
-                typeof message.value !== "undefined"){
+            if (typeof message === "object" &amp;&amp;
+                typeof message.value !== "undefined") {
                 return message.value;
             }
 
@@ -596,17 +641,17 @@ class StreamDSL {
      * @param {function} callback
      * @returns {StreamDSL}
      */
-    atThroughput(count = 1, callback){
+    atThroughput(count = 1, callback) {
 
         let countState = 0;
         this.tap(message => {
 
-            if(countState > count){
+            if (countState > count) {
                 return;
             }
 
             countState++;
-            if(count === countState){
+            if (count === countState) {
                 callback(message);
             }
         });
@@ -623,7 +668,7 @@ class StreamDSL {
      * @param getId
      * @returns {StreamDSL}
      */
-    mapToFormat(type = "unknown-publish", getId = null){
+    mapToFormat(type = "unknown-publish", getId = null) {
 
         this.map(message => {
 
@@ -645,20 +690,20 @@ class StreamDSL {
      * {value: "{ payload: {} }" -> {}
      * @returns {StreamDSL}
      */
-    mapFromFormat(){
+    mapFromFormat() {
 
         this.map(message => {
 
-            if(typeof message === "object"){
+            if (typeof message === "object") {
                 return message.payload;
             }
 
             try {
                 const object = JSON.parse(message);
-                if(typeof object === "object"){
+                if (typeof object === "object") {
                     return object.payload;
                 }
-            } catch(e){
+            } catch (e) {
                 //empty
             }
 
@@ -673,12 +718,12 @@ class StreamDSL {
     * @param etl
     * @returns {StreamDSL}
     */
-    timestamp(etl){
+    timestamp(etl) {
 
-      	if(!etl){
-        	this.stream$ = this.stream$.timestamp();
-        	return this;
-      	}
+        if (!etl) {
+            this.stream$ = this.stream$.timestamp();
+            return this;
+        }
 
         this.stream$ = this.stream$.map(element => {
             return {
@@ -695,7 +740,7 @@ class StreamDSL {
      * @param substitute
      * @returns {StreamDSL}
      */
-    constant(substitute){
+    constant(substitute) {
         this.stream$ = this.stream$.constant(substitute);
         return this;
     }
@@ -707,7 +752,7 @@ class StreamDSL {
      * @param initial
      * @returns {StreamDSL}
      */
-    scan(eff, initial){
+    scan(eff, initial) {
         this.stream$ = this.stream$.scan(eff, initial);
         return this;
     }
@@ -718,7 +763,7 @@ class StreamDSL {
      * @param end
      * @returns {StreamDSL}
      */
-    slice(start, end){
+    slice(start, end) {
         this.stream$ = this.stream$.slice(start, end);
         return this;
     }
@@ -730,7 +775,7 @@ class StreamDSL {
      * @param pred
      * @returns {StreamDSL}
      */
-    takeWhile(pred){
+    takeWhile(pred) {
         this.stream$ = this.stream$.takeWhile(pred);
         return this;
     }
@@ -741,7 +786,7 @@ class StreamDSL {
      * @param pred
      * @returns {StreamDSL}
      */
-    skipWhile(pred){
+    skipWhile(pred) {
         this.stream$ = this.stream$.skipWhile(pred);
         return this;
     }
@@ -752,7 +797,7 @@ class StreamDSL {
      * @param signal$
      * @returns {StreamDSL}
      */
-    until(signal$){
+    until(signal$) {
         this.stream$ = this.stream$.until(signal$);
         return this;
     }
@@ -763,7 +808,7 @@ class StreamDSL {
      * @param signal$
      * @returns {StreamDSL}
      */
-    since(signal$){
+    since(signal$) {
         this.stream$ = this.stream$.since(signal$);
         return this;
     }
@@ -775,7 +820,7 @@ class StreamDSL {
      * @param initial
      * @returns Promise{*}
      */
-    reduce(eff, initial){
+    reduce(eff, initial) {
         return this.stream$.reduce(eff, initial);
     }
 
@@ -787,14 +832,14 @@ class StreamDSL {
      * @param callback
      * @returns {StreamDSL}
      */
-    chainReduce(eff, initial, callback){
+    chainReduce(eff, initial, callback) {
         this.stream$ = this.stream$.multicast();
         this.stream$.reduce(eff, initial).then(r => {
-            if(callback){
+            if (callback) {
                 callback(null, r);
             }
         }, e => {
-            if(callback){
+            if (callback) {
                 callback(e);
             }
         });
@@ -806,7 +851,7 @@ class StreamDSL {
      * without iterator, returns a promise
      * @returns Promise{*}
      */
-    drain(){
+    drain() {
         return this.stream$.drain();
     }
 
@@ -816,7 +861,7 @@ class StreamDSL {
      * @param throttlePeriod
      * @returns {StreamDSL}
      */
-    throttle(throttlePeriod){
+    throttle(throttlePeriod) {
         this.stream$ = this.stream$.throttle(throttlePeriod);
         return this;
     }
@@ -826,7 +871,7 @@ class StreamDSL {
      * @param delayTime
      * @returns {StreamDSL}
      */
-    delay(delayTime){
+    delay(delayTime) {
         this.stream$ = this.stream$.delay(delayTime);
         return this;
     }
@@ -837,7 +882,7 @@ class StreamDSL {
      * @param debounceTime
      * @returns {StreamDSL}
      */
-    debounce(debounceTime){
+    debounce(debounceTime) {
         this.stream$ = this.stream$.debounce(debounceTime);
         return this;
     }
@@ -857,7 +902,7 @@ class StreamDSL {
      * @param countFieldName
      * @returns {StreamDSL}
      */
-    countByKey(key = "key", countFieldName = "count"){
+    countByKey(key = "key", countFieldName = "count") {
         const keyCount = new KeyCount(this.storage, key, countFieldName);
         this.asyncMap(keyCount.execute.bind(keyCount));
         return this;
@@ -871,7 +916,7 @@ class StreamDSL {
      * @param sumField
      * @returns {StreamDSL}
      */
-    sumByKey(key = "key", fieldName = "value", sumField = false){
+    sumByKey(key = "key", fieldName = "value", sumField = false) {
         const sum = new Sum(this.storage, key, fieldName, sumField);
         this.asyncMap(sum.execute.bind(sum));
         return this;
@@ -887,7 +932,7 @@ class StreamDSL {
      * @param minField
      * @returns {StreamDSL}
      */
-    min(fieldName = "value", minField = "min"){
+    min(fieldName = "value", minField = "min") {
         const min = new Min(this.storage, fieldName, minField);
         this.asyncMap(min.execute.bind(min));
         return this;
@@ -903,7 +948,7 @@ class StreamDSL {
      * @param maxField
      * @returns {StreamDSL}
      */
-    max(fieldName = "value", maxField = "max"){
+    max(fieldName = "value", maxField = "max") {
         const max = new Max(this.storage, fieldName, maxField);
         this.asyncMap(max.execute.bind(max));
         return this;
@@ -922,7 +967,7 @@ class StreamDSL {
      * and merge all child streams into a new stream
      * @private
      */
-    _join(){
+    _join() {
         this.stream$ = most.join(this.stream$);
         return this;
     }
@@ -932,7 +977,7 @@ class StreamDSL {
      * stream with all elements from both streams
      * @param otherStream$
      */
-    _merge(otherStream$){
+    _merge(otherStream$) {
         this.stream$ = most.merge(this.stream$, otherStream$);
         return this;
     }
@@ -945,7 +990,7 @@ class StreamDSL {
      * @param otherStream$
      * @param combine
      */
-    _zip(otherStream$, combine){
+    _zip(otherStream$, combine) {
         this.stream$ = this.stream$.zip(combine, otherStream$);
         return this;
     }
@@ -959,7 +1004,7 @@ class StreamDSL {
      * @returns {StreamDSL}
      * @private
      */
-    _combine(otherStream$, combine){
+    _combine(otherStream$, combine) {
         this.stream$ = this.stream$.combine(combine, otherStream$);
         return this;
     }
@@ -974,7 +1019,7 @@ class StreamDSL {
      * @returns {StreamDSL}
      * @private
      */
-    _sample(sampleStream$, otherStream$, combine){
+    _sample(sampleStream$, otherStream$, combine) {
         this.stream$ = sampleStream$.sample(combine, this.stream$, otherStream$);
         return this;
     }
@@ -993,36 +1038,70 @@ class StreamDSL {
      * the stream$ result to be produced to the given topic name
      * if the instance is a clone, this function call will have to setup a kafka producer
      * returns a promise
-     * @param {string} topic - optional
+     * @param {string|Object} topic - optional (can also be an object, containing the same parameters as fields)
      * @param {number} outputPartitionsCount - optional
      * @param {string} produceType - optional
      * @param {number} version - optional
      * @param {number} compressionType - optional
      * @param {function} producerErrorCallback - optional
+     * @param {Object} outputKafkaConfig - optional
      * @returns {Promise.&lt;boolean>}
      */
-    to(topic = undefined, outputPartitionsCount = 1, produceType = "send", version = 1, compressionType = 0, producerErrorCallback = null){
-        return new Promise(resolve => {
+    to(topic = undefined, outputPartitionsCount = 1, produceType = "send", version = 1, compressionType = 0, producerErrorCallback = null, outputKafkaConfig = null) {
+        return new Promise((resolve, reject) => {
 
-            if(this.produceAsTopic){
-                throw new Error(".to() has already been called on this dsl instance.");
+            if (this.produceAsTopic) {
+                return reject(new Error(".to() has already been called on this dsl instance."));
+            }
+
+            this.produceAsTopic = true;
+
+            //map object if first param is a config object
+            if (topic &amp;&amp; typeof topic === "object") {
+
+                if (topic.outputPartitionsCount) {
+                    outputPartitionsCount = topic.outputPartitionsCount;
+                }
+
+                if (topic.produceType) {
+                    produceType = topic.produceType;
+                }
+
+                if (topic.version) {
+                    version = topic.version;
+                }
+
+                if (topic.compressionType) {
+                    compressionType = topic.compressionType;
+                }
+
+                if (topic.producerErrorCallback) {
+                    producerErrorCallback = topic.producerErrorCallback;
+                }
+
+                if (topic.outputKafkaConfig) {
+                    outputKafkaConfig = topic.outputKafkaConfig;
+                }
+
+                if (topic.topic) {
+                    topic = topic.topic;
+                }
             }
 
             produceType = produceType || "";
             produceType = produceType.toLowerCase();
             const produceTypes = Object.keys(PRODUCE_TYPES).map(k => PRODUCE_TYPES[k]);
-            if(produceTypes.indexOf(produceType) === -1){
-                throw new Error(`produceType must be a supported types: ${produceTypes.join(", ")}.`);
+            if (produceTypes.indexOf(produceType) === -1) {
+                return reject(new Error(`produceType must be a supported types: ${produceTypes.join(", ")}.`));
             }
 
-            this.produceAsTopic = true;
             this.outputTopicName = topic;
             this.outputPartitionsCount = outputPartitionsCount;
             this.produceType = produceType;
             this.produceVersion = version;
             this.produceCompressionType = compressionType;
 
-            if(!this.isClone){
+            if (!this.isClone) {
                 return resolve(true);
             }
 
@@ -1030,12 +1109,26 @@ class StreamDSL {
             //as the result of a KStream or KTable merge
             //which requires the creation of a Producer for .to() to work first
 
-            if(!this.kafka || !this.kafka.setupProducer){
-                throw new Error("setting .to() on a cloned KStream requires a kafka client to injected during merge.");
+            if (!this.kafka || !this.kafka.setupProducer) {
+                return reject(new Error("setting .to() on a cloned KStream requires a kafka client to injected during merge."));
             }
 
+            if (!this._kafkaStreams) {
+                return reject(new Error("KafkaStreams reference missing on stream instance, failed to setup to(..)"));
+            }
+
+            const oldProducerErrorCallback = producerErrorCallback;
+            producerErrorCallback = (error) => {
+
+                if (oldProducerErrorCallback) {
+                    oldProducerErrorCallback(error);
+                }
+
+                this._kafkaStreams.emit("error", error);
+            };
+
             this.kafka.setupProducer(this.outputTopicName, this.outputPartitionsCount,
-                resolve, producerErrorCallback || NOOP);
+                resolve, producerErrorCallback || NOOP, outputKafkaConfig);
 
             this.forEach(message => {
                 messageProduceHandle(
@@ -1063,13 +1156,13 @@ module.exports = StreamDSL;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Mon May 13 2019 09:55:08 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

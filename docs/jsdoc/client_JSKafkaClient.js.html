@@ -29,12 +29,12 @@
             <pre class="prettyprint source linenums"><code>"use strict";
 
 const uuid = require("uuid");
-const {Kafka, PartitionDrainer, Drainer, Publisher} = require("sinek");
+const { Kafka, PartitionDrainer, Drainer, Publisher } = require("sinek");
 const debug = require("debug")("kafka-streams:jsclient");
 
 const KafkaClient = require("./KafkaClient.js");
 
-const NOOP = () => {};
+const NOOP = () => { };
 
 class JSKafkaClient extends KafkaClient {
 
@@ -45,7 +45,7 @@ class JSKafkaClient extends KafkaClient {
      * @param topic
      * @param config
      */
-    constructor(topic, config){
+    constructor(topic, config) {
         super();
 
         this.topic = topic;
@@ -67,7 +67,7 @@ class JSKafkaClient extends KafkaClient {
      * (emits whenever kafka messages are produced/delivered)
      * @param handler {EventEmitter}
      */
-    setProduceHandler(handler){
+    setProduceHandler(handler) {
         this._produceHandler = handler;
     }
 
@@ -75,7 +75,7 @@ class JSKafkaClient extends KafkaClient {
      * returns the produce handler instance if present
      * @returns {null|EventEmitter}
      */
-    getProduceHandler(){
+    getProduceHandler() {
         return this._produceHandler;
     }
 
@@ -83,7 +83,7 @@ class JSKafkaClient extends KafkaClient {
      * overwrites the topic
      * @param topics {Array&lt;string>}
      */
-    overwriteTopics(topics){
+    overwriteTopics(topics) {
         this.topic = topics;
     }
 
@@ -95,26 +95,26 @@ class JSKafkaClient extends KafkaClient {
      * @param withProducer
      * @param withBackPressure
      */
-    start(readyCallback = null, kafkaErrorCallback = null, withProducer = false, withBackPressure = false){
+    start(readyCallback = null, kafkaErrorCallback = null, withProducer = false, withBackPressure = false) {
 
         //might be possible if the parent stream is build to produce messages only
-        if(!this.topic){
+        if (!this.topic || !this.topic.length) {
             return;
         }
 
-        const {zkConStr, kafkaHost, logger, groupId, workerPerPartition, options} = this.config;
+        const { zkConStr, kafkaHost, logger, groupId, workerPerPartition, options } = this.config;
 
         let conStr = null;
 
-        if(typeof kafkaHost === "string"){
+        if (typeof kafkaHost === "string") {
             conStr = kafkaHost;
         }
 
-        if(typeof zkConStr === "string"){
+        if (typeof zkConStr === "string") {
             conStr = zkConStr;
         }
 
-        if(conStr === null){
+        if (conStr === null) {
             throw new Error("One of the following: zkConStr or kafkaHost must be defined.");
         }
 
@@ -123,7 +123,7 @@ class JSKafkaClient extends KafkaClient {
         this.kafkaConsumerClient.on("ready", () => {
             debug("consumer ready");
 
-            if(readyCallback){
+            if (readyCallback) {
                 readyCallback();
             }
         });
@@ -131,7 +131,7 @@ class JSKafkaClient extends KafkaClient {
 
         this.kafkaConsumerClient.becomeConsumer(this.topic, groupId, options || {});
 
-        if(withBackPressure){
+        if (withBackPressure) {
             this.consumer = new PartitionDrainer(this.kafkaConsumerClient, workerPerPartition || 1, false, false);
         } else {
             this.consumer = new Drainer(this.kafkaConsumerClient, workerPerPartition, false, true);
@@ -140,9 +140,9 @@ class JSKafkaClient extends KafkaClient {
         //consumer has to wait for producer
         super.once("kafka-producer-ready", () => {
 
-            if(withBackPressure){
+            if (withBackPressure) {
 
-                if(this.topic.length > 1){
+                if (this.topic.length > 1) {
                     throw new Error("JS Client does not support multiple topics in backpressure mode.");
                 }
 
@@ -158,7 +158,7 @@ class JSKafkaClient extends KafkaClient {
             }
         });
 
-        if(!withProducer){
+        if (!withProducer) {
             super.emit("kafka-producer-ready", true);
         }
     }
@@ -171,36 +171,37 @@ class JSKafkaClient extends KafkaClient {
      * @param partitions
      * @param readyCallback
      * @param kafkaErrorCallback
+     * @param outputKafkaConfig
      */
-    setupProducer(produceTopic, partitions = 1, readyCallback = null, kafkaErrorCallback = null){
+    setupProducer(produceTopic, partitions = 1, readyCallback = null, kafkaErrorCallback = null, outputKafkaConfig = null) {
 
         this.produceTopic = produceTopic || this.produceTopic;
         this.producePartitionCount = partitions;
-        const {zkConStr, kafkaHost, logger, clientName, options} = this.config;
+        const { zkConStr, kafkaHost, logger, clientName, options } = (outputKafkaConfig || this.config);
 
         let conStr = null;
 
-        if(typeof kafkaHost === "string"){
+        if (typeof kafkaHost === "string") {
             conStr = kafkaHost;
         }
 
-        if(typeof zkConStr === "string"){
+        if (typeof zkConStr === "string") {
             conStr = zkConStr;
         }
 
-        if(conStr === null){
+        if (conStr === null) {
             throw new Error("One of the following: zkConStr or kafkaHost must be defined.");
         }
 
         //might be possible if the parent stream is build to produce messages only
-        if(!this.kafkaProducerClient){
+        if (!this.kafkaProducerClient) {
             this.kafkaProducerClient = new Kafka(conStr, logger, conStr === kafkaHost);
 
             //consumer is awaiting producer
             this.kafkaProducerClient.on("ready", () => {
                 debug("producer ready");
                 super.emit("kafka-producer-ready", true);
-                if(readyCallback){
+                if (readyCallback) {
                     readyCallback();
                 }
             });
@@ -220,14 +221,14 @@ class JSKafkaClient extends KafkaClient {
      * @param message
      * @returns {*}
      */
-    send(topic, message){
+    send(topic, message) {
 
-        if(!this.producer){
+        if (!this.producer) {
             return Promise.reject("producer is not yet setup.");
         }
 
         let partition = -1;
-        if(this.producePartitionCount &lt; 2){
+        if (this.producePartitionCount &lt; 2) {
             partition = 0;
         } else {
             partition = KafkaClient._getRandomIntInclusive(0, this.producePartitionCount);
@@ -251,13 +252,13 @@ class JSKafkaClient extends KafkaClient {
      * @param compressionType
      * @returns {*}
      */
-    buffer(topic, identifier, payload, compressionType = 0){
+    buffer(topic, identifier, payload, compressionType = 0) {
 
-        if(!this.producer){
+        if (!this.producer) {
             return Promise.reject("producer is not yet setup.");
         }
 
-        if(!identifier){
+        if (!identifier) {
             identifier = uuid.v4();
         }
 
@@ -275,42 +276,42 @@ class JSKafkaClient extends KafkaClient {
      * @param compressionType
      * @returns {*}
      */
-    bufferFormat(topic, identifier, payload, version = 1, compressionType = 0){
+    bufferFormat(topic, identifier, payload, version = 1, compressionType = 0) {
 
-        if(!this.producer){
+        if (!this.producer) {
             return Promise.reject("producer is not yet setup.");
         }
 
-        if(!identifier){
+        if (!identifier) {
             identifier = uuid.v4();
         }
 
         return this.producer.bufferPublishMessage(topic, identifier, payload, version, compressionType);
     }
 
-    pause(){
+    pause() {
 
-        if(this.consumer){
+        if (this.consumer) {
             this.consumer.pause();
         }
 
-        if(this.producer){
+        if (this.producer) {
             this.producer.pause();
         }
     }
 
-    resume(){
+    resume() {
 
-        if(this.consumer){
+        if (this.consumer) {
             this.consumer.resume();
         }
 
-        if(this.producer){
+        if (this.producer) {
             this.producer.resume();
         }
     }
 
-    getStats(){
+    getStats() {
         return {
             inTopic: this.topic ? this.topic : null,
             consumer: this.consumer ? this.consumer.getStats() : null,
@@ -320,7 +321,7 @@ class JSKafkaClient extends KafkaClient {
         };
     }
 
-    close(commit = false){
+    close(commit = false) {
 
         if (this.consumer) {
             this.consumer.close(commit);
@@ -334,9 +335,9 @@ class JSKafkaClient extends KafkaClient {
     }
 
     //required by KTable
-    closeConsumer(){
+    closeConsumer() {
 
-        if(this.consumer){
+        if (this.consumer) {
             this.consumer.close();
             this.consumer = null;
         }
@@ -354,13 +355,13 @@ module.exports = JSKafkaClient;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Mon May 13 2019 09:55:08 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

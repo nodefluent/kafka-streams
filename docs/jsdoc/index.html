@@ -43,10 +43,13 @@
 
 
     <section>
-        <article><h1>node-kafka-streams</h1><p><a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/nodefluent/kafka-streams.svg" alt="Greenkeeper badge"></a>
+        <article><h1>node-kafka-streams</h1>
+<p><a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/nodefluent/kafka-streams.svg" alt="Greenkeeper badge"></a>
 <a href="https://travis-ci.org/nodefluent/kafka-streams"><img src="https://travis-ci.org/nodefluent/kafka-streams.svg?branch=master" alt="Build Status"></a>
 <a href="https://badge.fury.io/js/kafka-streams"><img src="https://badge.fury.io/js/kafka-streams.svg" alt="npm version"></a></p>
-<pre class="prettyprint source"><code>npm install --save kafka-streams</code></pre><pre class="prettyprint source lang-javascript"><code>const {KafkaStreams} = require(&quot;kafka-streams&quot;);
+<pre class="prettyprint source"><code>npm install --save kafka-streams
+</code></pre>
+<pre class="prettyprint source lang-javascript"><code>const {KafkaStreams} = require(&quot;kafka-streams&quot;);
 
 const config = require(&quot;./config.json&quot;);
 const factory = new KafkaStreams(config);
@@ -54,10 +57,13 @@ const factory = new KafkaStreams(config);
 const kstream = factory.getKStream(&quot;input-topic&quot;);
 const ktable = factory.getKTable(/* .. */);
 
-kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to(&quot;output-topic&quot;);</code></pre><blockquote>
+kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to(&quot;output-topic&quot;);
+</code></pre>
+<blockquote>
 <p>CHANGES: The latest version brings a lot of changes, please check <a href="CHANGELOG.md">here</a> before updating.</p>
 </blockquote>
-<h2>API Overview</h2><ul>
+<h2>API Overview</h2>
+<ul>
 <li><a href="docs/quick-start.md">Quick Start</a></li>
 <li><a href="docs/handling-messages-schemas.md">Message 'to' and 'from' Apache Kafka</a></li>
 <li><a href="docs/api.md">API Info</a></li>
@@ -66,12 +72,14 @@ kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to(&quot;o
 <li><a href="https://github.com/nodefluent/kafka-streams/tree/master/examples">Examples</a></li>
 <li><a href="docs/native.md">Native Client</a> | <a href="docs/ssl-sasl.md">SSL, SASL, Kerberos</a></li>
 </ul>
-<h2>You might also like</h2><ul>
+<h2>You might also like</h2>
+<ul>
 <li><a href="https://github.com/nodefluent/kafka-connect">node-kafka-connect</a></li>
 <li><a href="https://github.com/nodefluent/schema-registry">node-schema-registry</a></li>
 <li><a href="https://github.com/nodefluent/kafka-rest-ui">node-kafka-rest-ui</a></li>
 </ul>
-<h2>README Overview</h2><ul>
+<h2>README Overview</h2>
+<ul>
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#aim-of-this-library">Aim of this Library</a></li>
 <li><a href="#description">Description</a></li>
@@ -83,18 +91,21 @@ kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to(&quot;o
 <li><a href="#window-operations">Window Operations</a></li>
 <li><a href="#more">FAQ - More</a></li>
 </ul>
-<h2>Prerequisites</h2><ul>
-<li>kafka broker should be version <code>&gt;= 0.11.x</code></li>
+<h2>Prerequisites</h2>
+<ul>
+<li>Kafka broker should be version <code>&gt;= 0.11.x</code></li>
 <li>Node.js should be version <code>&gt;= 8.x.x</code></li>
 </ul>
-<h2>Aim of this Library</h2><ul>
+<h2>Aim of this Library</h2>
+<ul>
 <li>this is not a 1:1 port of the official JAVA kafka-streams</li>
 <li>the goal of this project is to give at least the same options to
 a nodejs developer that kafka-streams provides for JVM developers</li>
 <li>stream-state processing, table representation, joins, aggregate etc.
 I am aiming for the easiest api access possible checkout the <a href="https://github.com/nodefluent/kafka-streams/blob/master/examples/wordCount.js">word count example</a></li>
 </ul>
-<h2>Description</h2><p><a href="http://docs.confluent.io/3.0.0/streams">kafka-streams</a> :octopus: equivalent for nodejs :sparkles::turtle::rocket::sparkles:
+<h2>Description</h2>
+<p><a href="http://docs.confluent.io/3.0.0/streams">kafka-streams</a> :octopus: equivalent for nodejs :sparkles::turtle::rocket::sparkles:
 build on super fast :fire: observables using <a href="https://github.com/cujojs/most">most.js</a> :metal:</p>
 <p>ships with <a href="https://github.com/nodefluent/node-sinek">sinek</a> :pray: for backpressure</p>
 <p>comes with js and native Kafka client, for more performance and SSL, SASL and Kerberos features</p>
@@ -104,7 +115,8 @@ yet they still feel natural in this api :squirrel:</p>
 <p>async (Promises) and sync stream operators e.g. <code>stream$.map()</code> or <code>stream$.asyncMap()</code></p>
 <p>super easy API :goberserk:</p>
 <p>the lib is based on <code>sinek</code>, which is based on kafka-node's <code>ConsumerGroups</code></p>
-<h2>Port Progress Overview</h2><ul>
+<h2>Port Progress Overview</h2>
+<ul>
 <li>[x] core structure</li>
 <li>[x] KStream base - stream as a changelog</li>
 <li>[x] KTable base - stream as a database</li>
@@ -134,7 +146,8 @@ yet they still feel natural in this api :squirrel:</p>
 <li>[x] SASL</li>
 <li>[x] Kerberos</li>
 </ul>
-<h2>Operator Implementations</h2><ul>
+<h2>Operator Implementations</h2>
+<ul>
 <li>[x] map</li>
 <li>[x] asyncMap</li>
 <li>[x] constant</li>
@@ -168,7 +181,8 @@ yet they still feel natural in this api :squirrel:</p>
 <li>A description of the operators can be found <a href="docs/most-api.md">here</a></li>
 <li>Missing an operator? Feel free to open an issue :cop:</li>
 </ul>
-<h2>Additional Operators</h2><ul>
+<h2>Additional Operators</h2>
+<ul>
 <li>[x] mapStringToArray</li>
 <li>[x] mapArrayToKV</li>
 <li>[x] mapStringToKV</li>
@@ -180,40 +194,52 @@ yet they still feel natural in this api :squirrel:</p>
 <li>[x] mapFromFormat</li>
 <li>Want more? Feel free to open an issue :cop:</li>
 </ul>
-<h2>Stream Action Implementations</h2><ul>
+<h2>Stream Action Implementations</h2>
+<ul>
 <li>[x] countByKey</li>
 <li>[x] sumByKey</li>
 <li>[x] min</li>
 <li>[x] max</li>
 <li>Want more? Feel free to open an issue :cop:</li>
 </ul>
-<h2>Join Operations</h2><p><a href="https://cwiki.apache.org/confluence/display/KAFKA/Kafka+Streams+Join+Semantics">Operation description</a></p>
-<h3>KStream Status</h3><ul>
+<h2>Join Operations</h2>
+<p><a href="https://cwiki.apache.org/confluence/display/KAFKA/Kafka+Streams+Join+Semantics">Operation description</a></p>
+<h3>KStream Status</h3>
+<ul>
 <li>[x] merge</li>
 <li>[ ] outerJoin</li>
 <li>[x] innerJoin</li>
 <li>[ ] leftJoin</li>
+<li>[x] branch</li>
 </ul>
-<h3>KTable Status</h3><ul>
+<h3>KTable Status</h3>
+<ul>
 <li>[x] merge</li>
 <li>[ ] outerJoin</li>
 <li>[ ] innerJoin</li>
 <li>[ ] leftJoin</li>
 </ul>
-<h3>KTable <-> KStream Status</h3><ul>
+<h3>KTable &lt;-&gt; KStream Status</h3>
+<ul>
 <li>[x] merge</li>
 <li>[ ] outerJoin</li>
 <li>[ ] innerJoin</li>
 <li>[ ] leftJoin</li>
 </ul>
-<h2>Window Operations</h2><h3>KStream</h3><ul>
+<h2>Window Operations</h2>
+<h3>KStream</h3>
+<ul>
 <li>[x] window</li>
 <li>[ ] advanced window</li>
 <li>[ ] rolling window</li>
 </ul>
-<h1>More</h1><h2>Can I use this library yet?</h2><p>Yes.</p>
-<h2>Are we ready for production yet?</h2><p>Probably, yes. :smile:</p>
-<h2>Even More</h2><p>Forks or Stars give motivation :bowtie:</p></article>
+<h1>More</h1>
+<h2>Can I use this library yet?</h2>
+<p>Yes.</p>
+<h2>Are we ready for production yet?</h2>
+<p>Probably, yes. :smile:</p>
+<h2>Even More</h2>
+<p>Forks or Stars give motivation :bowtie:</p></article>
     </section>
 
 
@@ -224,13 +250,13 @@ yet they still feel natural in this api :squirrel:</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Mon May 13 2019 09:55:08 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

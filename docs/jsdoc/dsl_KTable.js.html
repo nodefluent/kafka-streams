@@ -33,12 +33,12 @@ const most = require("most");
 const Promise = require("bluebird");
 
 const StreamDSL = require("./StreamDSL.js");
-const {LastState} = require("../actions/index");
+const { LastState } = require("../actions/index");
 const StorageMerger = require("../StorageMerger.js");
-const {messageProduceHandle} = require("../messageProduceHandle.js");
+const { messageProduceHandle } = require("../messageProduceHandle.js");
 
 const MESSAGE = "message";
-const NOOP = () => {};
+const NOOP = () => { };
 
 /**
  * table representation of a stream
@@ -85,34 +85,41 @@ class KTable extends StreamDSL {
      * prepare production of messages if necessary
      * when called with zero or just a single callback argument
      * this function will return a promise and use the callback for errors
-     * @param {function} kafkaReadyCallback
+     * @param {function|Object} kafkaReadyCallback - can also be an object (config)
      * @param {function} kafkaErrorCallback
      * @param {boolean} withBackPressure
+     * @param {Object} outputKafkaConfig
      */
-    start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure = false){
+    start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure = false, outputKafkaConfig = null) {
 
-        if(arguments.length &lt; 2){
+        if (kafkaReadyCallback &amp;&amp; typeof kafkaReadyCallback === "object" &amp;&amp; arguments.length &lt; 2) {
+            return new Promise((resolve, reject) => {
+                this._start(resolve, reject, kafkaReadyCallback.withBackPressure, kafkaReadyCallback.outputKafkaConfig);
+            });
+        }
+
+        if (arguments.length &lt; 2) {
             return new Promise((resolve, reject) => {
                 this._start(resolve, reject, withBackPressure);
             });
         }
 
-        return this._start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure);
+        return this._start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure, outputKafkaConfig);
     }
 
-    _start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure){
+    _start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure = false, outputKafkaConfig = null) {
 
-        if(this.started){
+        if (this.started) {
             throw new Error("this KTable is already started.");
         }
 
         this.started = true;
 
-        if(!this.topicName &amp;&amp; !this.produceAsTopic){
+        if (!this.topicName &amp;&amp; !this.produceAsTopic) {
             return kafkaReadyCallback(); //possibly a good idea to skip finalise()
         }
 
-        if(!this.finalised){
+        if (!this.finalised) {
             this.finalise();
         }
 
@@ -120,23 +127,23 @@ class KTable extends StreamDSL {
         let consumerReady = false;
 
         const onReady = (type) => {
-            switch(type){
+            switch (type) {
                 case "producer": producerReady = true; break;
                 case "consumer": consumerReady = true; break;
             }
 
             //consumer &amp;&amp; producer
-            if(producerReady &amp;&amp; consumerReady &amp;&amp; kafkaReadyCallback){
+            if (producerReady &amp;&amp; consumerReady &amp;&amp; kafkaReadyCallback) {
                 kafkaReadyCallback();
             }
 
             //consumer only
-            if(!this.produceAsTopic &amp;&amp; consumerReady &amp;&amp; kafkaReadyCallback){
+            if (!this.produceAsTopic &amp;&amp; consumerReady &amp;&amp; kafkaReadyCallback) {
                 kafkaReadyCallback();
             }
 
             //producer only
-            if(this.produceAsTopic &amp;&amp; producerReady &amp;&amp; kafkaReadyCallback &amp;&amp; !this.kafka.topic){
+            if (this.produceAsTopic &amp;&amp; producerReady &amp;&amp; kafkaReadyCallback &amp;&amp; !this.kafka.topic &amp;&amp; !this.kafka.topic.length) {
                 kafkaReadyCallback();
             }
         };
@@ -146,7 +153,7 @@ class KTable extends StreamDSL {
 
         this.kafka.on(MESSAGE, msg => {
 
-            if(!this.consumerOpen){
+            if (!this.consumerOpen) {
                 return;
             }
 
@@ -155,10 +162,10 @@ class KTable extends StreamDSL {
 
         this.kafka.start(() => { onReady("consumer"); }, kafkaErrorCallback, this.produceAsTopic, withBackPressure);
 
-        if(this.produceAsTopic){
+        if (this.produceAsTopic) {
 
             this.kafka.setupProducer(this.outputTopicName, this.outputPartitionsCount, () => { onReady("producer"); },
-                kafkaErrorCallback);
+                kafkaErrorCallback, outputKafkaConfig);
 
             super.forEach(message => {
                 messageProduceHandle(
@@ -179,7 +186,7 @@ class KTable extends StreamDSL {
      * @param {StreamDSL} stream
      * @param {string} key
      */
-    innerJoin(stream, key = "key"){
+    innerJoin(stream, key = "key") {
         throw new Error("not implemented yet."); //TODO implement
     }
 
@@ -188,7 +195,7 @@ class KTable extends StreamDSL {
      * If only one source contains a key, the other is null
      * @param {StreamDSL} stream
      */
-    outerJoin(stream){
+    outerJoin(stream) {
         throw new Error("not implemented yet."); //TODO implement
     }
 
@@ -197,7 +204,7 @@ class KTable extends StreamDSL {
      * If the other source does not have a value for a given key, it is set to null
      * @param {StreamDSL} stream
      */
-    leftJoin(stream){
+    leftJoin(stream) {
         throw new Error("not implemented yet."); //TODO implement
     }
 
@@ -205,13 +212,13 @@ class KTable extends StreamDSL {
      * write message to the internal stream
      * @param {any} message
      */
-    writeToTableStream(message){
+    writeToTableStream(message) {
         this._tee.emit(MESSAGE, message);
     }
 
-    finalise(buildReadyCallback = null){
+    finalise(buildReadyCallback = null) {
 
-        if(this.finalised){
+        if (this.finalised) {
             throw new Error("this KTable has already been finalised.");
         }
 
@@ -227,7 +234,7 @@ class KTable extends StreamDSL {
             this.kafka.closeConsumer();
             this.consumerOpen = false;
 
-            if(typeof buildReadyCallback === "function"){
+            if (typeof buildReadyCallback === "function") {
                 buildReadyCallback();
             }
         });
@@ -236,7 +243,7 @@ class KTable extends StreamDSL {
         this.finalised = true;
     }
 
-    _bindToTableStream(){
+    _bindToTableStream() {
         this.stream$ = most.merge(this.stream$, most.fromEvent(MESSAGE, this._tee));
     }
 
@@ -246,12 +253,12 @@ class KTable extends StreamDSL {
      * @param {function} finishedCallback
      * @returns {KTable}
      */
-    consumeUntilMs(ms = 1000, finishedCallback = null){
+    consumeUntilMs(ms = 1000, finishedCallback = null) {
 
         super.multicast();
         this.stream$ = this.stream$.until(most.of().delay(ms));
 
-        if(!this.finalised){
+        if (!this.finalised) {
             this.finalise(finishedCallback);
         }
 
@@ -264,12 +271,12 @@ class KTable extends StreamDSL {
      * @param {function} finishedCallback
      * @returns {KTable}
      */
-    consumeUntilCount(count = 1000, finishedCallback = null){
+    consumeUntilCount(count = 1000, finishedCallback = null) {
 
         super.multicast();
         this.stream$ = this.stream$.take(count);
 
-        if(!this.finalised){
+        if (!this.finalised) {
             this.finalise(finishedCallback);
         }
 
@@ -280,7 +287,7 @@ class KTable extends StreamDSL {
      * consume messages until latest offset of topic
      * @param {function} finishedCallback
      */
-    consumeUntilLatestOffset(finishedCallback = null){
+    consumeUntilLatestOffset(finishedCallback = null) {
 
         throw new Error("not implemented yet."); //TODO implement
 
@@ -296,7 +303,7 @@ class KTable extends StreamDSL {
      * returns the state of the internal KStorage
      * @returns {Promise&lt;object>}
      */
-    getTable(){
+    getTable() {
         return this.storage.getState();
     }
 
@@ -305,7 +312,7 @@ class KTable extends StreamDSL {
      * to the stream, every observer will receive
      * the content as KV {key, value} object
      */
-    replay(){
+    replay() {
         Object.keys(this.storage.state).forEach(key => {
 
             const message = {
@@ -325,9 +332,9 @@ class KTable extends StreamDSL {
      * @param {StreamDSL} stream
      * @returns {Promise.&lt;KTable>}
      */
-    merge(stream){
+    merge(stream) {
 
-        if(!(stream instanceof StreamDSL)){
+        if (!(stream instanceof StreamDSL)) {
             throw new Error("stream has to be an instance of KStream or KTable.");
         }
 
@@ -335,15 +342,15 @@ class KTable extends StreamDSL {
         //create a new internal stream that merges both KStream.stream$s
         const newStream$ = this.stream$.multicast().merge(stream.stream$.multicast());
 
-       return StorageMerger.mergeIntoState([this.getStorage(), stream.getStorage()]).then(mergedState => {
-           return this._cloneWith(newStream$, mergedState);
-       });
+        return StorageMerger.mergeIntoState([this.getStorage(), stream.getStorage()]).then(mergedState => {
+            return this._cloneWith(newStream$, mergedState);
+        });
     }
 
-    _cloneWith(newStream$, storageState = {}){
+    _cloneWith(newStream$, storageState = {}) {
 
         const kafkaStreams = this._kafkaStreams;
-        if(!kafkaStreams){
+        if (!kafkaStreams) {
             throw new Error("merging requires a kafka streams reference on the left-hand merger.");
         }
 
@@ -365,7 +372,7 @@ class KTable extends StreamDSL {
      * using this function
      * @returns {Promise.&lt;KTable>}
      */
-    clone(){
+    clone() {
         const newStream$ = this.stream$.tap(NOOP);
         return this._cloneWith(newStream$);
     }
@@ -376,7 +383,7 @@ class KTable extends StreamDSL {
      * as well as KStorage connections
      * @returns {Promise.&lt;boolean>}
      */
-    close(){
+    close() {
         this.stream$ = this.stream$.take(0);
         this.stream$ = null;
         this.kafka.close();
@@ -395,13 +402,13 @@ module.exports = KTable;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Mon May 13 2019 09:55:08 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

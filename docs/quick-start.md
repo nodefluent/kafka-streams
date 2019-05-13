@@ -19,31 +19,38 @@ these services elsewhere, make sure to adapt the config settings)
 
 ```es6
 {
-    //zkConStr: "localhost:2181/",
-    kafkaHost: "localhost:9092", //either kafkaHost or zkConStr
-    logger: {
-      debug: msg => console.log(msg),
-      info: msg => console.log(msg),
-      warn: msg => console.log(msg),
-      error: msg => console.error(msg)
+    "noptions": {
+        "metadata.broker.list": "localhost:9092",
+        "group.id": "kafka-streams-test-native",
+        "client.id": "kafka-streams-test-name-native",
+        "event_cb": true,
+        "compression.codec": "snappy",
+        "api.version.request": true,
+        "socket.keepalive.enable": true,
+        "socket.blocking.max.ms": 100,
+        "enable.auto.commit": false,
+        "auto.commit.interval.ms": 100,
+        "heartbeat.interval.ms": 250,
+        "retry.backoff.ms": 250,
+        "fetch.min.bytes": 100,
+        "fetch.message.max.bytes": 2 * 1024 * 1024,
+        "queued.min.messages": 100,
+        "fetch.error.backoff.ms": 100,
+        "queued.max.messages.kbytes": 50,
+        "fetch.wait.max.ms": 1000,
+        "queue.buffering.max.ms": 1000,
+        "batch.num.messages": 10000
     },
-    groupId: "kafka-streams-test",
-    clientName: "kafka-streams-test-name",
-    workerPerPartition: 1,
-    options: {
-        sessionTimeout: 8000,
-        protocol: ["roundrobin"],
-        fromOffset: "earliest", //latest
-        fetchMaxBytes: 1024 * 100,
-        fetchMinBytes: 1,
-        fetchMaxWaitMs: 10,
-        heartbeatInterval: 250,
-        retryMinTimeout: 250,
-        autoCommit: true,
-        autoCommitIntervalMs: 1000,
-        requireAcks: 1,
-        ackTimeoutMs: 100,
-        partitionerType: 3
+    "tconf": {
+        "auto.offset.reset": "earliest",
+        "request.required.acks": 1
+    },
+    "batchOptions": {
+        "batchSize": 5,
+        "commitEveryNBatch": 1,
+        "concurrency": 1,
+        "commitSync": false,
+        "noBatchCommits": false
     }
 }
 ```
@@ -68,6 +75,7 @@ That is why you have to pass a config object to the constructor of KafkaStreams.
 
 ```es6
 const kafkaStreams = new KafkaStreams(config);
+kafkaStreams.on("error", (error) => console.error(error));
 ```
 
 * Creating a new KStream (change-log stream representation) via:
@@ -199,7 +207,3 @@ table.start().then(() => {
 Via `.getTable().then(table => {})` you can also trigger a replay of all KV pairs in the table at any time after completion by calling `.replay()`.
 
 * A table can be merged with a KStream or another KTable, keep in mind that when merging 2 KTables their storages will be merged, resulting a combination of both internal KStorage maps. Where the left hand table's values might be overwritten by the right hand side, if both contain the equal keys.
-
-* Aggregate Operations TODO
-* Window Operations TODO
-* JOIN Types TODO

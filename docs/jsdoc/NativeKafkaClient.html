@@ -203,6 +203,8 @@ Sinek native kafka- Consumer and/or Producer
 
 
 
+
+
     
     </div>
 
@@ -473,7 +475,7 @@ an uuid.v4() will be generated
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line195">line 195</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line198">line 198</a>
     </li></ul></dd>
     
 
@@ -483,6 +485,8 @@ an uuid.v4() will be generated
 
     
 </dl>
+
+
 
 
 
@@ -769,7 +773,7 @@ an uuid.4() will be generated
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line217">line 217</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line220">line 220</a>
     </li></ul></dd>
     
 
@@ -779,6 +783,8 @@ an uuid.4() will be generated
 
     
 </dl>
+
+
 
 
 
@@ -883,6 +889,8 @@ an uuid.4() will be generated
 
     
 </dl>
+
+
 
 
 
@@ -1039,6 +1047,8 @@ an uuid.4() will be generated
 
     
 </dl>
+
+
 
 
 
@@ -1285,7 +1295,7 @@ the target partition for the message/s
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line173">line 173</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line176">line 176</a>
     </li></ul></dd>
     
 
@@ -1295,6 +1305,8 @@ the target partition for the message/s
 
     
 </dl>
+
+
 
 
 
@@ -1467,13 +1479,15 @@ the target partition for the message/s
 
 
 
+
+
         
             
 
     
 
     
-    <h4 class="name" id="setupProducer"><span class="type-signature"></span>setupProducer<span class="signature">(produceTopic, partitions, readyCallback, kafkaErrorCallback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setupProducer"><span class="type-signature"></span>setupProducer<span class="signature">(produceTopic, partitions, readyCallback, kafkaErrorCallback, outputKafkaConfig)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1612,6 +1626,30 @@ requires a topic's partition count during initialisation
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>outputKafkaConfig</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1649,7 +1687,7 @@ requires a topic's partition count during initialisation
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line134">line 134</a>
+        <a href="client_NativeKafkaClient.js.html">client/NativeKafkaClient.js</a>, <a href="client_NativeKafkaClient.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -1659,6 +1697,8 @@ requires a topic's partition count during initialisation
 
     
 </dl>
+
+
 
 
 
@@ -1888,6 +1928,8 @@ will await a kafka-producer-ready-event if started withProducer=true
 
 
 
+
+
         
     
 
@@ -1904,13 +1946,13 @@ will await a kafka-producer-ready-event if started withProducer=true
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Mon May 13 2019 09:55:08 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

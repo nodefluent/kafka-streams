@@ -39,10 +39,10 @@ const PRODUCE_TYPES = require("./produceTypes.js");
  */
 const hasKVStructure = message => {
 
-    if(message &amp;&amp;
+    if (message &amp;&amp;
         typeof message === "object" &amp;&amp;
         typeof message.key !== "undefined" &amp;&amp;
-        typeof message.value !== "undefined"){
+        typeof message.value !== "undefined") {
         return true;
     }
 
@@ -61,35 +61,30 @@ const hasKVStructure = message => {
  * @param value
  * @param partitionKey - optional
  * @param opaqueKey - optional
+ * @param version - optional
  * @returns {Promise&lt;void>}
  */
-const produceTypeSelection = (produceType, kafka, compressionType, topic, partition, key, value, partitionKey = null, opaqueKey = null) => {
+const produceTypeSelection = (produceType, kafka, compressionType, topic, partition, key, value, partitionKey = null, opaqueKey = null, version = 1) => {
 
-    debug("producing", produceType, topic, partition, key, partitionKey, opaqueKey, value);
+    debug("producing", produceType, topic, partition, key, partitionKey, opaqueKey, version, value);
 
     //compressionType is only passed for the JS client, the native client will ignore it
     //on the other hand partitionKey, opaqueKey and partition are ignored by the JS client
 
-    let promise = null;
-    switch(produceType){
+    switch (produceType) {
 
         case PRODUCE_TYPES.SEND:
-            promise = kafka.send(topic, value, partition, key, partitionKey, opaqueKey);
-            break;
+            return kafka.send(topic, value, partition, key, partitionKey, opaqueKey);
 
         case PRODUCE_TYPES.BUFFER:
-            promise = kafka.buffer(topic, key, value, compressionType, partition, version, partitionKey);
-            break;
+            return kafka.buffer(topic, key, value, compressionType, partition, version, partitionKey);
 
         case PRODUCE_TYPES.BUFFER_FORMAT:
-            promise = kafka.bufferFormat(topic, key, value, version, compressionType, partitionKey, partition);
-            break;
+            return kafka.bufferFormat(topic, key, value, version, compressionType, partitionKey, partition);
 
         default:
-            throw new Error(`${produceType} is an unknown produceType.`);
+            return Promise.reject(new Error(`${produceType} is an unknown produceType.`));
     }
-
-    return promise;
 };
 
 /**
@@ -116,28 +111,28 @@ const messageProduceHandle = (kafka, message, outputTopicName, produceType, comp
 
     //overwrite default values or configured values
     //with on demand message settings
-    if(hasKVStructure(message)){
+    if (hasKVStructure(message)) {
 
         _key = message.key;
 
         //overwrite default topic, with per messag topic
-        if(message.topic){
-            _topic = message.topc;
+        if (message.topic) {
+            _topic = message.topic;
         }
 
-        if(typeof message.version !== "undefined"){
+        if (typeof message.version !== "undefined") {
             _version = message.version;
         }
 
-        if(typeof message.partition !== "undefined"){
+        if (typeof message.partition !== "undefined") {
             _partition = message.partition;
         }
 
-        if(typeof message.partitionKey !== "undefined"){
+        if (typeof message.partitionKey !== "undefined") {
             _partitionKey = message.partitionKey;
         }
 
-        if(typeof message.opaqueKey !== "undefined"){
+        if (typeof message.opaqueKey !== "undefined") {
             _opaqueKey = message.opaqueKey;
         }
 
@@ -156,7 +151,7 @@ const messageProduceHandle = (kafka, message, outputTopicName, produceType, comp
     };
 
     const produceHandler = kafka.getProduceHandler();
-    if(produceHandler){
+    if (produceHandler) {
         produceHandler.emit("produced", kafkaMessage);
     }
 
@@ -171,14 +166,16 @@ const messageProduceHandle = (kafka, message, outputTopicName, produceType, comp
         _key,
         _value,
         _partitionKey,
-        _opaqueKey
+        _opaqueKey,
+        _version
 
-    ).then(() => {
-        if(produceHandler){
-            produceHandler.emit("delivered", kafkaMessage);
+    ).then((produceMessageValue) => {
+        if (produceHandler) {
+            produceHandler.emit("delivered", kafkaMessage, produceMessageValue);
         }
-    }).catch(error => {
-        if(producerErrorCallback){
+    }).catch((error) => {
+        if (producerErrorCallback) {
+            error.message = "During message produce: " + error.message;
             producerErrorCallback(error);
         }
     });
@@ -197,13 +194,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KeyCount.html">KeyCount</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="LastState.html">LastState</a></li><li><a href="Max.html">Max</a></li><li><a href="Min.html">Min</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li><li><a href="Sum.html">Sum</a></li><li><a href="Window.html">Window</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSKafkaClient.html">JSKafkaClient</a></li><li><a href="KafkaFactory.html">KafkaFactory</a></li><li><a href="KafkaStreams.html">KafkaStreams</a></li><li><a href="KStorage.html">KStorage</a></li><li><a href="KStream.html">KStream</a></li><li><a href="KTable.html">KTable</a></li><li><a href="NativeKafkaClient.html">NativeKafkaClient</a></li><li><a href="StorageMerger.html">StorageMerger</a></li><li><a href="StreamDSL.html">StreamDSL</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hasKVStructure">hasKVStructure</a></li><li><a href="global.html#messageProduceHandle">messageProduceHandle</a></li><li><a href="global.html#produceTypeSelection">produceTypeSelection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 23 2018 01:13:52 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Mon May 13 2019 09:55:08 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -89,7 +89,7 @@ in a stream
     * [.getProduceHandler()](#JSKafkaClient+getProduceHandler) ⇒ <code>null</code> \| <code>EventEmitter</code>
     * [.overwriteTopics(topics)](#JSKafkaClient+overwriteTopics)
     * [.start(readyCallback, kafkaErrorCallback, withProducer, withBackPressure)](#JSKafkaClient+start)
-    * [.setupProducer(produceTopic, partitions, readyCallback, kafkaErrorCallback)](#JSKafkaClient+setupProducer)
+    * [.setupProducer(produceTopic, partitions, readyCallback, kafkaErrorCallback, outputKafkaConfig)](#JSKafkaClient+setupProducer)
     * [.send(topic, message)](#JSKafkaClient+send) ⇒ <code>\*</code>
     * [.buffer(topic, identifier, payload, compressionType)](#JSKafkaClient+buffer) ⇒ <code>\*</code>
     * [.bufferFormat(topic, identifier, payload, version, compressionType)](#JSKafkaClient+bufferFormat) ⇒ <code>\*</code>
@@ -153,7 +153,7 @@ will await a kafka-producer-ready-event if started withProducer=true
 
 <a name="JSKafkaClient+setupProducer"></a>
 
-# jsKafkaClient.setupProducer(produceTopic, partitions, readyCallback, kafkaErrorCallback)
+# jsKafkaClient.setupProducer(produceTopic, partitions, readyCallback, kafkaErrorCallback, outputKafkaConfig)
 starts a new kafka-producer using sinek's publisher
 will fire kafka-producer-ready-event
 requires a topic's partition count during initialisation
@@ -166,6 +166,7 @@ requires a topic's partition count during initialisation
 | partitions | <code>1</code> | 
 | readyCallback | <code></code> | 
 | kafkaErrorCallback | <code></code> | 
+| outputKafkaConfig | <code></code> | 
 
 <a name="JSKafkaClient+send"></a>
 
@@ -225,7 +226,7 @@ an uuid.4() will be generated
     * [.getProduceHandler()](#NativeKafkaClient+getProduceHandler) ⇒ <code>null</code> \| <code>EventEmitter</code>
     * [.overwriteTopics(topics)](#NativeKafkaClient+overwriteTopics)
     * [.start(readyCallback, kafkaErrorCallback, withProducer, withBackPressure)](#NativeKafkaClient+start)
-    * [.setupProducer(produceTopic, partitions, readyCallback, kafkaErrorCallback)](#NativeKafkaClient+setupProducer)
+    * [.setupProducer(produceTopic, partitions, readyCallback, kafkaErrorCallback, outputKafkaConfig)](#NativeKafkaClient+setupProducer)
     * [.send(topicName, message, partition, key, partitionKey, opaqueKey)](#NativeKafkaClient+send) ⇒ <code>Promise.&lt;void&gt;</code>
     * [.buffer(topic, identifier, payload, _, partition, version, partitionKey)](#NativeKafkaClient+buffer) ⇒ <code>Promise.&lt;void&gt;</code>
     * [.bufferFormat(topic, identifier, payload, version, _, partitionKey, partition)](#NativeKafkaClient+bufferFormat) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -290,7 +291,7 @@ will await a kafka-producer-ready-event if started withProducer=true
 
 <a name="NativeKafkaClient+setupProducer"></a>
 
-# nativeKafkaClient.setupProducer(produceTopic, partitions, readyCallback, kafkaErrorCallback)
+# nativeKafkaClient.setupProducer(produceTopic, partitions, readyCallback, kafkaErrorCallback, outputKafkaConfig)
 starts a new kafka-producer
 will fire kafka-producer-ready-event
 requires a topic's partition count during initialisation
@@ -303,6 +304,7 @@ requires a topic's partition count during initialisation
 | partitions | <code>1</code> | 
 | readyCallback | <code></code> | 
 | kafkaErrorCallback | <code></code> | 
+| outputKafkaConfig | <code></code> | 
 
 <a name="NativeKafkaClient+send"></a>
 
@@ -369,14 +371,15 @@ change-log representation of a stream
 
 * [KStream](#KStream)
     * [new KStream(topicName, storage, kafka, isClone)](#new_KStream_new)
-    * [.start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure)](#KStream+start)
+    * [.start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure, outputKafkaConfig)](#KStream+start)
     * [.innerJoin(stream, key, windowed, combine)](#KStream+innerJoin) ⇒ [<code>KStream</code>](#KStream)
     * [.outerJoin(stream)](#KStream+outerJoin)
     * [.leftJoin(stream)](#KStream+leftJoin)
     * [.merge(stream)](#KStream+merge) ⇒ [<code>KStream</code>](#KStream)
     * [.fromMost()](#KStream+fromMost) ⇒ [<code>KStream</code>](#KStream)
-    * [.clone()](#KStream+clone) ⇒ [<code>KStream</code>](#KStream)
-    * [.window(from, to, etl, encapsulated)](#KStream+window) ⇒ <code>Object</code>
+    * [.clone(cloneEvents, cloneDeep)](#KStream+clone) ⇒ [<code>KStream</code>](#KStream)
+    * [.branch(preds)](#KStream+branch) ⇒ [<code>Array.&lt;KStream&gt;</code>](#KStream)
+    * [.window(from, to, etl, encapsulated, collect)](#KStream+window) ⇒ <code>Object</code>
     * [.close()](#KStream+close) ⇒ <code>Promise.&lt;boolean&gt;</code>
 
 <a name="new_KStream_new"></a>
@@ -396,7 +399,7 @@ and return new instances immediately
 
 <a name="KStream+start"></a>
 
-# kStream.start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure)
+# kStream.start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure, outputKafkaConfig)
 start kafka consumption
 prepare production of messages if necessary
 when called with zero or just a single callback argument
@@ -404,11 +407,12 @@ this function will return a promise and use the callback for errors
 
 **Kind**: instance method of [<code>KStream</code>](#KStream)  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| kafkaReadyCallback | <code>function</code> | <code></code> | 
-| kafkaErrorCallback | <code>function</code> | <code></code> | 
-| withBackPressure | <code>boolean</code> | <code>false</code> | 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| kafkaReadyCallback | <code>function</code> \| <code>Object</code> | <code></code> | can also be an object (config) |
+| kafkaErrorCallback | <code>function</code> | <code></code> |  |
+| withBackPressure | <code>boolean</code> | <code>false</code> |  |
+| outputKafkaConfig | <code>Object</code> | <code></code> |  |
 
 <a name="KStream+innerJoin"></a>
 
@@ -478,15 +482,38 @@ no consumer will be build
 
 <a name="KStream+clone"></a>
 
-# kStream.clone() ⇒ [<code>KStream</code>](#KStream)
+# kStream.clone(cloneEvents, cloneDeep) ⇒ [<code>KStream</code>](#KStream)
 as only joins and window operations return new stream instances
 you might need a clone sometimes, which can be accomplished
 using this function
 
 **Kind**: instance method of [<code>KStream</code>](#KStream)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| cloneEvents | <code>boolean</code> | <code>false</code> | if events in the stream should be cloned |
+| cloneDeep | <code>boolean</code> | <code>false</code> | if events in the stream should be cloned deeply |
+
+<a name="KStream+branch"></a>
+
+# kStream.branch(preds) ⇒ [<code>Array.&lt;KStream&gt;</code>](#KStream)
+Splits a stream into multiple branches based on cloning
+and filtering it depending on the passed predicates.
+[ (message) => message.key.startsWith("A"),
+  (message) => message.key.startsWith("B"),
+  (message) => true ]
+---
+[ streamA, streamB, streamTrue ]
+
+**Kind**: instance method of [<code>KStream</code>](#KStream)  
+
+| Param | Type |
+| --- | --- |
+| preds | <code>Array.&lt;function()&gt;</code> | 
+
 <a name="KStream+window"></a>
 
-# kStream.window(from, to, etl, encapsulated) ⇒ <code>Object</code>
+# kStream.window(from, to, etl, encapsulated, collect) ⇒ <code>Object</code>
 builds a window'ed stream across all events of the current kstream
 when the first event with an exceeding "to" is received (or the abort()
 callback is called) the window closes and emits its "collected" values to the
@@ -501,12 +528,13 @@ encapsulated in an object: {time, value}
 
 **Kind**: instance method of [<code>KStream</code>](#KStream)  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| from | <code>number</code> |  | 
-| to | <code>number</code> |  | 
-| etl | <code>function</code> | <code></code> | 
-| encapsulated | <code>boolean</code> | <code>true</code> | 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| from | <code>number</code> |  |  |
+| to | <code>number</code> |  |  |
+| etl | <code>function</code> | <code></code> |  |
+| encapsulated | <code>boolean</code> | <code>true</code> | if event should stay encapsulated {time, value} |
+| collect | <code>boolean</code> | <code>true</code> | if events should be collected first before publishing to result stream |
 
 <a name="KStream+close"></a>
 
@@ -525,7 +553,7 @@ table representation of a stream
 
 * [KTable](#KTable)
     * [new KTable(topicName, keyMapETL, storage, kafka, isClone)](#new_KTable_new)
-    * [.start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure)](#KTable+start)
+    * [.start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure, outputKafkaConfig)](#KTable+start)
     * [.innerJoin(stream, key)](#KTable+innerJoin)
     * [.outerJoin(stream)](#KTable+outerJoin)
     * [.leftJoin(stream)](#KTable+leftJoin)
@@ -558,7 +586,7 @@ keyMapETL = v -> {key, value} (sync)
 
 <a name="KTable+start"></a>
 
-# kTable.start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure)
+# kTable.start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure, outputKafkaConfig)
 start kafka consumption
 prepare production of messages if necessary
 when called with zero or just a single callback argument
@@ -566,11 +594,12 @@ this function will return a promise and use the callback for errors
 
 **Kind**: instance method of [<code>KTable</code>](#KTable)  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| kafkaReadyCallback | <code>function</code> | <code></code> | 
-| kafkaErrorCallback | <code>function</code> | <code></code> | 
-| withBackPressure | <code>boolean</code> | <code>false</code> | 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| kafkaReadyCallback | <code>function</code> \| <code>Object</code> | <code></code> | can also be an object (config) |
+| kafkaErrorCallback | <code>function</code> | <code></code> |  |
+| withBackPressure | <code>boolean</code> | <code>false</code> |  |
+| outputKafkaConfig | <code>Object</code> | <code></code> |  |
 
 <a name="KTable+innerJoin"></a>
 
@@ -712,13 +741,16 @@ Stream base class
     * [.getStorage()](#StreamDSL+getStorage) ⇒ <code>KStorage</code>
     * [.writeToStream(message)](#StreamDSL+writeToStream)
     * [.getMost()](#StreamDSL+getMost) ⇒ <code>Object</code>
+    * [.getNewMostFrom(array)](#StreamDSL+getNewMostFrom) ⇒ <code>Stream.&lt;any&gt;</code>
     * [.replaceInternalObservable(newStream$)](#StreamDSL+replaceInternalObservable)
     * [.setProduceHandler(handler)](#StreamDSL+setProduceHandler)
     * [.createAndSetProduceHandler()](#StreamDSL+createAndSetProduceHandler) ⇒ <code>module:events.internal</code>
     * [.setKafkaStreamsReference(reference)](#StreamDSL+setKafkaStreamsReference)
     * [.from(topicName)](#StreamDSL+from) ⇒ [<code>StreamDSL</code>](#StreamDSL)
+    * [.awaitPromises(etl)](#StreamDSL+awaitPromises) ⇒ [<code>StreamDSL</code>](#StreamDSL)
     * [.map(etl)](#StreamDSL+map) ⇒ [<code>StreamDSL</code>](#StreamDSL)
     * [.asyncMap(etl)](#StreamDSL+asyncMap) ⇒ [<code>StreamDSL</code>](#StreamDSL)
+    * [.concatMap(etl)](#StreamDSL+concatMap) ⇒ [<code>StreamDSL</code>](#StreamDSL)
     * [.forEach(eff)](#StreamDSL+forEach) ⇒ <code>\*</code>
     * [.chainForEach(eff, callback)](#StreamDSL+chainForEach) ⇒ [<code>StreamDSL</code>](#StreamDSL)
     * [.tap(eff)](#StreamDSL+tap)
@@ -761,7 +793,7 @@ Stream base class
     * [.max(fieldName, maxField)](#StreamDSL+max) ⇒ [<code>StreamDSL</code>](#StreamDSL)
     * [._merge(otherStream$)](#StreamDSL+_merge)
     * [._zip(otherStream$, combine)](#StreamDSL+_zip)
-    * [.to(topic, outputPartitionsCount, produceType, version, compressionType, producerErrorCallback)](#StreamDSL+to) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.to(topic, outputPartitionsCount, produceType, version, compressionType, producerErrorCallback, outputKafkaConfig)](#StreamDSL+to) ⇒ <code>Promise.&lt;boolean&gt;</code>
 
 <a name="new_StreamDSL_new"></a>
 
@@ -815,6 +847,18 @@ returns the internal most.js stream
 
 **Kind**: instance method of [<code>StreamDSL</code>](#StreamDSL)  
 **Returns**: <code>Object</code> - most.js stream  
+<a name="StreamDSL+getNewMostFrom"></a>
+
+# streamDSL.getNewMostFrom(array) ⇒ <code>Stream.&lt;any&gt;</code>
+returns a new most stream from the
+given array
+
+**Kind**: instance method of [<code>StreamDSL</code>](#StreamDSL)  
+
+| Param |
+| --- |
+| array | 
+
 <a name="StreamDSL+replaceInternalObservable"></a>
 
 # streamDSL.replaceInternalObservable(newStream$)
@@ -870,6 +914,18 @@ add more topic/s to the consumer
 | --- | --- |
 | topicName | <code>string</code> \| <code>Array.&lt;string&gt;</code> | 
 
+<a name="StreamDSL+awaitPromises"></a>
+
+# streamDSL.awaitPromises(etl) ⇒ [<code>StreamDSL</code>](#StreamDSL)
+given a stream of promises, returns stream containing the fulfillment values
+etl = Promise -> v
+
+**Kind**: instance method of [<code>StreamDSL</code>](#StreamDSL)  
+
+| Param |
+| --- |
+| etl | 
+
 <a name="StreamDSL+map"></a>
 
 # streamDSL.map(etl) ⇒ [<code>StreamDSL</code>](#StreamDSL)
@@ -888,6 +944,19 @@ etl = v -> v2
 map that expects etl to return a Promise
 can be used to apply async maps to stream
 etl = v -> Promise
+
+**Kind**: instance method of [<code>StreamDSL</code>](#StreamDSL)  
+
+| Param |
+| --- |
+| etl | 
+
+<a name="StreamDSL+concatMap"></a>
+
+# streamDSL.concatMap(etl) ⇒ [<code>StreamDSL</code>](#StreamDSL)
+transform each etl in stream into a stream,
+and then concatenate it onto the end of the resulting stream.
+etl = v -> stream(v2)
 
 **Kind**: instance method of [<code>StreamDSL</code>](#StreamDSL)  
 
@@ -1366,7 +1435,7 @@ latest value which is stored
 
 <a name="StreamDSL+_merge"></a>
 
-# streamDSL._merge(otherStream$)
+# streamDSL.\_merge(otherStream$)
 merge this stream with another, resulting a
 stream with all elements from both streams
 
@@ -1378,7 +1447,7 @@ stream with all elements from both streams
 
 <a name="StreamDSL+_zip"></a>
 
-# streamDSL._zip(otherStream$, combine)
+# streamDSL.\_zip(otherStream$, combine)
 merge this stream with another stream
 by combining (zipping) every event from each stream
 to a single new event on the new stream
@@ -1393,7 +1462,7 @@ combine = (e1, e2) -> e1 + e2
 
 <a name="StreamDSL+to"></a>
 
-# streamDSL.to(topic, outputPartitionsCount, produceType, version, compressionType, producerErrorCallback) ⇒ <code>Promise.&lt;boolean&gt;</code>
+# streamDSL.to(topic, outputPartitionsCount, produceType, version, compressionType, producerErrorCallback, outputKafkaConfig) ⇒ <code>Promise.&lt;boolean&gt;</code>
 define an output topic
 when passed to KafkaStreams this will trigger
 the stream$ result to be produced to the given topic name
@@ -1404,10 +1473,11 @@ returns a promise
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| topic | <code>string</code> |  | optional |
+| topic | <code>string</code> \| <code>Object</code> |  | optional (can also be an object, containing the same parameters as fields) |
 | outputPartitionsCount | <code>number</code> | <code>1</code> | optional |
 | produceType | <code>string</code> | <code>&quot;send&quot;</code> | optional |
 | version | <code>number</code> | <code>1</code> | optional |
 | compressionType | <code>number</code> | <code>0</code> | optional |
 | producerErrorCallback | <code>function</code> | <code></code> | optional |
+| outputKafkaConfig | <code>Object</code> | <code></code> | optional |
 
