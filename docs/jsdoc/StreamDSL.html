@@ -396,7 +396,7 @@ stream with all elements from both streams
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line952">line 952</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line962">line 962</a>
     </li></ul></dd>
     
 
@@ -549,7 +549,7 @@ combine = (e1, e2) -> e1 + e2
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line965">line 965</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line975">line 975</a>
     </li></ul></dd>
     
 
@@ -1395,7 +1395,7 @@ you probably would not want to use this in production
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line807">line 807</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line817">line 817</a>
     </li></ul></dd>
     
 
@@ -1751,6 +1751,139 @@ etl = v -> stream(v2)
     
 
     
+    <h4 class="name" id="continueWith"><span class="type-signature"></span>continueWith<span class="signature">(f)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Replace the end signal with a new stream returned by f.
+Note that f must return a (most.js) stream.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>f</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function (must return a most stream)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line793">line 793</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="countByKey"><span class="type-signature"></span>countByKey<span class="signature">(key, countFieldName)</span><span class="type-signature"> &rarr; {<a href="StreamDSL.html">StreamDSL</a>}</span></h4>
     
 
@@ -1880,7 +2013,7 @@ requires events to have a present key/value field
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line877">line 877</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line887">line 887</a>
     </li></ul></dd>
     
 
@@ -2138,7 +2271,7 @@ only the last event
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line857">line 857</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line867">line 867</a>
     </li></ul></dd>
     
 
@@ -2288,7 +2421,7 @@ only the last event
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line846">line 846</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line856">line 856</a>
     </li></ul></dd>
     
 
@@ -2395,7 +2528,7 @@ without iterator, returns a promise
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line826">line 826</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line836">line 836</a>
     </li></ul></dd>
     
 
@@ -5276,7 +5409,7 @@ latest value which is stored
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line923">line 923</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line933">line 933</a>
     </li></ul></dd>
     
 
@@ -5462,7 +5595,7 @@ latest value which is stored
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line907">line 907</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line917">line 917</a>
     </li></ul></dd>
     
 
@@ -5631,7 +5764,7 @@ will return a promise
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line795">line 795</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line805">line 805</a>
     </li></ul></dd>
     
 
@@ -7382,7 +7515,7 @@ requires events to have a present key/value field
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line891">line 891</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line901">line 901</a>
     </li></ul></dd>
     
 
@@ -7971,7 +8104,7 @@ throttlePeriod = index count omit
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line836">line 836</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line846">line 846</a>
     </li></ul></dd>
     
 
@@ -8463,7 +8596,7 @@ returns a promise
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line1022">line 1022</a>
+        <a href="dsl_StreamDSL.js.html">dsl/StreamDSL.js</a>, <a href="dsl_StreamDSL.js.html#line1032">line 1032</a>
     </li></ul></dd>
     
 
@@ -8976,7 +9109,7 @@ to the internal stream$
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Mon May 13 2019 09:55:08 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Fri May 17 2019 00:30:02 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

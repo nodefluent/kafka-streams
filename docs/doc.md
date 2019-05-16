@@ -781,6 +781,7 @@ Stream base class
     * [.skipWhile(pred)](#StreamDSL+skipWhile) ⇒ [<code>StreamDSL</code>](#StreamDSL)
     * [.until(signal$)](#StreamDSL+until) ⇒ [<code>StreamDSL</code>](#StreamDSL)
     * [.since(signal$)](#StreamDSL+since) ⇒ [<code>StreamDSL</code>](#StreamDSL)
+    * [.continueWith(f)](#StreamDSL+continueWith)
     * [.reduce(eff, initial)](#StreamDSL+reduce) ⇒ <code>\*</code>
     * [.chainReduce(eff, initial, callback)](#StreamDSL+chainReduce) ⇒ [<code>StreamDSL</code>](#StreamDSL)
     * [.drain()](#StreamDSL+drain) ⇒ <code>\*</code>
@@ -1302,6 +1303,18 @@ signal$ must be a most stream instance
 | Param |
 | --- |
 | signal$ | 
+
+<a name="StreamDSL+continueWith"></a>
+
+# streamDSL.continueWith(f)
+Replace the end signal with a new stream returned by f.
+Note that f must return a (most.js) stream.
+
+**Kind**: instance method of [<code>StreamDSL</code>](#StreamDSL)  
+
+| Param | Description |
+| --- | --- |
+| f | function (must return a most stream) |
 
 <a name="StreamDSL+reduce"></a>
 

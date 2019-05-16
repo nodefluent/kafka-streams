@@ -219,6 +219,7 @@ declare module "kafka-streams" {
         skipWhile(pred: (message: any) => boolean): StreamDSL;
         until(signal$: any): StreamDSL;
         since(signal$: any): StreamDSL;
+        continueWith(f: () => any): StreamDSL;
         reduce(eff: (val: any, ret: any) => any, initial: any): Promise<any>;
         chainReduce(eff: (val: any, ret: any) => any, initial: any, callback: (error: Error, value: any) => void): StreamDSL;
         drain(): Promise<void>;

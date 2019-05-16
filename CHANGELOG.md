@@ -1,5 +1,9 @@
 # kafka-streams CHANGELOG
 
+## 2019-05-16, Version 4.11.0
+
+* added continueWith dsl operation
+
 ## 2019-05-13, Version 4.10.0
 
 * fixed typo that broke window functionality
