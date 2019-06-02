@@ -245,7 +245,7 @@ declare module "kafka-streams" {
         fromMost(stream$: any): KStream;
         clone(): KStream;
         window(from: number, to: number, etl?: null | ((message: any) => any), encapsulated?: boolean): { window: Window, abort: () => void, stream: KStream };
-        branch(preds: (message: any) => boolean[]): KStream[];
+        branch(preds: ((message: any) => boolean)[]): KStream[];
         close(): Promise<boolean>;
     }
 
