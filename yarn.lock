@@ -369,6 +369,11 @@ async@^2.6.2, async@~2.6.2:
   dependencies:
     lodash "^4.17.11"
 
+async@~3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/async/-/async-3.1.0.tgz#42b3b12ae1b74927b5217d8c0016baaf62463772"
+  integrity sha512-4vx/aaY6j/j3Lw3fbCHNWP0pPaTCew3F6F3hYyl/tHs/ndmV1q7NW9T5yuJ2XAGwdQrP+6Wu20x06U4APo/iQQ==
+
 babylon@7.0.0-beta.19:
   version "7.0.0-beta.19"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.19.tgz#e928c7e807e970e0536b078ab3e0c48f9e052503"
@@ -431,6 +436,11 @@ bluebird@^3.5.4, bluebird@~3.5.0, bluebird@~3.5.4:
   version "3.5.4"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.4.tgz#d6cc661595de30d5b3af5fcedd3c0b3ef6ec5714"
   integrity sha512-FG+nFEZChJrbQ9tIccIfZJBz3J7mLrAhxakAbnrJWn8d7aKOC+LWifa0G+p4ZqKp4y13T7juYvdhq9NzKdsrjw==
+
+bluebird@~3.5.5:
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.5.tgz#a8d0afd73251effbbd5fe384a77d73003c17a71f"
+  integrity sha512-5am6HnnfN+urzt4yfg7IgTbotDjIT/u8AJpEt0sIU9FtXfVeezXAPKswrG+xKUCOYAINpSdgZVDU6QFh+cuH3w==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -1941,10 +1951,10 @@ node-pre-gyp@^0.13.0:
     semver "^5.3.0"
     tar "^4"
 
-node-rdkafka@~2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/node-rdkafka/-/node-rdkafka-2.6.1.tgz#87171ad5f45d8405dcc4d987b7b606c8a763344b"
-  integrity sha512-mBRq7/7hgnRmbfX8TLPK0JVQYxu/kkuHVT4W7vLXc6wQoV5JfInpV0hWtkGIBjNzFyYSk0faJDIqlDQ2k9vy9Q==
+node-rdkafka@~2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/node-rdkafka/-/node-rdkafka-2.7.0.tgz#3e96fc3dd31f28a7c4fea6277f943a88da84edc2"
+  integrity sha512-pSO60jT0AC0eEzXlRxUoNpEp7nCdtglHMBJ2r5lP0y+TqXDAUrV1it1ZtXfi4yeKShksLdRfMI/jeLXWXMMpLA==
   dependencies:
     bindings "^1.3.1"
     nan "^2.11.1"
@@ -2450,18 +2460,18 @@ simple-get@^2.7.0:
     once "^1.3.1"
     simple-concat "^1.0.0"
 
-sinek@~7.29.3:
-  version "7.29.3"
-  resolved "https://registry.yarnpkg.com/sinek/-/sinek-7.29.3.tgz#a60d1d0ace907f6249d8883c5941a0b3caad92cf"
-  integrity sha512-I8a9XR2x8Kadl6r6r7gAR+bBW+z3dezIHosm0CfIqv1eDxlBwl+HNo4WgDwazoAIuvxbq7s4QLp+K6WxS32G5Q==
+sinek@~7.30.0:
+  version "7.30.0"
+  resolved "https://registry.yarnpkg.com/sinek/-/sinek-7.30.0.tgz#db0e452e7c509ed3cb13fb6d079d4e5936b5d068"
+  integrity sha512-4OS2LPbUCrz2a91IGsKmFe8SednjK5dyIj1TyZIi+9K1N8Dyh5aMryUPGo/MgjwKglKsnZruXFzjm8if62wt2A==
   dependencies:
-    async "~2.6.2"
-    bluebird "~3.5.4"
+    async "~3.1.0"
+    bluebird "~3.5.5"
     debug "~4.1.1"
     lodash.merge "~4.6.1"
     murmur2-partitioner "~1.0.0"
     murmurhash "~0.0.2"
-    node-rdkafka "~2.6.1"
+    node-rdkafka "~2.7.0"
     uuid "~3.3.2"
   optionalDependencies:
     kafka-node "~4.1.3"
