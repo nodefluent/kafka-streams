@@ -32,4 +32,4 @@ stream
 //start the stream
 consumeStream.start();
 
-//setTimeout(abort, 5000); // -> abort the window collection after 5 seconds
+//setTimeout(() => { abort(); }, 5000); // -> abort the window collection after 5 seconds

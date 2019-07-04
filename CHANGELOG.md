@@ -1,5 +1,11 @@
 # kafka-streams CHANGELOG
 
+## 2019-07-04, Version 4.12.0
+
+* upgraded dependencies
+* fixed issue #91
+* added topic extractor example
+
 ## 2019-05-16, Version 4.11.0
 
 * added continueWith dsl operation
