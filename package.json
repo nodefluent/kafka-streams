@@ -73,7 +73,7 @@
         "async": "~3.1.0",
         "jsdoc": "~3.6.2",
         "jsdoc-to-markdown": "~5.0.0",
-        "log4bro": "~3.10.0",
+        "log4bro": "~3.11.0",
         "mocha": "~6.1.4",
         "proxyquire": "~2.1.0",
         "uuid": "~3.3.2"
