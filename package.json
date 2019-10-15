@@ -60,7 +60,7 @@
     },
     "homepage": "https://github.com/nodefluent/kafka-streams#readme",
     "dependencies": {
-        "bluebird": "~3.5.5",
+        "bluebird": "~3.7.1",
         "debug": "~4.1.1",
         "global": "~4.4.0",
         "lodash.clone": "~4.5.0",
