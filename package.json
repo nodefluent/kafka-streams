@@ -67,7 +67,7 @@
         "lodash.clonedeep": "~4.5.0",
         "most": "1.7.3",
         "most-subject": "5.3.0",
-        "sinek": "~7.30.0"
+        "sinek": "~8.1.0"
     },
     "devDependencies": {
         "async": "~3.1.0",
