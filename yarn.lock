@@ -1796,7 +1796,16 @@ most-subject@5.3.0:
     "@most/prelude" "^1.4.1"
     most "^1.1.0"
 
-most@1.7.3, most@^1.1.0:
+most@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/most/-/most-1.8.0.tgz#02ff0eff64618496c946cac7b828ac4a99af652c"
+  integrity sha512-V49VlfnnGBVSIcHVeW6jViOwsPwSdnw8qv2BQ97TCfJMA07Yq5BkjUnEPmDZ0Kqm6crTBlgmdnH+jO0qVJMXfw==
+  dependencies:
+    "@most/multicast" "^1.2.5"
+    "@most/prelude" "^1.4.0"
+    symbol-observable "^1.0.2"
+
+most@^1.1.0:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/most/-/most-1.7.3.tgz#406c31a66d73aa16957816fdf96965e27df84f1a"
   integrity sha512-mk68SM/ptK8WSo3l03raXcWy02Hl7jbzxVozMuvyYxohn4yteh2THhl3+XABF5cunWE8eXHAsLbv+RCJI5y+jg==
