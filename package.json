@@ -70,7 +70,7 @@
         "sinek": "~7.30.0"
     },
     "devDependencies": {
-        "async": "~3.1.0",
+        "async": "3.1.0",
         "jsdoc": "~3.6.2",
         "jsdoc-to-markdown": "~5.0.0",
         "log4bro": "~3.10.0",
