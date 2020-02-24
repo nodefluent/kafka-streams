@@ -1,11 +1,18 @@
 language: node_js
 node_js:
-  - "11"
+  - "12"
 env:
   global:
   - ZOOKEEPER_PEERS=localhost:2181
   - KAFKA_PEERS=localhost:9092
   - CXX=g++-4.8
+
+script:
+  - rm -rf node_modules
+  - yarn
+  - yarn add --frozen-lockfile node-rdkafka@2.7.4
+  - yarn lint
+  - mocha --exit --timeout 60000 -R spec test/int/*
 
 before_install:
 - wget https://archive.apache.org/dist/kafka/1.1.0/kafka_2.11-1.1.0.tgz -O kafka.tgz
