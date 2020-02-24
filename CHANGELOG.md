@@ -1,5 +1,26 @@
 # kafka-streams CHANGELOG
 
+## 2020-02-24, Version 5.0.0
+
+* upgraded dependencies
+* **BREAKING** please note that the latest sinek (kafka-client) will not install the
+native kafka client dependency `node-rdkafka` anymore. In case you are using the
+native client with kafka-streams or kafka-connect you have to install it manually (see below).
+
+### A note on native mode
+
+If you are using the native mode (`config: { noptions: {} }`).
+You will have to manually install `node-rdkafka` alongside kafka-streams.
+(This requires a Node.js version between 9 and 12 and will not work with Node.js >= 13, last tested with 12.16.1)
+
+On Mac OS High Sierra / Mojave:
+`CPPFLAGS=-I/usr/local/opt/openssl/include LDFLAGS=-L/usr/local/opt/openssl/lib yarn add --frozen-lockfile node-rdkafka@2.7.4`
+
+Otherwise:
+`yarn add --frozen-lockfile node-rdkafka@2.7.4`
+
+(Please also note: Doing this with npm does not work, it will remove your deps, `npm i -g yarn`)
+
 ## 2019-07-04, Version 4.12.0
 
 * upgraded dependencies

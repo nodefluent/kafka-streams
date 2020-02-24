@@ -1,11 +1,10 @@
 # node-kafka-streams
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/nodefluent/kafka-streams.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/nodefluent/kafka-streams.svg?branch=master)](https://travis-ci.org/nodefluent/kafka-streams)
 [![npm version](https://badge.fury.io/js/kafka-streams.svg)](https://badge.fury.io/js/kafka-streams)
 
 ```
-// suggested Node.js version: v11.15.0
+// suggested Node.js version: v12.16.1
 npm install --save kafka-streams
 ```
 
@@ -53,8 +52,23 @@ kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to("output
 * [FAQ - More](#more)
 
 ## Prerequisites
+
 - Kafka broker should be version `>= 0.11.x`
 - Node.js should be version `>= 8.x.x`
+
+### A note on native mode
+
+If you are using the native mode (`config: { noptions: {} }`).
+You will have to manually install `node-rdkafka` alongside kafka-streams.
+(This requires a Node.js version between 9 and 12 and will not work with Node.js >= 13, last tested with 12.16.1)
+
+On Mac OS High Sierra / Mojave:
+`CPPFLAGS=-I/usr/local/opt/openssl/include LDFLAGS=-L/usr/local/opt/openssl/lib yarn add --frozen-lockfile node-rdkafka@2.7.4`
+
+Otherwise:
+`yarn add --frozen-lockfile node-rdkafka@2.7.4`
+
+(Please also note: Doing this with npm does not work, it will remove your deps, `npm i -g yarn`)
 
 ## Aim of this Library
 
