@@ -1,3 +1,10 @@
+---
+id: mostAPI
+title: Operator descriptions
+sidebar_label: Operator descriptions
+---
+
+
 most.js API [taken from here](https://github.com/cujojs/most/blob/master/docs/api.md)
 ===========================
 

@@ -1,4 +1,10 @@
- Classes
+---
+id: doc
+title: Class Documentation
+sidebar_label: Class Documentation
+---
+
+Classes
 
 <dl>
 <dt><a href="#KeyCount">KeyCount</a></dt>

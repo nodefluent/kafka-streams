@@ -1,5 +1,8 @@
-Native Consumer/Producer Explanation
-====================
+---
+id: native
+title: Native Consumer/Producer Explanation
+sidebar_label: Native Consumer/Producer Explanation
+---
 
 - kafka-streams uses `sinek` as underlying kafka client (although it ships its own wrapper)
 - sinek comes with 2 kafka-clients `kafka-node` JS and `node-librdkafka` C++

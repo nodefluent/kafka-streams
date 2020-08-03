@@ -1,5 +1,8 @@
-SSL, SASL and Kerberos Support
-==============================
+---
+id: sslSasl
+title: SSL, SASL and Kerberos Support
+sidebar_label: SSL, SASL and Kerberos Support
+---
 
 - SSL, SASL and Kerberos support is available when
     you are using the [native client](native.md)

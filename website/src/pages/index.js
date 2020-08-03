@@ -5,44 +5,13 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
-
-const features = [
-  {
-    title: <>Easy to Use</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
-  },
-  {
-    title: <>Focus on What Matters</>,
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
-  },
-  {
-    title: <>Powered by React</>,
-    imageUrl: 'img/undraw_docusaurus_react.svg',
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
-  },
-];
+import Highlight from 'react-highlight';
+import 'highlight.js/styles/atom-one-dark-reasonable.css';
 
 function Feature({imageUrl, title, description}) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
-    <div className={clsx('col col--4', styles.feature)}>
+    <div className={clsx('col', styles.feature)}>
       {imgUrl && (
         <div className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />
@@ -59,7 +28,7 @@ function Home() {
   const {siteConfig = {}} = context;
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title={`${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
@@ -78,17 +47,27 @@ function Home() {
         </div>
       </header>
       <main>
-        {features && features.length > 0 && (
-          <section className={styles.features}>
-            <div className="container">
-              <div className="row">
-                {features.map((props, idx) => (
-                  <Feature key={idx} {...props} />
-                ))}
+        <section className={styles.features}>
+          <div className="container">
+            <div className="row">
+              <div className={clsx('col', styles.feature)}>
+                <Highlight className='language-javascript'>
+                  npm install --save kafka-streams
+                </Highlight>
+                <Highlight className='language-javascript'>
+                  const {'{'} KafkaStreams {'}'} = require("kafka-streams");<br/>
+                  const config = require("./config.json");<br/>
+                  const factory = new KafkaStreams(config);<br/>
+                  <br/>
+                  const kstream = factory.getKStream("input-topic");<br/>
+                  const ktable = factory.getKTable(/* .. */);<br/>
+                  <br/>
+                  kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to("output-topic");
+                </Highlight>
               </div>
             </div>
-          </section>
-        )}
+          </div>
+        </section>
       </main>
     </Layout>
   );

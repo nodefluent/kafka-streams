@@ -1,3 +1,9 @@
+---
+id: handlingMessageSchemas
+title: Message 'to' amd 'from' Apache Kafka
+sidebar_label: Message 'to' amd 'from' Apache Kafka
+---
+
 # Handling Message Schemas
 
 The following document should help you to understand

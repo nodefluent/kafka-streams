@@ -1,5 +1,8 @@
-Quick Start Tutorial
-====================
+---
+id: quickStart
+title: Quick Start Tutorial
+sidebar_label: Quick Start Tutorial
+---
 
 # Requirements
 

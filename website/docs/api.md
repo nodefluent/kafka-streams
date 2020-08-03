@@ -1,5 +1,8 @@
-kafka-streams.js Documentation
-==============================
+---
+id: api
+title: API info
+sidebar_label: API info
+---
 
 1. Relation to most.js
     * [Similarities](#relation-to-most)
