@@ -4,7 +4,7 @@ title: Quick Start Tutorial
 sidebar_label: Quick Start Tutorial
 ---
 
-# Requirements
+## Requirements
 
 * Before you get started, make sure you have installed NodeJS (at least version 6.10, better latest)
 running on your system and a local Zookeeper (:2181) and Kafka Broker (:9092) (if you are running
@@ -13,7 +13,7 @@ these services elsewhere, make sure to adapt the config settings)
 * When you are in need of a `local` kafka setup, just take a look at `/kafka-setup/start.sh` (you will need docker and docker-compose for this to work)
 * Installing kafka-streams in an existing project (directory with package.json) is quite easy: `npm install --save kafka-streams`
 
-# Configuration
+## Configuration
 
 * NOTE: as of version 3.0.0 node-kafka-streams supports an additional `librdkafka` client,
     that offers better performance, configuration tweaking and especially features like
@@ -65,7 +65,7 @@ outside and KafkaClients and KStorages on the inside.
 * The sub-object options supports all settings provided by the `kafka-node`
 module.
 
-# The API
+## The API
 
 ```es6
 const {KafkaStreams} = require("kafka-streams");
@@ -102,7 +102,7 @@ that will resolve when the Kafka Client is connected & ready to consume messages
 you can also simply call `stream.from("topicName")` later. (Also multiple times
 to stream from multiple Kafka topics).
 
-* We highly suggest to read the [Message Schemas to and from Kafka guide](handling-messages-schemas.md)
+* We highly suggest to read the [Message Schemas to and from Kafka guide](handling-message-schemas.md)
 
 ```es6
 //format of an incoming kafka message (equals to kafka-node's format)

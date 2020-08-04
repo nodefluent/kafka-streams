@@ -4,12 +4,16 @@ module.exports = {
   url: 'https://nodefluent.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  favicon: 'img/favicon.ico',
+  favicon: '🐙',
   organizationName: 'nodefluent', // Usually your GitHub org/user name.
   projectName: 'kafka-streams', // Usually your repo name.
   themeConfig: {
     navbar: {
       title: 'Kafka Streams 🐙',
+      logo: {
+        alt: 'My Site Logo',
+        src: 'img/logo.svg',
+      },
       items: [
         {
           to: 'docs/',
@@ -37,7 +41,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()}. Built with Docusaurus.`,
     },
   },
   presets: [
@@ -48,15 +52,8 @@ module.exports = {
           // It is recommended to set document id as docs home page (`docs/` path).
           homePageId: 'quickStart',
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/nodefluent/kafka-streams/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

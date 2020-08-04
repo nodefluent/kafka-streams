@@ -1,5 +1,5 @@
 ---
-id: api
+id: ksAPI
 title: API info
 sidebar_label: API info
 ---
@@ -18,16 +18,16 @@ sidebar_label: API info
    * [Using the examples](#the-examples)
 
 5. Documentation (is still WIP)
-    * [Dealing with Message Schemas](handling-messages-schemas.md)
+    * [Dealing with Message Schemas](handling-message-schemas.md)
     * [HTML-Documentation](https://nodefluent.github.io/kafka-streams/jsdoc/)
-    * [MD-Documentation](doc.md)
+    * [MD-Documentation](classDoc.md)
     * [Using the native client](native.md)
     * [SSL support](ssl-sasl.md)
     * [SASL and Kerberos](ssl-sasl.md)
 
-# 1. most.js
+## 1. most.js
 
-## Relation to most
+### Relation to most
 
 Both KStream and KTable classes depend on StreamDSL
 that internally wraps around `most.js's` observable/stream
@@ -43,9 +43,9 @@ do return a new KStream or KTable instance as of their nature.
 
 [You can find the most.js project here](https://github.com/cujojs/most)
 
-# 2. Apache kafka-streams
+## 2. Apache kafka-streams
 
-## Relation to kafka-streams
+### Relation to kafka-streams
 
 In its core kafka-streams.js tried to adopt the behaviour and
 API of the original kafa-streams lib that is part of Kafka.
@@ -59,9 +59,9 @@ API. E.g. KafkaStreams's role as factory.
 
 [You can find the Apache Kafka project here](https://github.com/apache/kafka)
 
-# 3. Apache Flink
+## 3. Apache Flink
 
-## Relation to Flink
+### Relation to Flink
 
 Kafka-streams actually implements the concept of `ẁindow`s to enable merge
 operations. However the `Flink` project (also a stream-processing framework
@@ -71,14 +71,14 @@ to offer additional windowing features similar to what Flink offers.
 
 [You can find the Apache Flink project here](https://github.com/apache/flink)
 
-# 4. How to get started
+## 4. How to get started
 
-## Getting started
+### Getting started
 
 A good place to start using this lib is
 the [Quick Start Tutorial](https://github.com/krystianity/kafka-streams/blob/master/docs/quick-start.md), besides the examples.
 
-## The examples
+### The examples
 
 The `/examples` should work out of the box, however they require
 you to have a local-setup that works with the tests. So take

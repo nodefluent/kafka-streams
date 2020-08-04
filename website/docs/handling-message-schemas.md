@@ -1,16 +1,16 @@
 ---
 id: handlingMessageSchemas
-title: Message 'to' amd 'from' Apache Kafka
-sidebar_label: Message 'to' amd 'from' Apache Kafka
+title: Message 'to' and 'from' Apache Kafka
+sidebar_label: Message 'to' and 'from' Apache Kafka
 ---
 
-# Handling Message Schemas
+## Handling Message Schemas
 
 The following document should help you to understand
 how the internal streams are connected to Kafka Consumers and Producers
 and the schemes of Kafka Message.
 
-# Consume Schema (consuming payloads from Kafka topics)
+## Consume Schema (consuming payloads from Kafka topics)
 
 Lets assume this very simple stream that consumes a kafka topic:
 
@@ -110,7 +110,7 @@ Events would now look like this:
 { "your": "payload object", "is": "here" }
 ```
 
-# Produce Schema (producing back to Kafka topics)
+## Produce Schema (producing back to Kafka topics)
 
 Lets talk about getting events back out there on a Kafka topic again.
 There are 2 things you will need to know:

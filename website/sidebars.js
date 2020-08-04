@@ -1,6 +1,5 @@
 module.exports = {
   someSidebar: {
-    Usage: ['quickStart', 'handlingMessageSchemas', 'api', 'mostAPI', 'native', 'sslSasl'],
-    Examples: []
+    Usage: ['quickStart', 'handlingMessageSchemas', 'ksAPI', 'mostAPI', 'native', 'sslSasl', 'classDoc'],
   },
 };
