@@ -24,13 +24,13 @@ kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to("output
 
 ## API Overview
 
-* [Quick Start](docs/quick-start.md)
-* [Message 'to' and 'from' Apache Kafka](docs/handling-messages-schemas.md)
-* [API Info](docs/api.md)
+* [Quick Start](website/docs/quick-start.md)
+* [Message 'to' and 'from' Apache Kafka](website/docs/handling-message-schemas.md)
+* [API Info](website/docs/classDocs.md)
 * [Documentation](https://nodefluent.github.io/kafka-streams/jsdoc/)
-* [Operator descriptions](docs/most-api.md)
+* [Operator descriptions](website/docs/most-api.md)
 * [Examples](https://github.com/nodefluent/kafka-streams/tree/master/examples)
-* [Native Client](docs/native.md) | [SSL, SASL, Kerberos](docs/ssl-sasl.md)
+* [Native Client](website/docs/native.md) | [SSL, SASL, Kerberos](website/docs/ssl-sasl.md)
 
 ## You might also like
 
