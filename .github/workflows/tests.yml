@@ -24,7 +24,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm instal -g yarn
+    - run: npm install -g yarn
     - run: yarn && yarn add --frozen-lockfile node-rdkafka@2.7.4
     - run: yarn lint
     - name: Start Docker containers for Zookeeper, Kafka and Schema Registry
