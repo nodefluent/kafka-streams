@@ -1,13 +1,11 @@
-"use strict";
+import { EventEmitter } from "events";
+import most from "most";
+import { Promise } from "bluebird";
+import { StreamDSL } from "./StreamDSL";
+import { LastState } from "../actions";
+import { StorageMerger } from "../StorageMerger";
+import { messageProduceHandle } from "../messageProduceHandle";
 
-const EventEmitter = require("events");
-const most = require("most");
-const Promise = require("bluebird");
-
-const StreamDSL = require("./StreamDSL.js");
-const { LastState } = require("../actions/index");
-const StorageMerger = require("../StorageMerger.js");
-const { messageProduceHandle } = require("../messageProduceHandle.js");
 
 const MESSAGE = "message";
 const NOOP = () => { };
@@ -15,7 +13,7 @@ const NOOP = () => { };
 /**
  * table representation of a stream
  */
-class KTable extends StreamDSL {
+export class KTable extends StreamDSL {
 
     /**
      * creates a table representation of a stream
@@ -362,5 +360,3 @@ class KTable extends StreamDSL {
         return this.storage.close();
     }
 }
-
-module.exports = KTable;

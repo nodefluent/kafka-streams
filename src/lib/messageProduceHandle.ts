@@ -1,7 +1,7 @@
-"use strict";
+import Debug from "debug";
+import { PRODUCE_TYPES } from "./produceTypes";
 
-const debug = require("debug")("kafka-streams:mph");
-const PRODUCE_TYPES = require("./produceTypes.js");
+const debug = Debug("kafka-streams:mph");
 
 /**
  * returns true if the message is an object
@@ -71,7 +71,7 @@ const produceTypeSelection = (produceType, kafka, compressionType, topic, partit
  * @param producerErrorCallback
  * @return {Promise<void>}
  */
-const messageProduceHandle = (kafka, message, outputTopicName, produceType, compressionType, version, producerErrorCallback) => {
+export const messageProduceHandle = (kafka, message, outputTopicName, produceType, compressionType, version, producerErrorCallback) => {
 
     let _topic = outputTopicName;
     let _key = null;
@@ -155,8 +155,4 @@ const messageProduceHandle = (kafka, message, outputTopicName, produceType, comp
             producerErrorCallback(error);
         }
     });
-};
-
-module.exports = {
-    messageProduceHandle
 };

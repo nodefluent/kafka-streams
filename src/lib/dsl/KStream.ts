@@ -1,20 +1,17 @@
-"use strict";
-
-const Promise = require("bluebird");
-const { async: createSubject } = require("most-subject");
-const lodashClone = require("lodash.clone");
-const lodashCloneDeep = require("lodash.clonedeep");
-
-const StreamDSL = require("./StreamDSL.js");
-const { Window } = require("../actions/index");
-const { messageProduceHandle } = require("../messageProduceHandle.js");
+import { Promise } from 'bluebird';
+import { async as createSubject } from "most-subject";
+import { clone as lodashClone } from "lodash.clone";
+import { clonedeep as lodashCloneDeep } from "lodash.clonedeep";
+import { StreamDSL } from "./StreamDSL";
+import { Window } from "../actions";
+import { messageProduceHandle } from "../messageProduceHandle"
 
 const NOOP = () => { };
 
 /**
  * change-log representation of a stream
  */
-class KStream extends StreamDSL {
+export class KStream extends StreamDSL {
 
     /**
      * creates a changelog representation of a stream
@@ -370,5 +367,3 @@ class KStream extends StreamDSL {
         return this.storage.close();
     }
 }
-
-module.exports = KStream;

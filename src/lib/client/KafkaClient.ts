@@ -1,8 +1,6 @@
-"use strict";
+import { EventEmitter } from "events";
 
-const EventEmitter = require("events");
-
-class KafkaClient extends EventEmitter {
+export class KafkaClient extends EventEmitter {
 
     constructor() {
         super();
@@ -14,5 +12,3 @@ class KafkaClient extends EventEmitter {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
-
-module.exports = KafkaClient;

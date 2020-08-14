@@ -1,11 +1,9 @@
-"use strict";
+import Debug from "debug";
+import { JSKafkaClient, NativeKafkaClient } from "./client";
 
-const debug = require("debug")("kafka-streams:kafkafactory");
+const debug = Debug("kafka-streams:kafkafactory");
 
-const JSKafkaClient = require("./client/JSKafkaClient.js");
-const NativeKafkaClient = require("./client/NativeKafkaClient.js");
-
-class KafkaFactory {
+export class KafkaFactory {
 
     /**
      * helper for KafkaStreams to wrap
@@ -38,5 +36,3 @@ class KafkaFactory {
         return new JSKafkaClient(topic, this.config);
     }
 }
-
-module.exports = KafkaFactory;

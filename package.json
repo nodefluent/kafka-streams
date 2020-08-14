@@ -2,8 +2,8 @@
     "name": "kafka-streams",
     "version": "5.0.0",
     "description": "kafka-streams for Node.js",
-    "typings": "index.d.ts",
-    "main": "index.js",
+    "main": "build/dist/index.js",
+    "types": "build/dist/index.d.ts",
     "scripts": {
         "consumeFromTopic": "node ./examples/consumeFromTopic.js",
         "consumeOneProduceTwo": "node ./examples/consumeOneProduceTwo.js",
@@ -28,8 +28,9 @@
         "kafka:start": "./kafka-setup/start.sh",
         "kafka:stop": "./kafka-setup/stop.sh",
         "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f",
-        "ts": "tsc ./index.d.ts",
-        "yarn:openssl": "LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' yarn"
+        "yarn:openssl": "LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' yarn",
+        "prepublishOnly": "tsc -p tsconfig.dist.json",
+        "lint": "eslint src/. --ext .ts"
     },
     "repository": {
         "type": "git",
@@ -60,6 +61,8 @@
     },
     "homepage": "https://github.com/nodefluent/kafka-streams#readme",
     "dependencies": {
+        "@typescript-eslint/eslint-plugin": "^3.9.0",
+        "@typescript-eslint/parser": "^3.9.0",
         "bluebird": "~3.7.2",
         "debug": "~4.1.1",
         "global": "~4.4.0",
@@ -71,11 +74,15 @@
         "uuid": "~3.4.0"
     },
     "devDependencies": {
+        "@types/node": "^14.0.27",
         "async": "~3.2.0",
+        "eslint": "^7.6.0",
         "jsdoc": "~3.6.3",
         "jsdoc-to-markdown": "~5.0.3",
         "log4bro": "~3.14.0",
         "mocha": "~7.0.1",
-        "proxyquire": "~2.1.3"
+        "proxyquire": "~2.1.3",
+        "ts-node": "^8.10.2",
+        "typescript": "^3.9.7"
     }
 }

@@ -1,11 +1,9 @@
-"use strict";
-
-const Promise = require("bluebird");
+import { Promise } from "bluebird";
 
 /**
  * used to count keys in a stream
  */
-class KeyCount {
+export class KeyCount {
 
     constructor(storage, key, fieldName = "count") {
         this.storage = storage;
@@ -25,5 +23,3 @@ class KeyCount {
         });
     }
 }
-
-module.exports = KeyCount;

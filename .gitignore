@@ -41,3 +41,5 @@ logs/
 certs/
 .vscode/*.sql
 .vscode/settings.json
+
+build

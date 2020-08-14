@@ -1,17 +1,13 @@
-"use strict";
-
-const EventEmitter = require("events");
-
-const KafkaFactory = require("./KafkaFactory.js");
-const KStream = require("./dsl/KStream.js");
-const KTable = require("./dsl/KTable.js");
-const KStorage = require("./KStorage.js");
+import { EventEmitter } from "events";
+import { KafkaFactory } from "./KafkaFactory";
+import { KStream, KTable } from "./dsl";
+import { KStorage } from "./KStorage";
 
 /**
  * Stream object factory
  * inhabits EventEmitter(events)
  */
-class KafkaStreams extends EventEmitter {
+export class KafkaStreams extends EventEmitter {
 
     /**
      * Can be used as factory to get
@@ -155,5 +151,3 @@ class KafkaStreams extends EventEmitter {
         });
     }
 }
-
-module.exports = KafkaStreams;

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es2016",
+    "sourceMap": true,
+    "noEmit": true,
+
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+
+    "strict": true,
+
+    "noImplicitAny": false,
+    "strictBindCallApply": true,
+    "strictNullChecks": true
+  },
+  "include": ["./src/**/*"]
+}
+

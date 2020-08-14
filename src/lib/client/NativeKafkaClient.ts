@@ -1,14 +1,14 @@
-"use strict";
+import { EventEmitter } from "events";
+import { v4 as uuidv4} from "uuid";
+import Debug from "debug";
+import { KafkaClient } from "./KafkaClient";
+import { NConsumer, NProducer } from "sinek";
 
-const uuid = require("uuid");
-const { NConsumer, NProducer } = require("sinek");
-const debug = require("debug")("kafka-streams:nativeclient");
-
-const KafkaClient = require("./KafkaClient.js");
+const debug = Debug("kafka-streams:nativeclient");
 
 const NOOP = () => { };
 
-class NativeKafkaClient extends KafkaClient {
+export class NativeKafkaClient extends KafkaClient {
 
     /**
      * NativeKafkaClient (EventEmitter)
@@ -224,7 +224,7 @@ class NativeKafkaClient extends KafkaClient {
         }
 
         if (!identifier) {
-            identifier = uuid.v4();
+            identifier = uuidv4();
         }
 
         return this.producer.bufferFormatPublish(topic, identifier, payload, version, undefined, partitionKey, partition);
@@ -278,5 +278,3 @@ class NativeKafkaClient extends KafkaClient {
         }
     }
 }
-
-module.exports = NativeKafkaClient;

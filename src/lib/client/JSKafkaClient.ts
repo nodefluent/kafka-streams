@@ -1,14 +1,13 @@
-"use strict";
+import Debug from "debug";
+import { v4 as uuidv4} from "uuid";
+import { Kafka, PartitionDrainer, Drainer, Publisher } from "sinek";
+import { KafkaClient } from './KafkaClient';
 
-const uuid = require("uuid");
-const { Kafka, PartitionDrainer, Drainer, Publisher } = require("sinek");
-const debug = require("debug")("kafka-streams:jsclient");
-
-const KafkaClient = require("./KafkaClient.js");
+const debug = Debug("kafka-streams:jsclient");
 
 const NOOP = () => { };
 
-class JSKafkaClient extends KafkaClient {
+export class JSKafkaClient extends KafkaClient {
 
     /**
      * KafkaClient (EventEmitter)
@@ -231,7 +230,7 @@ class JSKafkaClient extends KafkaClient {
         }
 
         if (!identifier) {
-            identifier = uuid.v4();
+            identifier = uuidv4();
         }
 
         return this.producer.appendBuffer(topic, identifier, payload, compressionType);
@@ -255,7 +254,7 @@ class JSKafkaClient extends KafkaClient {
         }
 
         if (!identifier) {
-            identifier = uuid.v4();
+            identifier = uuidv4();
         }
 
         return this.producer.bufferPublishMessage(topic, identifier, payload, version, compressionType);
@@ -315,5 +314,3 @@ class JSKafkaClient extends KafkaClient {
         }
     }
 }
-
-module.exports = JSKafkaClient;
