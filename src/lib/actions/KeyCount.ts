@@ -5,21 +5,21 @@ import { Promise } from "bluebird";
  */
 export class KeyCount {
 
-    constructor(storage, key, fieldName = "count") {
-        this.storage = storage;
-        this.key = key;
-        this.fieldName = fieldName;
+  constructor(storage, key, fieldName = "count") {
+    this.storage = storage;
+    this.key = key;
+    this.fieldName = fieldName;
+  }
+
+  execute(value) {
+
+    if (!value || typeof value[this.key] === "undefined") {
+      return Promise.resolve(value);
     }
 
-    execute(value) {
-
-        if (!value || typeof value[this.key] === "undefined") {
-            return Promise.resolve(value);
-        }
-
-        return this.storage.increment(value[this.key]).then(count => {
-            value[this.fieldName] = count;
-            return value;
-        });
-    }
+    return this.storage.increment(value[this.key]).then(count => {
+      value[this.fieldName] = count;
+      return value;
+    });
+  }
 }

@@ -6,20 +6,20 @@ import { Promise } from "bluebird";
  */
 export class Min {
 
-    constructor(storage, fieldName = "value", min = "min") {
-        this.storage = storage;
-        this.fieldName = fieldName;
-        this.min = min;
+  constructor(storage, fieldName = "value", min = "min") {
+    this.storage = storage;
+    this.fieldName = fieldName;
+    this.min = min;
+  }
+
+  execute(element) {
+
+    if (!element || typeof element[this.fieldName] === "undefined") {
+      return Promise.resolve(element);
     }
 
-    execute(element) {
-
-        if (!element || typeof element[this.fieldName] === "undefined") {
-            return Promise.resolve(element);
-        }
-
-        return this.storage.setSmaller(this.min, element[this.fieldName]).then(_ => {
-            return element;
-        });
-    }
+    return this.storage.setSmaller(this.min, element[this.fieldName]).then(_ => {
+      return element;
+    });
+  }
 }
