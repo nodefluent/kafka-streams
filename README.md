@@ -24,13 +24,13 @@ kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to("output
 
 ## API Overview
 
-* [Quick Start](website/docs/quick-start.md)
-* [Message 'to' and 'from' Apache Kafka](website/docs/handling-message-schemas.md)
-* [API Info](website/docs/classDocs.md)
-* [Documentation](https://nodefluent.github.io/kafka-streams/jsdoc/)
-* [Operator descriptions](website/docs/most-api.md)
+* [Quick Start](https://nodefluent.github.io/kafka-streams/docs/)
+* [Message 'to' and 'from' Apache Kafka](https://nodefluent.github.io/kafka-streams/docs/handlingMessageSchemas)
+* [API Info](https://nodefluent.github.io/kafka-streams/docs/classDoc)
+* [Documentation](https://nodefluent.github.io/kafka-streams/)
+* [Operator descriptions](https://nodefluent.github.io/kafka-streams/docs/mostAPI)
 * [Examples](https://github.com/nodefluent/kafka-streams/tree/master/examples)
-* [Native Client](website/docs/native.md) | [SSL, SASL, Kerberos](website/docs/ssl-sasl.md)
+* [Native Client](https://nodefluent.github.io/kafka-streams/docs/native) | [SSL, SASL, Kerberos](https://nodefluent.github.io/kafka-streams/docs/sslSasl)
 
 ## You might also like
 
@@ -40,16 +40,28 @@ kstream.merge(ktable).filter(/* .. */).map(/* .. */).reduce(/* .. */).to("output
 
 ## README Overview
 
-* [Prerequisites](#prerequisites)
-* [Aim of this Library](#aim-of-this-library)
-* [Description](#description)
-* [Port Progress Overview](#port-progress-overview)
-* [Operator Implementations](#operator-implementations)
-* [Additional Operators](#additional-operators)
-* [Stream Action Implementations](#stream-action-implementations)
-* [Join Operators Status](#join-operations)
-* [Window Operations](#window-operations)
-* [FAQ - More](#more)
+- [node-kafka-streams](#node-kafka-streams)
+  - [API Overview](#api-overview)
+  - [You might also like](#you-might-also-like)
+  - [README Overview](#readme-overview)
+  - [Prerequisites](#prerequisites)
+    - [A note on native mode](#a-note-on-native-mode)
+  - [Aim of this Library](#aim-of-this-library)
+  - [Description](#description)
+  - [Port Progress Overview](#port-progress-overview)
+  - [Operator Implementations](#operator-implementations)
+  - [Additional Operators](#additional-operators)
+  - [Stream Action Implementations](#stream-action-implementations)
+  - [Join Operations](#join-operations)
+    - [KStream Status](#kstream-status)
+    - [KTable Status](#ktable-status)
+    - [KTable <-> KStream Status](#ktable---kstream-status)
+  - [Window Operations](#window-operations)
+    - [KStream](#kstream)
+- [More](#more)
+  - [Can I use this library yet?](#can-i-use-this-library-yet)
+  - [Are we ready for production yet?](#are-we-ready-for-production-yet)
+  - [Even More](#even-more)
 
 ## Prerequisites
 
