@@ -2,7 +2,7 @@ module.exports = {
   title: 'Kafka streams',
   tagline: 'equivalent to kafka-streams 🐙 for nodejs ✨🐢🚀✨',
   url: 'https://nodefluent.github.io',
-  baseUrl: '/',
+  baseUrl: '/kafka-streams/',
   onBrokenLinks: 'throw',
   favicon: '🐙',
   organizationName: 'nodefluent', // Usually your GitHub org/user name.
@@ -49,7 +49,7 @@ module.exports = {
           homePageId: 'quickStart',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/nodefluent/kafka-streams/website/',
+            'https://github.com/nodefluent/kafka-streams/tree/master/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
