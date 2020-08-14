@@ -4,6 +4,7 @@ const assert = require("assert");
 const proxyquire = require("proxyquire");
 
 const { KafkaFactoryStub } = require("./../utils/KafkaFactoryStub.js");
+const { Buffer } = require("buffer");
 const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
@@ -23,11 +24,14 @@ describe("KStream UNIT", function () {
                 streamA,
                 streamB,
                 streamTrue
-            ] = parent.branch([
-                (message) => message.startsWith("a"),
-                (message) => message.startsWith("b"),
-                (message) => !!message
-            ]);
+            ] = parent
+                    .mapJSONConvenience()
+                    .mapWrapKafkaValue()
+                    .branch([
+                        (message) => message.name.startsWith("a"),
+                        (message) => message.name.startsWith("b"),
+                        (message) => !!message
+                    ]);
 
             const outputA = [];
             streamA.forEach((a) => outputA.push(a));
@@ -41,6 +45,10 @@ describe("KStream UNIT", function () {
             const outputParent = [];
             parent.forEach((p) => outputParent.push(p));
 
+            function makeKafkaLikeMessage(string) {
+                return { value: Buffer.from(JSON.stringify({ name: string })) }
+            }
+
             const parentMessages = [
                 "albert",
                 "bunert",
@@ -53,11 +61,11 @@ describe("KStream UNIT", function () {
                 "christina",
                 "bolf",
                 "achim"
-            ];
+            ].map(makeKafkaLikeMessage);
 
             setTimeout(() => {
-                parent.writeToStream("alina");
-                parent.writeToStream("bela");
+                parent.writeToStream(makeKafkaLikeMessage("alina"));
+                parent.writeToStream(makeKafkaLikeMessage("bela"));
             }, 15);
 
             parentMessages.forEach(m => parent.writeToStream(m));
