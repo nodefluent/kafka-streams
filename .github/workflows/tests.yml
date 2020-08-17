@@ -30,4 +30,5 @@ jobs:
       run: cd kafka-setup && docker-compose up -d
     - run: sleep 60
     - run: docker ps -a
-    - run: yarn test
+    - run: docker logs kafka-setup_kafka_1
+    #- run: yarn test
