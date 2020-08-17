@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2016",
+    "allowJs": true,
+    "outDir": "./dist",
+    "declaration": true
+  },
+  "include": [
+      "./src/**/*",
+  ]
+}
