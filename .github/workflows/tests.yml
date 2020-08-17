@@ -26,9 +26,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install -g yarn
     - run: yarn && yarn add --frozen-lockfile node-rdkafka@2.7.4
+    - run: mkdir /tmp/kafka-data && mkdir /tmp/kafka-data/data && mkdir /tmp/kafka-data/logs && chmod -R 777 /tmp/kafka-data
+    - run: ./kafka-setup/generate-certs.sh
     - name: Start Docker containers for Zookeeper, Kafka and Schema Registry
       run: cd kafka-setup && docker-compose up -d
     - run: sleep 60
     - run: docker ps -a
     - run: docker logs kafka-setup_kafka_1
-    #- run: yarn test
+    - run: yarn test
