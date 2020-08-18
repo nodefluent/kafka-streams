@@ -7,35 +7,35 @@ const Promise = require("bluebird");
  */
 class Sum {
 
-    constructor(storage, key = "key", fieldName = "value", sumField = false) {
-        this.storage = storage;
-        this.key = key;
-        this.fieldName = fieldName;
-        this.sumField = sumField || fieldName;
+  constructor(storage, key = "key", fieldName = "value", sumField = false) {
+    this.storage = storage;
+    this.key = key;
+    this.fieldName = fieldName;
+    this.sumField = sumField || fieldName;
+  }
+
+  static tryConvertFloat(value) {
+
+    const parsed = parseFloat(value);
+    if (!isNaN(parsed)) {
+      return parsed;
     }
 
-    static tryConvertFloat(value) {
+    return value;
+  }
 
-        const parsed = parseFloat(value);
-        if (!isNaN(parsed)) {
-            return parsed;
-        }
+  execute(element) {
 
-        return value;
+    if (!element || typeof element[this.key] === "undefined") {
+      return Promise.resolve(element);
     }
 
-    execute(element) {
-
-        if (!element || typeof element[this.key] === "undefined") {
-            return Promise.resolve(element);
-        }
-
-        const newValue = Sum.tryConvertFloat(element[this.fieldName]);
-        return this.storage.sum(element[this.key], newValue).then(sum => {
-            element[this.sumField] = sum;
-            return element;
-        });
-    }
+    const newValue = Sum.tryConvertFloat(element[this.fieldName]);
+    return this.storage.sum(element[this.key], newValue).then(sum => {
+      element[this.sumField] = sum;
+      return element;
+    });
+  }
 }
 
 module.exports = Sum;

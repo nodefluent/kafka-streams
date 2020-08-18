@@ -1,7 +1,7 @@
 "use strict";
 
-const { KafkaStreams } = require("./../../index.js");
-const { nativeConfig: config } = require("./../test-config.js");
+const { KafkaStreams } = require("../../src/index.js");
+const { nativeConfig: config } = require("../test-config.js");
 
 const keyValueMapperEtl = (message) => {
     console.log(message);

@@ -8,11 +8,11 @@ const KStorage = require("./lib/KStorage.js");
 const KafkaClient = require("./lib/client/KafkaClient.js");
 
 module.exports = {
-    default: KafkaStreams,
-    KStream,
-    KTable,
-    KafkaFactory,
-    KafkaStreams,
-    KStorage,
-    KafkaClient
+  default: KafkaStreams,
+  KStream,
+  KTable,
+  KafkaFactory,
+  KafkaStreams,
+  KStorage,
+  KafkaClient
 };

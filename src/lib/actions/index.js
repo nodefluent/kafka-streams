@@ -8,10 +8,10 @@ const Min = require("./Min.js");
 const Max = require("./Max.js");
 
 module.exports = {
-    KeyCount,
-    LastState,
-    Sum,
-    Window,
-    Min,
-    Max
+  KeyCount,
+  LastState,
+  Sum,
+  Window,
+  Min,
+  Max
 };
