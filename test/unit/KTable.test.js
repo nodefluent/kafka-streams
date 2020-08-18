@@ -4,7 +4,7 @@ const assert = require("assert");
 const proxyquire = require("proxyquire");
 
 const { KafkaFactoryStub } = require("./../utils/KafkaFactoryStub.js");
-const KafkaStreams = proxyquire("./../../lib/KafkaStreams.js", {
+const KafkaStreams = proxyquire("../../src/lib/KafkaStreams.js", {
     "./KafkaFactory.js": KafkaFactoryStub
 });
 
