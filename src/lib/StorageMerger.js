@@ -6,29 +6,29 @@
  */
 class StorageMerger {
 
-    /**
+  /**
      * merges the content of multiple storages
      * if keys have the same name, the later storage
      * will overwrite the value
      * @param storages
      * @returns {Promise.<{State}>}
      */
-    static mergeIntoState(storages) {
-        return Promise.all(storages
-            .map(storage => storage.getState()))
-            .then(states => {
+  static mergeIntoState(storages) {
+    return Promise.all(storages
+      .map(storage => storage.getState()))
+      .then(states => {
 
-                const newState = {};
+        const newState = {};
 
-                states.forEach(state => {
-                    Object.keys(state).forEach(key => {
-                        newState[key] = state[key];
-                    });
-                });
+        states.forEach(state => {
+          Object.keys(state).forEach(key => {
+            newState[key] = state[key];
+          });
+        });
 
-                return newState;
-            });
-    }
+        return newState;
+      });
+  }
 
 }
 

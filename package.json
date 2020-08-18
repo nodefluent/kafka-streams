@@ -30,7 +30,7 @@
         "kafka:logs": "docker-compose --file ./kafka-setup/docker-compose.yml logs -f",
         "yarn:openssl": "LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' yarn",
         "prepublishOnly": "tsc -p tsconfig.json",
-        "lint": "eslint src/. --ext .ts .js"
+        "lint": "eslint src/. --ext .ts,.js"
     },
     "repository": {
         "type": "git",
