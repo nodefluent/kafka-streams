@@ -151,7 +151,8 @@ class NativeKafkaClient extends KafkaClient {
 
     //might be possible if the parent stream is build to produce messages only
     if (!this.producer) {
-      this.producer = new NProducer(config, [this.produceTopic], this.producePartitionCount);
+      // Sinek library has some strange null value here so we map this to any
+      this.producer = new NProducer(config, [this.produceTopic] as any, this.producePartitionCount);
 
       //consumer is awaiting producer
       this.producer.on("ready", () => {

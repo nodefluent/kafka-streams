@@ -231,7 +231,8 @@ class KTable extends StreamDSL {
   consumeUntilMs(ms = 1000, finishedCallback = null) {
 
     super.multicast();
-    this.stream$ = this.stream$.until(most.of().delay(ms));
+    // TODO we passing undefined here. Is that right?
+    this.stream$ = this.stream$.until(most.of(undefined).delay(ms));
 
     if (!this.finalised) {
       this.finalise(finishedCallback);
