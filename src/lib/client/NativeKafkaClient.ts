@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import { NConsumer, NProducer } from 'sinek';
 import debugFactory from 'debug';
 const debug = debugFactory("kafka-streams:nativeclient");
-import KafkaClient from './KafkaClient.js';
+import KafkaClient from './KafkaClient';
 
 const NOOP = () => { };
 

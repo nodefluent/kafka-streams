@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import { Kafka, PartitionDrainer, Drainer, Publisher } from 'sinek';
 import debugFactory from 'debug';
 const debug = debugFactory("kafka-streams:jsclient");
-import KafkaClient from './KafkaClient.js';
+import KafkaClient from './KafkaClient';
 
 const NOOP = () => { };
 

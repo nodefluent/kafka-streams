@@ -4,9 +4,9 @@ import Promise from 'bluebird';
 import { async as createSubject } from 'most-subject';
 import lodashClone from 'lodash.clone';
 import lodashCloneDeep from 'lodash.clonedeep';
-import StreamDSL from './StreamDSL.js';
+import StreamDSL from './StreamDSL';
 import { Window } from '../actions/index';
-import { messageProduceHandle } from '../messageProduceHandle.js';
+import { messageProduceHandle } from '../messageProduceHandle';
 
 const NOOP = () => { };
 

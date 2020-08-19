@@ -3,10 +3,10 @@
 import EventEmitter from 'events';
 import most from 'most';
 import Promise from 'bluebird';
-import StreamDSL from './StreamDSL.js';
+import StreamDSL from './StreamDSL';
 import { LastState } from '../actions/index';
-import StorageMerger from '../StorageMerger.js';
-import { messageProduceHandle } from '../messageProduceHandle.js';
+import StorageMerger from '../StorageMerger';
+import { messageProduceHandle } from '../messageProduceHandle';
 
 const MESSAGE = "message";
 const NOOP = () => { };

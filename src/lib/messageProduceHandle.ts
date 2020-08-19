@@ -2,7 +2,7 @@
 
 import debugFactory from 'debug';
 const debug = debugFactory("kafka-streams:mph");
-import PRODUCE_TYPES from './produceTypes.js';
+import PRODUCE_TYPES from './produceTypes';
 
 /**
  * returns true if the message is an object
