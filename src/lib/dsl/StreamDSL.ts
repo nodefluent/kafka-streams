@@ -1,15 +1,15 @@
 "use strict";
 
-import EventEmitter from 'events';
-import most from 'most';
+import { EventEmitter } from 'events';
+import * as most from 'most';
 import Promise from 'bluebird';
 import uuid from 'uuid';
 import debugFactory from 'debug';
 const debug = debugFactory("kafka-streams:streamdsl");
 import KStorage from '../KStorage.js';
 import KafkaClient from '../client/KafkaClient.js';
-import { KeyCount, Sum, Max, Min } from '../actions/index.js';
-import { messageProduceHandle } from '../messageProduceHandle.js';
+import { KeyCount, Sum, Max, Min } from '../actions/index';
+import { messageProduceHandle } from '../messageProduceHandle';
 import PRODUCE_TYPES from '../produceTypes.js';
 
 const NOOP = () => { };
@@ -20,22 +20,22 @@ const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
  * Stream base class
  */
 class StreamDSL {
-	public noTopicProvided: any;
-	public topicName: any;
-	public kafka: any;
-	public storage: any;
-	public isClone: any;
-	public _ee: any;
-	public stream$: any;
-	public produceAsTopic: any;
-	public outputTopicName: any;
-	public outputPartitionsCount: any;
-	public produceType: any;
-	public produceVersion: any;
-	public produceCompressionType: any;
-	public _kafkaStreams: any;
-	public PRODUCE_TYPES: any;
-	public DEFAULT_AUTO_FLUSH_BUFFER_SIZE: any;
+  public noTopicProvided: any;
+  public topicName: any;
+  public kafka: any;
+  public storage: any;
+  public isClone: any;
+  public _ee: any;
+  public stream$: any;
+  public produceAsTopic: any;
+  public outputTopicName: any;
+  public outputPartitionsCount: any;
+  public produceType: any;
+  public produceVersion: any;
+  public produceCompressionType: any;
+  public _kafkaStreams: any;
+  public PRODUCE_TYPES: any;
+  public DEFAULT_AUTO_FLUSH_BUFFER_SIZE: any;
 
   /**
      * Stream base class that wraps around a private most.js stream$
@@ -612,7 +612,7 @@ class StreamDSL {
     return this.map(message => {
 
       if (typeof message === "object" &&
-                typeof message.value !== "undefined") {
+        typeof message.value !== "undefined") {
         return message.value;
       }
 

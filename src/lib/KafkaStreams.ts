@@ -1,6 +1,6 @@
 "use strict";
 
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import KafkaFactory from './KafkaFactory.js';
 import KStream from './dsl/KStream.js';
 import KTable from './dsl/KTable.js';
@@ -11,12 +11,12 @@ import KStorage from './KStorage.js';
  * inhabits EventEmitter(events)
  */
 class KafkaStreams extends EventEmitter {
-	public config: any;
-	public factory: any;
-	public storageClass: any;
-	public storageOptions: any;
-	public kafkaClients: any;
-	public storages: any;
+  public config: any;
+  public factory: any;
+  public storageClass: any;
+  public storageOptions: any;
+  public kafkaClients: any;
+  public storages: any;
 
   /**
      * Can be used as factory to get
