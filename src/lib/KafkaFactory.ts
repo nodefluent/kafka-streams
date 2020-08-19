@@ -1,11 +1,13 @@
 "use strict";
 
-const debug = require("debug")("kafka-streams:kafkafactory");
-
-const JSKafkaClient = require("./client/JSKafkaClient.js");
-const NativeKafkaClient = require("./client/NativeKafkaClient.js");
+import debugFactory from 'debug';
+const debug = debugFactory("kafka-streams:kafkafactory");
+import JSKafkaClient from './client/JSKafkaClient.js';
+import NativeKafkaClient from './client/NativeKafkaClient.js';
 
 class KafkaFactory {
+	public config: any;
+	public batchOptions: any;
 
   /**
      * helper for KafkaStreams to wrap
@@ -39,4 +41,4 @@ class KafkaFactory {
   }
 }
 
-module.exports = KafkaFactory;
+export default KafkaFactory;

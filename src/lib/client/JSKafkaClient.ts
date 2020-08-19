@@ -1,14 +1,30 @@
 "use strict";
 
-const uuid = require("uuid");
-const { Kafka, PartitionDrainer, Drainer, Publisher } = require("sinek");
-const debug = require("debug")("kafka-streams:jsclient");
-
-const KafkaClient = require("./KafkaClient.js");
+import uuid from 'uuid';
+import { Kafka, PartitionDrainer, Drainer, Publisher } from 'sinek';
+import debugFactory from 'debug';
+const debug = debugFactory("kafka-streams:jsclient");
+import KafkaClient from './KafkaClient.js';
 
 const NOOP = () => { };
 
 class JSKafkaClient extends KafkaClient {
+	public topic: any;
+	public config: any;
+	public kafkaConsumerClient: any;
+	public kafkaProducerClient: any;
+	public consumer: any;
+	public producer: any;
+	public produceTopic: any;
+	public producePartitionCount: any;
+	public _produceHandler: any;
+	public zkConStr: any;
+	public kafkaHost: any;
+	public logger: any;
+	public groupId: any;
+	public workerPerPartition: any;
+	public options: any;
+	public clientName: any;
 
   /**
      * KafkaClient (EventEmitter)
@@ -316,4 +332,4 @@ class JSKafkaClient extends KafkaClient {
   }
 }
 
-module.exports = JSKafkaClient;
+export default JSKafkaClient;

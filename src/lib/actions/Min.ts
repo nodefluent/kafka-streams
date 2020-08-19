@@ -1,12 +1,15 @@
 "use strict";
 
-const Promise = require("bluebird");
+import Promise from 'bluebird';
 
 /**
  * used grab the lowest value of
  * key values in a stream
  */
 class Min {
+	public storage: any;
+	public fieldName: any;
+	public min: any;
 
   constructor(storage, fieldName = "value", min = "min") {
     this.storage = storage;
@@ -26,4 +29,4 @@ class Min {
   }
 }
 
-module.exports = Min;
+export default Min;

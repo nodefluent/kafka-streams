@@ -1,12 +1,15 @@
 "use strict";
 
-const Promise = require("bluebird");
+import Promise from 'bluebird';
 
 /**
  * used to hold the last state of key values
  * in a stream e.g. building KTables
  */
 class LastState {
+	public storage: any;
+	public key: any;
+	public fieldName: any;
 
   constructor(storage, key = "key", fieldName = "value") {
     this.storage = storage;
@@ -26,4 +29,4 @@ class LastState {
   }
 }
 
-module.exports = LastState;
+export default LastState;

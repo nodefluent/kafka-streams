@@ -1,12 +1,15 @@
 "use strict";
 
-const { async: createSubject } = require("most-subject");
+import { async as createSubject } from 'most-subject';
 
 /**
  * used to build windows of key value states
  * in a stream
  */
 class Window {
+	public container: any;
+	public container$: any;
+	public collect: any;
 
   constructor(container, collect = false) {
     this.container = container || [];
@@ -40,4 +43,4 @@ class Window {
   }
 }
 
-module.exports = Window;
+export default Window;

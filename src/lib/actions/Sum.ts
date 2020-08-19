@@ -1,11 +1,15 @@
 "use strict";
 
-const Promise = require("bluebird");
+import Promise from 'bluebird';
 
 /**
  * used to sum up key values in a stream
  */
 class Sum {
+	public storage: any;
+	public key: any;
+	public fieldName: any;
+	public sumField: any;
 
   constructor(storage, key = "key", fieldName = "value", sumField = false) {
     this.storage = storage;
@@ -38,4 +42,4 @@ class Sum {
   }
 }
 
-module.exports = Sum;
+export default Sum;
