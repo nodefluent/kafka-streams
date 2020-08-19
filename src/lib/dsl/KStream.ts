@@ -5,8 +5,8 @@ import { async as createSubject } from 'most-subject';
 import lodashClone from 'lodash.clone';
 import lodashCloneDeep from 'lodash.clonedeep';
 import StreamDSL from './StreamDSL';
-import { Window } from '../actions/index';
-import { messageProduceHandle } from '../messageProduceHandle';
+import messageProduceHandle from '../messageProduceHandle';
+import Window from "../actions/Window"
 
 const NOOP = () => { };
 
@@ -14,7 +14,7 @@ const NOOP = () => { };
  * change-log representation of a stream
  */
 class KStream extends StreamDSL {
-	public started: any;
+  public started: any;
 
   /**
      * creates a changelog representation of a stream
@@ -81,8 +81,8 @@ class KStream extends StreamDSL {
     const onReady = (type) => {
 
       switch (type) {
-      case "producer": producerReady = true; break;
-      case "consumer": consumerReady = true; break;
+        case "producer": producerReady = true; break;
+        case "consumer": consumerReady = true; break;
       }
 
       //consumer && producer
@@ -278,7 +278,7 @@ class KStream extends StreamDSL {
     return preds.map((pred) => {
 
       if (typeof pred !== "function") {
-        throw new Error("branch predicates must be an array of functions: ", pred);
+        throw new Error(`branch predicates must be an array of functions: ${pred}`);
       }
 
       return this.clone(true, true).filter(pred);
