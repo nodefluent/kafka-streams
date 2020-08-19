@@ -13,9 +13,9 @@ import PRODUCE_TYPES from './produceTypes';
 const hasKVStructure = message => {
 
   if (message &&
-        typeof message === "object" &&
-        typeof message.key !== "undefined" &&
-        typeof message.value !== "undefined") {
+    typeof message === "object" &&
+    typeof message.key !== "undefined" &&
+    typeof message.value !== "undefined") {
     return true;
   }
 
@@ -46,17 +46,17 @@ const produceTypeSelection = (produceType, kafka, compressionType, topic, partit
 
   switch (produceType) {
 
-  case PRODUCE_TYPES.SEND:
-    return kafka.send(topic, value, partition, key, partitionKey, opaqueKey);
+    case PRODUCE_TYPES.SEND:
+      return kafka.send(topic, value, partition, key, partitionKey, opaqueKey);
 
-  case PRODUCE_TYPES.BUFFER:
-    return kafka.buffer(topic, key, value, compressionType, partition, version, partitionKey);
+    case PRODUCE_TYPES.BUFFER:
+      return kafka.buffer(topic, key, value, compressionType, partition, version, partitionKey);
 
-  case PRODUCE_TYPES.BUFFER_FORMAT:
-    return kafka.bufferFormat(topic, key, value, version, compressionType, partitionKey, partition);
+    case PRODUCE_TYPES.BUFFER_FORMAT:
+      return kafka.bufferFormat(topic, key, value, version, compressionType, partitionKey, partition);
 
-  default:
-    return Promise.reject(new Error(`${produceType} is an unknown produceType.`));
+    default:
+      return Promise.reject(new Error(`${produceType} is an unknown produceType.`));
   }
 };
 
@@ -158,6 +158,5 @@ const messageProduceHandle = (kafka, message, outputTopicName, produceType, comp
   });
 };
 
-export default {
-  messageProduceHandle
-};
+export default messageProduceHandle
+

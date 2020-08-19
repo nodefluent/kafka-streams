@@ -1,12 +1,12 @@
 "use strict";
 
-import EventEmitter from 'events';
-import most from 'most';
+import { EventEmitter } from 'events';
+import * as most from 'most';
 import Promise from 'bluebird';
 import StreamDSL from './StreamDSL';
-import { LastState } from '../actions/index';
+import LastState from '../actions/LastState';
 import StorageMerger from '../StorageMerger';
-import { messageProduceHandle } from '../messageProduceHandle';
+import messageProduceHandle from '../messageProduceHandle';
 
 const MESSAGE = "message";
 const NOOP = () => { };
@@ -15,10 +15,10 @@ const NOOP = () => { };
  * table representation of a stream
  */
 class KTable extends StreamDSL {
-	public _tee: any;
-	public started: any;
-	public finalised: any;
-	public consumerOpen: any;
+  public _tee: any;
+  public started: any;
+  public finalised: any;
+  public consumerOpen: any;
 
   /**
      * creates a table representation of a stream
@@ -103,8 +103,8 @@ class KTable extends StreamDSL {
 
     const onReady = (type) => {
       switch (type) {
-      case "producer": producerReady = true; break;
-      case "consumer": consumerReady = true; break;
+        case "producer": producerReady = true; break;
+        case "consumer": consumerReady = true; break;
       }
 
       //consumer && producer
