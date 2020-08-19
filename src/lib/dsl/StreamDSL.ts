@@ -6,11 +6,11 @@ import Promise from 'bluebird';
 import uuid from 'uuid';
 import debugFactory from 'debug';
 const debug = debugFactory("kafka-streams:streamdsl");
-import KStorage from '../KStorage.js';
-import KafkaClient from '../client/KafkaClient.js';
+import KStorage from '../KStorage';
+import KafkaClient from '../client/KafkaClient';
 import { KeyCount, Sum, Max, Min } from '../actions/index';
 import { messageProduceHandle } from '../messageProduceHandle';
-import PRODUCE_TYPES from '../produceTypes.js';
+import PRODUCE_TYPES from '../produceTypes';
 
 const NOOP = () => { };
 const MESSAGE = "message";

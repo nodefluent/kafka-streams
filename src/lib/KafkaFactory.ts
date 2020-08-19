@@ -2,8 +2,8 @@
 
 import debugFactory from 'debug';
 const debug = debugFactory("kafka-streams:kafkafactory");
-import JSKafkaClient from './client/JSKafkaClient.js';
-import NativeKafkaClient from './client/NativeKafkaClient.js';
+import JSKafkaClient from './client/JSKafkaClient';
+import NativeKafkaClient from './client/NativeKafkaClient';
 
 class KafkaFactory {
 	public config: any;
