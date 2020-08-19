@@ -1,12 +1,15 @@
 "use strict";
 
-const Promise = require("bluebird");
+import Promise from 'bluebird';
 
 /**
  * used to grab the highest value of key values
  * in a stream
  */
 class Max {
+	public storage: any;
+	public fieldName: any;
+	public max: any;
 
   constructor(storage, fieldName = "value", max = "max") {
     this.storage = storage;
@@ -26,4 +29,4 @@ class Max {
   }
 }
 
-module.exports = Max;
+export default Max;

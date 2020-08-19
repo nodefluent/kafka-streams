@@ -1,14 +1,22 @@
 "use strict";
 
-const uuid = require("uuid");
-const { NConsumer, NProducer } = require("sinek");
-const debug = require("debug")("kafka-streams:nativeclient");
-
-const KafkaClient = require("./KafkaClient.js");
+import uuid from 'uuid';
+import { NConsumer, NProducer } from 'sinek';
+import debugFactory from 'debug';
+const debug = debugFactory("kafka-streams:nativeclient");
+import KafkaClient from './KafkaClient.js';
 
 const NOOP = () => { };
 
 class NativeKafkaClient extends KafkaClient {
+	public topic: any;
+	public config: any;
+	public batchOptions: any;
+	public consumer: any;
+	public producer: any;
+	public produceTopic: any;
+	public producePartitionCount: any;
+	public _produceHandler: any;
 
   /**
      * NativeKafkaClient (EventEmitter)
@@ -279,4 +287,4 @@ class NativeKafkaClient extends KafkaClient {
   }
 }
 
-module.exports = NativeKafkaClient;
+export default NativeKafkaClient;

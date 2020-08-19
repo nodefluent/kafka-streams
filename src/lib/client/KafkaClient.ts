@@ -1,6 +1,6 @@
 "use strict";
 
-const EventEmitter = require("events");
+import EventEmitter from 'events';
 
 class KafkaClient extends EventEmitter {
 
@@ -15,4 +15,4 @@ class KafkaClient extends EventEmitter {
   }
 }
 
-module.exports = KafkaClient;
+export default KafkaClient;

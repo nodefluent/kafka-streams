@@ -1,16 +1,16 @@
 "use strict";
 
-const EventEmitter = require("events");
-const most = require("most");
-const Promise = require("bluebird");
-const uuid = require("uuid");
-const debug = require("debug")("kafka-streams:streamdsl");
-
-const KStorage = require("../KStorage.js");
-const KafkaClient = require("../client/KafkaClient.js");
-const { KeyCount, Sum, Max, Min } = require("../actions/index.js");
-const { messageProduceHandle } = require("../messageProduceHandle.js");
-const PRODUCE_TYPES = require("../produceTypes.js");
+import EventEmitter from 'events';
+import most from 'most';
+import Promise from 'bluebird';
+import uuid from 'uuid';
+import debugFactory from 'debug';
+const debug = debugFactory("kafka-streams:streamdsl");
+import KStorage from '../KStorage.js';
+import KafkaClient from '../client/KafkaClient.js';
+import { KeyCount, Sum, Max, Min } from '../actions/index.js';
+import { messageProduceHandle } from '../messageProduceHandle.js';
+import PRODUCE_TYPES from '../produceTypes.js';
 
 const NOOP = () => { };
 const MESSAGE = "message";
@@ -20,6 +20,22 @@ const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
  * Stream base class
  */
 class StreamDSL {
+	public noTopicProvided: any;
+	public topicName: any;
+	public kafka: any;
+	public storage: any;
+	public isClone: any;
+	public _ee: any;
+	public stream$: any;
+	public produceAsTopic: any;
+	public outputTopicName: any;
+	public outputPartitionsCount: any;
+	public produceType: any;
+	public produceVersion: any;
+	public produceCompressionType: any;
+	public _kafkaStreams: any;
+	public PRODUCE_TYPES: any;
+	public DEFAULT_AUTO_FLUSH_BUFFER_SIZE: any;
 
   /**
      * Stream base class that wraps around a private most.js stream$
@@ -1127,4 +1143,4 @@ class StreamDSL {
   }
 }
 
-module.exports = StreamDSL;
+export default StreamDSL;

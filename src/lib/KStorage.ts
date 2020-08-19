@@ -1,8 +1,10 @@
 "use strict";
 
-const Promise = require("bluebird");
+import Promise from 'bluebird';
 
 class KStorage {
+	public options: any;
+	public state: any;
 
   /**
      * be aware that even though KStorage is built on Promises
@@ -89,4 +91,4 @@ class KStorage {
   }
 }
 
-module.exports = KStorage;
+export default KStorage;

@@ -1,7 +1,8 @@
 "use strict";
 
-const debug = require("debug")("kafka-streams:mph");
-const PRODUCE_TYPES = require("./produceTypes.js");
+import debugFactory from 'debug';
+const debug = debugFactory("kafka-streams:mph");
+import PRODUCE_TYPES from './produceTypes.js';
 
 /**
  * returns true if the message is an object
@@ -157,6 +158,6 @@ const messageProduceHandle = (kafka, message, outputTopicName, produceType, comp
   });
 };
 
-module.exports = {
+export default {
   messageProduceHandle
 };

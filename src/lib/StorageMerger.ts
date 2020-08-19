@@ -32,4 +32,4 @@ class StorageMerger {
 
 }
 
-module.exports = StorageMerger;
+export default StorageMerger;
