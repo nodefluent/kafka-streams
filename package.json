@@ -8,6 +8,7 @@
         "consumeFromTopic": "node ./examples/consumeFromTopic.js",
         "consumeOneProduceTwo": "node ./examples/consumeOneProduceTwo.js",
         "consumeOneProduceTwoTopics": "node ./examples/consumeOneProduceTwoTopics.js",
+        "build": "tsc",
         "fieldSum": "node ./examples/fieldSum.js",
         "mergeTopics": "node ./examples/mergeTopics.js",
         "produceToTopic": "node ./examples/produceToTopic.js",

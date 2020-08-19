@@ -31,4 +31,5 @@ jobs:
     - name: Start Docker containers for Zookeeper, Kafka and Schema Registry
       run: cd kafka-setup && docker-compose up -d
     - run: sleep 60
+    - run: yarn build
     - run: yarn test
