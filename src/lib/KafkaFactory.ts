@@ -1,44 +1,44 @@
 "use strict";
 
-import debugFactory from 'debug';
+import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:kafkafactory");
-import JSKafkaClient from './client/JSKafkaClient';
-import NativeKafkaClient from './client/NativeKafkaClient';
+import JSKafkaClient from "./client/JSKafkaClient";
+import NativeKafkaClient from "./client/NativeKafkaClient";
 
 class KafkaFactory {
 	public config: any;
 	public batchOptions: any;
 
-  /**
+	/**
      * helper for KafkaStreams to wrap
      * the setup of Kafka-Client instances
      * @param config
      * @param batchOptions - optional
      */
-  constructor(config, batchOptions = undefined) {
+	constructor(config, batchOptions = undefined) {
 
-    if (!config) {
-      throw new Error("kafka factory constructor expects a configuration object.");
-    }
+	  if (!config) {
+	    throw new Error("kafka factory constructor expects a configuration object.");
+	  }
 
-    this.config = config;
-    this.batchOptions = batchOptions;
-  }
+	  this.config = config;
+	  this.batchOptions = batchOptions;
+	}
 
-  getKafkaClient(topic) {
+	getKafkaClient(topic) {
 
-    if (this.config.noptions && typeof this.config.noptions === "object") {
-      debug("creating new native kafka client");
-      return new NativeKafkaClient(topic, this.config, this.batchOptions);
-    }
+	  if (this.config.noptions && typeof this.config.noptions === "object") {
+	    debug("creating new native kafka client");
+	    return new NativeKafkaClient(topic, this.config, this.batchOptions);
+	  }
 
-    if (this.batchOptions) {
-      debug("WARNING: batchOptions are omitted for the JS client.");
-    }
+	  if (this.batchOptions) {
+	    debug("WARNING: batchOptions are omitted for the JS client.");
+	  }
 
-    debug("creating new js kafka client");
-    return new JSKafkaClient(topic, this.config);
-  }
+	  debug("creating new js kafka client");
+	  return new JSKafkaClient(topic, this.config);
+	}
 }
 
 export default KafkaFactory;

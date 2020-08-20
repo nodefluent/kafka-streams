@@ -4,18 +4,19 @@ module.exports = {
     "node": true,
     "mocha": true
   },
-  "parser": '@typescript-eslint/parser',
+  "parser": "@typescript-eslint/parser",
   "plugins": [
-    '@typescript-eslint',
+    "@typescript-eslint",
   ],
   "extends": [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
   ],
   "rules": {
     "indent": [
-      "error",
-      2
+      2, 2, {
+        "SwitchCase": 1
+      }
     ],
     "linebreak-style": [
       "error",
@@ -29,6 +30,7 @@ module.exports = {
       "error",
       "always"
     ],
-    "no-console": 0
+    "no-console": 0,
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"]
   }
 };

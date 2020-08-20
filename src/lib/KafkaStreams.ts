@@ -1,10 +1,10 @@
 "use strict";
 
-import { EventEmitter } from 'events';
-import KafkaFactory from './KafkaFactory';
-import KStream from './dsl/KStream';
-import KTable from './dsl/KTable';
-import KStorage from './KStorage';
+import { EventEmitter } from "events";
+import KafkaFactory from "./KafkaFactory";
+import KStream from "./dsl/KStream";
+import KTable from "./dsl/KTable";
+import KStorage from "./KStorage";
 
 /**
  * Stream object factory

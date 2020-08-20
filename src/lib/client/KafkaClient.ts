@@ -1,6 +1,6 @@
 "use strict";
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 class KafkaClient extends EventEmitter {
 
