@@ -1,19 +1,14 @@
-"use strict";
-
-import { EventEmitter } from 'events';
-import * as most from 'most';
-import Promise from 'bluebird';
-import uuid from 'uuid';
-import debugFactory from 'debug';
+import { EventEmitter } from "events";
+import * as most from "most";
+import { Promise } from "bluebird";
+import { v4 as uuidv4 } from "uuid";
+import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:streamdsl");
-import KStorage from '../KStorage';
-import KafkaClient from '../client/KafkaClient';
-import messageProduceHandle from '../messageProduceHandle';
-import PRODUCE_TYPES from '../produceTypes';
-import KeyCount from '../actions/KeyCount';
-import Sum from '../actions/Sum';
-import Min from '../actions/Min';
-import Max from '../actions/Max';
+import KStorage from "../KStorage";
+import { KafkaClient } from "../client/KafkaClient";
+import { messageProduceHandle } from "../messageProduceHandle";
+import PRODUCE_TYPES from "../produceTypes";
+import { KeyCount, Sum, Min, Max } from "../actions";
 
 const NOOP = () => { };
 const MESSAGE = "message";
@@ -22,7 +17,7 @@ const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
 /**
  * Stream base class
  */
-class StreamDSL {
+export class StreamDSL {
   public noTopicProvided: any;
   public topicName: any;
   public kafka: any;
@@ -663,7 +658,7 @@ class StreamDSL {
 
     this.map(message => {
 
-      const id = getId ? getId(message) : uuid.v4();
+      const id = getId ? getId(message) : uuidv4();
 
       return {
         payload: message,
@@ -1145,5 +1140,3 @@ class StreamDSL {
     });
   }
 }
-
-export default StreamDSL;

@@ -1,18 +1,7 @@
 "use strict";
 
-import  KStream  from "./lib/dsl/KStream"
-import  KTable  from "./lib/dsl/KTable"
-import  KafkaFactory  from "./lib/KafkaFactory"
-import  KafkaStreams  from "./lib/KafkaStreams"
-import  KStorage  from "./lib/KStorage.js"
-import  KafkaClient  from "./lib/client/KafkaClient"
-
-module.exports = {
-  default: KafkaStreams,
-  KStream,
-  KTable,
-  KafkaFactory,
-  KafkaStreams,
-  KStorage,
-  KafkaClient
-};
+export { KStream, KTable } from "./lib/dsl";
+export { KafkaFactory } from "./lib/KafkaFactory";
+export { KafkaStreams } from "./lib/KafkaStreams";
+export { KStorage } from "./lib/KStorage";
+export { KafkaClient } from "./lib/client/KafkaClient";

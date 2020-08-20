@@ -1,19 +1,17 @@
-"use strict";
-
-import Promise from 'bluebird';
-import { async as createSubject } from 'most-subject';
-import lodashClone from 'lodash.clone';
-import lodashCloneDeep from 'lodash.clonedeep';
-import StreamDSL from './StreamDSL';
-import messageProduceHandle from '../messageProduceHandle';
-import Window from "../actions/Window"
+import { Promise } from "bluebird";
+import { async as createSubject } from "most-subject";
+import * as lodashClone from "lodash.clone";
+import * as lodashCloneDeep from "lodash.clonedeep";
+import { StreamDSL } from "./StreamDSL";
+import { messageProduceHandle } from "../messageProduceHandle";
+import { Window } from "../actions";
 
 const NOOP = () => { };
 
 /**
  * change-log representation of a stream
  */
-class KStream extends StreamDSL {
+export class KStream extends StreamDSL {
   public started: any;
 
   /**
@@ -37,15 +35,15 @@ class KStream extends StreamDSL {
   }
 
   /**
-     * start kafka consumption
-     * prepare production of messages if necessary
-     * when called with zero or just a single callback argument
-     * this function will return a promise and use the callback for errors
-     * @param {function|Object} kafkaReadyCallback - can also be an object (config)
-     * @param {function} kafkaErrorCallback
-     * @param {boolean} withBackPressure
-     * @param {Object} outputKafkaConfig
-     */
+   * start kafka consumption
+   * prepare production of messages if necessary
+   * when called with zero or just a single callback argument
+   * this function will return a promise and use the callback for errors
+   * @param {function|Object} kafkaReadyCallback - can also be an object (config)
+   * @param {function} kafkaErrorCallback
+   * @param {boolean} withBackPressure
+   * @param {Object} outputKafkaConfig
+   */
   start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure = false, outputKafkaConfig = null) {
 
     if (kafkaReadyCallback && typeof kafkaReadyCallback === "object" && arguments.length < 2) {
@@ -370,5 +368,3 @@ class KStream extends StreamDSL {
     return this.storage.close();
   }
 }
-
-export default KStream;
