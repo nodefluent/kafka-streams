@@ -1,8 +1,6 @@
-"use strict";
-
 import { EventEmitter } from "events";
 import * as most from "most";
-import Promise from "bluebird";
+import { Promise } from "bluebird";
 import { StreamDSL } from "./StreamDSL";
 import { LastState } from "../actions";
 import { StorageMerger } from "../StorageMerger";

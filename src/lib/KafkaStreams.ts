@@ -157,5 +157,3 @@ export class KafkaStreams extends EventEmitter {
     });
   }
 }
-
-export default KafkaStreams;

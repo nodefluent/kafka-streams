@@ -120,7 +120,7 @@ export class JSKafkaClient extends KafkaClient {
 	  if (withBackPressure) {
 	    this.consumer = new PartitionDrainer(this.kafkaConsumerClient, workerPerPartition || 1, false, false);
 	  } else {
-	    this.consumer = new Drainer(this.kafkaConsumerClient, workerPerPartition, false, true);
+	    this.consumer = new Drainer(this.kafkaConsumerClient, workerPerPartition, true, false, false);
 	  }
 
 	  //consumer has to wait for producer
@@ -196,7 +196,7 @@ export class JSKafkaClient extends KafkaClient {
 	  }
 
 	  this.kafkaProducerClient.becomeProducer([this.produceTopic], clientName, options);
-	  this.producer = new Publisher(this.kafkaProducerClient, partitions || 1);
+	  this.producer = new Publisher(this.kafkaProducerClient, partitions || 1, 0, 100);
 	}
 
 	/**

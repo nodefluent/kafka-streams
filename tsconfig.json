@@ -4,9 +4,10 @@
     "target": "es2016",
     "allowJs": true,
     "outDir": "./dist",
-    "declaration": true
+    "declaration": true,
+    "alwaysStrict": true,
   },
   "include": [
-      "./src/**/*",
+    "./src/**/*",
   ]
 }

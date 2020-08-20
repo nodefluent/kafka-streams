@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import * as most from "most";
-import Promise from "bluebird";
-import uuid from "uuid";
+import { Promise } from "bluebird";
+import { v4 as uuidv4 } from "uuid";
 import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:streamdsl");
 import KStorage from "../KStorage";
@@ -658,7 +658,7 @@ export class StreamDSL {
 
     this.map(message => {
 
-      const id = getId ? getId(message) : uuid.v4();
+      const id = getId ? getId(message) : uuidv4();
 
       return {
         payload: message,

@@ -1,4 +1,4 @@
-import Promise from "bluebird";
+import { Promise } from "bluebird";
 
 export class KStorage {
 	public options: any;

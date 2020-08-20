@@ -1,7 +1,7 @@
-import Promise from "bluebird";
+import { Promise } from "bluebird";
 import { async as createSubject } from "most-subject";
-import lodashClone from "lodash.clone";
-import lodashCloneDeep from "lodash.clonedeep";
+import * as lodashClone from "lodash.clone";
+import * as lodashCloneDeep from "lodash.clonedeep";
 import { StreamDSL } from "./StreamDSL";
 import { messageProduceHandle } from "../messageProduceHandle";
 import { Window } from "../actions";
