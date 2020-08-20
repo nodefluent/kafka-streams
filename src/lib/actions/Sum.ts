@@ -1,45 +1,43 @@
 "use strict";
 
-import Promise from 'bluebird';
+import Promise from "bluebird";
 
 /**
  * used to sum up key values in a stream
  */
-class Sum {
+export class Sum {
 	public storage: any;
 	public key: any;
 	public fieldName: any;
 	public sumField: any;
 
-  constructor(storage, key = "key", fieldName = "value", sumField = false) {
-    this.storage = storage;
-    this.key = key;
-    this.fieldName = fieldName;
-    this.sumField = sumField || fieldName;
-  }
+	constructor(storage, key = "key", fieldName = "value", sumField = false) {
+	  this.storage = storage;
+	  this.key = key;
+	  this.fieldName = fieldName;
+	  this.sumField = sumField || fieldName;
+	}
 
-  static tryConvertFloat(value) {
+	static tryConvertFloat(value) {
 
-    const parsed = parseFloat(value);
-    if (!isNaN(parsed)) {
-      return parsed;
-    }
+	  const parsed = parseFloat(value);
+	  if (!isNaN(parsed)) {
+	    return parsed;
+	  }
 
-    return value;
-  }
+	  return value;
+	}
 
-  execute(element) {
+	execute(element) {
 
-    if (!element || typeof element[this.key] === "undefined") {
-      return Promise.resolve(element);
-    }
+	  if (!element || typeof element[this.key] === "undefined") {
+	    return Promise.resolve(element);
+	  }
 
-    const newValue = Sum.tryConvertFloat(element[this.fieldName]);
-    return this.storage.sum(element[this.key], newValue).then(sum => {
-      element[this.sumField] = sum;
-      return element;
-    });
-  }
+	  const newValue = Sum.tryConvertFloat(element[this.fieldName]);
+	  return this.storage.sum(element[this.key], newValue).then(sum => {
+	    element[this.sumField] = sum;
+	    return element;
+	  });
+	}
 }
-
-export default Sum;

@@ -1,12 +1,12 @@
 "use strict";
 
-import { EventEmitter } from 'events';
-import * as most from 'most';
-import Promise from 'bluebird';
-import StreamDSL from './StreamDSL';
-import LastState from '../actions/LastState';
-import StorageMerger from '../StorageMerger';
-import messageProduceHandle from '../messageProduceHandle';
+import { EventEmitter } from "events";
+import * as most from "most";
+import Promise from "bluebird";
+import StreamDSL from "./StreamDSL";
+import { LastState } from "../actions";
+import StorageMerger from "../StorageMerger";
+import messageProduceHandle from "../messageProduceHandle";
 
 const MESSAGE = "message";
 const NOOP = () => { };
