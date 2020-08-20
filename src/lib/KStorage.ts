@@ -1,8 +1,6 @@
-"use strict";
-
 import Promise from "bluebird";
 
-class KStorage {
+export class KStorage {
 	public options: any;
 	public state: any;
 

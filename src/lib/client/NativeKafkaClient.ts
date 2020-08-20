@@ -1,14 +1,12 @@
-"use strict";
-
 import uuid from "uuid";
 import { NConsumer, NProducer } from "sinek";
 import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:nativeclient");
-import KafkaClient from "./KafkaClient";
+import { KafkaClient } from "./KafkaClient";
 
 const NOOP = () => { };
 
-class NativeKafkaClient extends KafkaClient {
+export class NativeKafkaClient extends KafkaClient {
 	public topic: any;
 	public config: any;
 	public batchOptions: any;
@@ -287,5 +285,3 @@ class NativeKafkaClient extends KafkaClient {
 	  }
 	}
 }
-
-export default NativeKafkaClient;

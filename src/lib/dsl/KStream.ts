@@ -1,11 +1,9 @@
-"use strict";
-
 import Promise from "bluebird";
 import { async as createSubject } from "most-subject";
 import lodashClone from "lodash.clone";
 import lodashCloneDeep from "lodash.clonedeep";
-import StreamDSL from "./StreamDSL";
-import messageProduceHandle from "../messageProduceHandle";
+import { StreamDSL } from "./StreamDSL";
+import { messageProduceHandle } from "../messageProduceHandle";
 import { Window } from "../actions";
 
 const NOOP = () => { };
@@ -13,7 +11,7 @@ const NOOP = () => { };
 /**
  * change-log representation of a stream
  */
-class KStream extends StreamDSL {
+export class KStream extends StreamDSL {
   public started: any;
 
   /**
@@ -370,5 +368,3 @@ class KStream extends StreamDSL {
     return this.storage.close();
   }
 }
-
-export default KStream;

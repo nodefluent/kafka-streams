@@ -1,14 +1,12 @@
-"use strict";
-
 import uuid from "uuid";
 import { Kafka, PartitionDrainer, Drainer, Publisher } from "sinek";
 import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:jsclient");
-import KafkaClient from "./KafkaClient";
+import { KafkaClient } from "./KafkaClient";
 
 const NOOP = () => { };
 
-class JSKafkaClient extends KafkaClient {
+export class JSKafkaClient extends KafkaClient {
 	public topic: any;
 	public config: any;
 	public kafkaConsumerClient: any;
@@ -331,5 +329,3 @@ class JSKafkaClient extends KafkaClient {
 	  }
 	}
 }
-
-export default JSKafkaClient;

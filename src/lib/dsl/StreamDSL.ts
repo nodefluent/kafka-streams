@@ -1,5 +1,3 @@
-"use strict";
-
 import { EventEmitter } from "events";
 import * as most from "most";
 import Promise from "bluebird";
@@ -7,8 +5,8 @@ import uuid from "uuid";
 import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:streamdsl");
 import KStorage from "../KStorage";
-import KafkaClient from "../client/KafkaClient";
-import messageProduceHandle from "../messageProduceHandle";
+import { KafkaClient } from "../client/KafkaClient";
+import { messageProduceHandle } from "../messageProduceHandle";
 import PRODUCE_TYPES from "../produceTypes";
 import { KeyCount, Sum, Min, Max } from "../actions";
 
@@ -19,7 +17,7 @@ const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
 /**
  * Stream base class
  */
-class StreamDSL {
+export class StreamDSL {
   public noTopicProvided: any;
   public topicName: any;
   public kafka: any;
@@ -1142,5 +1140,3 @@ class StreamDSL {
     });
   }
 }
-
-export default StreamDSL;

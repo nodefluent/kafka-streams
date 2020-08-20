@@ -1,16 +1,13 @@
-"use strict";
-
 import { EventEmitter } from "events";
-import KafkaFactory from "./KafkaFactory";
-import KStream from "./dsl/KStream";
-import KTable from "./dsl/KTable";
-import KStorage from "./KStorage";
+import { KafkaFactory } from "./KafkaFactory";
+import { KStream, KTable } from "./dsl";
+import { KStorage } from "./KStorage";
 
 /**
  * Stream object factory
  * inhabits EventEmitter(events)
  */
-class KafkaStreams extends EventEmitter {
+export class KafkaStreams extends EventEmitter {
   public config: any;
   public factory: any;
   public storageClass: any;
