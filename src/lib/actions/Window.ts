@@ -1,5 +1,3 @@
-"use strict";
-
 import { async as createSubject } from "most-subject";
 
 /**

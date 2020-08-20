@@ -1,10 +1,8 @@
-"use strict";
-
 /**
  * static class, that helps with merging
  * KStorages (e.g. joining two KTables)
  */
-class StorageMerger {
+export class StorageMerger {
 
   /**
      * merges the content of multiple storages
@@ -31,5 +29,3 @@ class StorageMerger {
   }
 
 }
-
-export default StorageMerger;

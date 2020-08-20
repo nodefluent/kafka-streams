@@ -1,11 +1,8 @@
-"use strict";
-
 import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:kafkafactory");
-import JSKafkaClient from "./client/JSKafkaClient";
-import NativeKafkaClient from "./client/NativeKafkaClient";
+import { JSKafkaClient, NativeKafkaClient } from "./client";
 
-class KafkaFactory {
+export class KafkaFactory {
 	public config: any;
 	public batchOptions: any;
 
@@ -40,5 +37,3 @@ class KafkaFactory {
 	  return new JSKafkaClient(topic, this.config);
 	}
 }
-
-export default KafkaFactory;

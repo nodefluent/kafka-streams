@@ -3,10 +3,10 @@
 import { EventEmitter } from "events";
 import * as most from "most";
 import Promise from "bluebird";
-import StreamDSL from "./StreamDSL";
+import { StreamDSL } from "./StreamDSL";
 import { LastState } from "../actions";
-import StorageMerger from "../StorageMerger";
-import messageProduceHandle from "../messageProduceHandle";
+import { StorageMerger } from "../StorageMerger";
+import { messageProduceHandle } from "../messageProduceHandle";
 
 const MESSAGE = "message";
 const NOOP = () => { };
@@ -14,7 +14,7 @@ const NOOP = () => { };
 /**
  * table representation of a stream
  */
-class KTable extends StreamDSL {
+export class KTable extends StreamDSL {
   public _tee: any;
   public started: any;
   public finalised: any;
@@ -366,5 +366,3 @@ class KTable extends StreamDSL {
     return this.storage.close();
   }
 }
-
-export default KTable;
