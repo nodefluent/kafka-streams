@@ -1,4 +1,4 @@
-import Promise from "bluebird";
+import { Promise } from "bluebird";
 
 /**
  * used to sum up key values in a stream

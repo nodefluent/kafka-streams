@@ -1,6 +1,7 @@
 import debugFactory from "debug";
-const debug = debugFactory("kafka-streams:mph");
 import PRODUCE_TYPES from "./produceTypes";
+
+const debug = debugFactory("kafka-streams:mph");
 
 /**
  * returns true if the message is an object

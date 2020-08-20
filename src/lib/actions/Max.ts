@@ -1,4 +1,4 @@
-import Promise from "bluebird";
+import { Promise } from "bluebird";
 
 /**
  * used to grab the highest value of key values

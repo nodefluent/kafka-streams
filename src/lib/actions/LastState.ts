@@ -1,4 +1,4 @@
-import Promise from "bluebird";
+import { Promise } from "bluebird";
 
 /**
  * used to hold the last state of key values
