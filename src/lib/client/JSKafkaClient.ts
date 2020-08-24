@@ -2,86 +2,77 @@ import uuid from "uuid";
 import { Kafka, PartitionDrainer, Drainer, Publisher } from "sinek";
 import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:jsclient");
-import { KafkaClient } from "./KafkaClient";
+import { KafkaClient, KafkaClientStats, KafkaReadyCallback, KafkaErrorCallback } from "./KafkaClient";
+import { EventEmitter } from "events";
+import { KafkaStreamsConfig, CombinedKafkaConfig } from "../../interfaces";
 
 const NOOP = () => { };
 
 export class JSKafkaClient extends KafkaClient {
-	public topic: any;
-	public config: any;
-	public kafkaConsumerClient: any;
-	public kafkaProducerClient: any;
-	public consumer: any;
-	public producer: any;
-	public produceTopic: any;
-	public producePartitionCount: any;
-	public _produceHandler: any;
-	public zkConStr: any;
-	public kafkaHost: any;
-	public logger: any;
-	public groupId: any;
-	public workerPerPartition: any;
-	public options: any;
-	public clientName: any;
+	public topic: string[] | string;
+	public config: CombinedKafkaConfig;
+	public kafkaConsumerClient: any = null;
+	public kafkaProducerClient: Kafka = null;
+	public consumer: any = null;
+	public producer: Publisher = null;
+	public produceTopic: string = null;
+	public producePartitionCount = 1;
+	
+	private _produceHandler: any = null;
 
 	/**
-     * KafkaClient (EventEmitter)
-     * that wraps an internal instance of a
-     * Sinek kafka- Consumer and/or Producer
-     * @param topic
-     * @param config
-     */
-	constructor(topic, config) {
+	 * KafkaClient (EventEmitter)
+	 * that wraps an internal instance of a
+	 * Sinek kafka- Consumer and/or Producer
+	 * @param topic
+	 * @param config
+	 */
+	constructor(topic: string, config: CombinedKafkaConfig) {
 	  super();
 
 	  this.topic = topic;
 	  this.config = config;
-
-	  this.kafkaConsumerClient = null;
-	  this.kafkaProducerClient = null;
-
-	  this.consumer = null;
-	  this.producer = null;
-
-	  this.produceTopic = null;
-	  this.producePartitionCount = 1;
-	  this._produceHandler = null;
 	}
 
 	/**
-     * sets a handler for produce messages
-     * (emits whenever kafka messages are produced/delivered)
-     * @param handler {EventEmitter}
-     */
-	setProduceHandler(handler) {
+	 * sets a handler for produce messages
+	 * (emits whenever kafka messages are produced/delivered)
+	 * @param handler {EventEmitter}
+	 */
+	setProduceHandler(handler: EventEmitter): void {
 	  this._produceHandler = handler;
 	}
 
 	/**
-     * returns the produce handler instance if present
-     * @returns {null|EventEmitter}
-     */
-	getProduceHandler() {
+	 * returns the produce handler instance if present
+	 * @returns {null|EventEmitter}
+	 */
+	getProduceHandler(): null | EventEmitter {
 	  return this._produceHandler;
 	}
 
 	/**
-     * overwrites the topic
-     * @param topics {Array<string>}
-     */
-	overwriteTopics(topics) {
+	 * overwrites the topic
+	 * @param topics {Array<string>}
+	 */
+	overwriteTopics(topics: string[]): void {
 	  this.topic = topics;
 	}
 
 	/**
-     * starts a new kafka consumer (using sinek's partition drainer)
-     * will await a kafka-producer-ready-event if started withProducer=true
-     * @param readyCallback
-     * @param kafkaErrorCallback
-     * @param withProducer
-     * @param withBackPressure
-     */
-	start(readyCallback = null, kafkaErrorCallback = null, withProducer = false, withBackPressure = false) {
+	 * starts a new kafka consumer (using sinek's partition drainer)
+	 * will await a kafka-producer-ready-event if started withProducer=true
+	 * @param readyCallback
+	 * @param kafkaErrorCallback
+	 * @param withProducer
+	 * @param withBackPressure
+	 */
+	start(
+	  readyCallback: KafkaReadyCallback = null,
+	  kafkaErrorCallback: KafkaErrorCallback = null,
+	  withProducer = false,
+	  withBackPressure = false
+	): void {
 
 	  //might be possible if the parent stream is build to produce messages only
 	  if (!this.topic || !this.topic.length) {
@@ -150,16 +141,24 @@ export class JSKafkaClient extends KafkaClient {
 	}
 
 	/**
-     * starts a new kafka-producer using sinek's publisher
-     * will fire kafka-producer-ready-event
-     * requires a topic's partition count during initialisation
-     * @param produceTopic
-     * @param partitions
-     * @param readyCallback
-     * @param kafkaErrorCallback
-     * @param outputKafkaConfig
-     */
-	setupProducer(produceTopic, partitions = 1, readyCallback = null, kafkaErrorCallback = null, outputKafkaConfig = null) {
+	 * starts a new kafka-producer using sinek's publisher
+	 * will fire kafka-producer-ready-event
+	 * requires a topic's partition count during initialisation
+	 * @param {string} produceTopic
+	 * 	 The topic to produce too.
+	 * @param {number} partitions
+	 * 	 The partitions for the topic.
+	 * @param {callback|null} readyCallback
+	 * @param {callback|null} kafkaErrorCallback
+	 * @param {KafkaStreamsConfig} outputKafkaConfig
+	 */
+	setupProducer(
+	  produceTopic: string,
+	  partitions = 1,
+	  readyCallback: KafkaReadyCallback = null,
+	  kafkaErrorCallback: KafkaErrorCallback = null,
+	  outputKafkaConfig: KafkaStreamsConfig
+	): void {
 
 	  this.produceTopic = produceTopic || this.produceTopic;
 	  this.producePartitionCount = partitions;
@@ -200,14 +199,14 @@ export class JSKafkaClient extends KafkaClient {
 	}
 
 	/**
-     * simply produces a message or multiple on a topic
-     * if producerPartitionCount is > 1 it will randomize
-     * the target partition for the message/s
-     * @param topic
-     * @param message
-     * @returns {*}
-     */
-	send(topic, message) {
+	 * simply produces a message or multiple on a topic
+	 * if producerPartitionCount is > 1 it will randomize
+	 * the target partition for the message/s
+	 * @param topic
+	 * @param message
+	 * @returns {*}
+	 */
+	send(topic: string, message: any[]): Promise<void> {
 
 	  if (!this.producer) {
 	    return Promise.reject("producer is not yet setup.");
@@ -229,16 +228,21 @@ export class JSKafkaClient extends KafkaClient {
 	}
 
 	/**
-     * buffers a keyed message to be send
-     * a keyed message needs an identifier, if none is provided
-     * an uuid.v4() will be generated
-     * @param topic
-     * @param identifier
-     * @param payload
-     * @param compressionType
-     * @returns {*}
-     */
-	buffer(topic, identifier, payload, compressionType = 0) {
+	 * buffers a keyed message to be send
+	 * a keyed message needs an identifier, if none is provided
+	 * an uuid.v4() will be generated
+	 * @param topic
+	 * @param identifier
+	 * @param payload
+	 * @param compressionType
+	 * @returns {*}
+	 */
+	buffer(
+	  topic: string,
+	  identifier: string,
+	  payload: Buffer | string,
+	  compressionType = 0
+	): Promise<void> {
 
 	  if (!this.producer) {
 	    return Promise.reject("producer is not yet setup.");
@@ -252,17 +256,23 @@ export class JSKafkaClient extends KafkaClient {
 	}
 
 	/**
-     * buffers a keyed message in (a base json format) to be send
-     * a keyed message needs an identifier, if none is provided
-     * an uuid.4() will be generated
-     * @param topic
-     * @param identifier
-     * @param payload
-     * @param version
-     * @param compressionType
-     * @returns {*}
-     */
-	bufferFormat(topic, identifier, payload, version = 1, compressionType = 0) {
+	 * buffers a keyed message in (a base json format) to be send
+	 * a keyed message needs an identifier, if none is provided
+	 * an uuid.4() will be generated
+	 * @param topic
+	 * @param identifier
+	 * @param payload
+	 * @param version
+	 * @param compressionType
+	 * @returns {*}
+	 */
+	bufferFormat(
+	  topic: string,
+	  identifier: string,
+	  payload: Buffer | string,
+	  version = 1,
+	  compressionType = 0
+	): Promise<void> {
 
 	  if (!this.producer) {
 	    return Promise.reject("producer is not yet setup.");
@@ -275,7 +285,10 @@ export class JSKafkaClient extends KafkaClient {
 	  return this.producer.bufferPublishMessage(topic, identifier, payload, version, compressionType);
 	}
 
-	pause() {
+	/**
+	 * Pauses the client.
+	 */
+	pause(): void {
 
 	  if (this.consumer) {
 	    this.consumer.pause();
@@ -285,8 +298,10 @@ export class JSKafkaClient extends KafkaClient {
 	    this.producer.pause();
 	  }
 	}
-
-	resume() {
+	/**
+	 * Resumes the client.
+	 */
+	resume(): void {
 
 	  if (this.consumer) {
 	    this.consumer.resume();
@@ -297,7 +312,10 @@ export class JSKafkaClient extends KafkaClient {
 	  }
 	}
 
-	getStats() {
+	/**
+	 * Gets stats for the client.
+	 */
+	getStats(): KafkaClientStats {
 	  return {
 	    inTopic: this.topic ? this.topic : null,
 	    consumer: this.consumer ? this.consumer.getStats() : null,
@@ -307,7 +325,12 @@ export class JSKafkaClient extends KafkaClient {
 	  };
 	}
 
-	close(commit = false) {
+	/**
+	 * Close the client.
+	 * 
+	 * @param {boolean} commit 
+	 */
+	close(commit = false): void {
 
 	  if (this.consumer) {
 	    this.consumer.close(commit);
@@ -320,9 +343,11 @@ export class JSKafkaClient extends KafkaClient {
 	  }
 	}
 
-	//required by KTable
-	closeConsumer() {
-
+	/**
+	 * Closes the consumer.
+	 */
+	closeConsumer(): void {
+	  //required by KTable
 	  if (this.consumer) {
 	    this.consumer.close();
 	    this.consumer = null;

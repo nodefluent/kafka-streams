@@ -2,31 +2,38 @@ import { Promise } from "bluebird";
 import { async as createSubject } from "most-subject";
 import * as lodashClone from "lodash.clone";
 import * as lodashCloneDeep from "lodash.clonedeep";
-import { StreamDSL } from "./StreamDSL";
+import { StreamDSL, StreamDSLConfig } from "./StreamDSL";
 import { messageProduceHandle } from "../messageProduceHandle";
 import { Window } from "../actions";
+import { KStorage } from "../KStorage";
+import { KafkaClient, KafkaReadyCallback, KafkaErrorCallback } from "../client";
 
 const NOOP = () => { };
+
+
+export type KStreamWindow = {
+ window: any;
+ abort: () => void;
+ stream: any;
+}
 
 /**
  * change-log representation of a stream
  */
 export class KStream extends StreamDSL {
-  public started: any;
+  public started = false;
 
   /**
-     * creates a changelog representation of a stream
-     * join operations of kstream instances are synchronous
-     * and return new instances immediately
-     * @param {string} topicName
-     * @param {KStorage} storage
-     * @param {KafkaClient} kafka
-     * @param {boolean} isClone
-     */
-  constructor(topicName, storage = null, kafka = null, isClone = false) {
+   * creates a changelog representation of a stream
+   * join operations of kstream instances are synchronous
+   * and return new instances immediately
+   * @param {string} topicName
+   * @param {KStorage} storage
+   * @param {KafkaClient} kafka
+   * @param {boolean} isClone
+   */
+  constructor(topicName: string, storage: KStorage = null, kafka: KafkaClient = null, isClone = false) {
     super(topicName, storage, kafka, isClone);
-
-    this.started = false;
 
     //readability
     if (isClone) {
@@ -44,7 +51,12 @@ export class KStream extends StreamDSL {
    * @param {boolean} withBackPressure
    * @param {Object} outputKafkaConfig
    */
-  start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure = false, outputKafkaConfig = null) {
+  start(
+    kafkaReadyCallback: KafkaReadyCallback | StreamDSLConfig = null,
+    kafkaErrorCallback: KafkaErrorCallback = null,
+    withBackPressure = false,
+    outputKafkaConfig = null
+  ): Promise<void> {
 
     if (kafkaReadyCallback && typeof kafkaReadyCallback === "object" && arguments.length < 2) {
       return new Promise((resolve, reject) => {
@@ -58,10 +70,15 @@ export class KStream extends StreamDSL {
       });
     }
 
-    return this._start(kafkaReadyCallback, kafkaErrorCallback, withBackPressure, outputKafkaConfig);
+    return this._start(kafkaReadyCallback as KafkaReadyCallback, kafkaErrorCallback, withBackPressure, outputKafkaConfig);
   }
 
-  _start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure = false, outputKafkaConfig = null) {
+  _start(
+    kafkaReadyCallback: KafkaReadyCallback = null,
+    kafkaErrorCallback: KafkaErrorCallback = null,
+    withBackPressure = false,
+    outputKafkaConfig = null
+  ): void {
 
     if (this.started) {
       throw new Error("this KStream is already started.");
@@ -126,15 +143,15 @@ export class KStream extends StreamDSL {
   }
 
   /**
-     * Emits an output when both input sources have records with the same key.
-     * s1$:{object} + s2$:{object} -> j$:{left: s1$object, right: s2$object}
-     * @param {StreamDSL} stream
-     * @param {string} key
-     * @param {boolean} windowed
-     * @param {function} combine
-     * @returns {KStream}
-     */
-  innerJoin(stream, key = "key", windowed = false, combine = null) {
+   * Emits an output when both input sources have records with the same key.
+   * s1$:{object} + s2$:{object} -> j$:{left: s1$object, right: s2$object}
+   * @param {StreamDSL} stream
+   * @param {string} key
+   * @param {boolean} windowed
+   * @param {function} combine
+   * @returns {KStream}
+   */
+  innerJoin(stream: StreamDSL, key = "key", windowed = false, combine = null): KStream {
 
     let join$ = null;
     if (!windowed) {
@@ -146,7 +163,7 @@ export class KStream extends StreamDSL {
     return this._cloneWith(join$);
   }
 
-  _innerJoinNoWindow(stream, key, combine) {
+  _innerJoinNoWindow(stream: StreamDSL, key: string, combine: () => void) {
 
     const existingKeyFilter = (event) => {
       return !!event && typeof event === "object" && typeof event[key] !== "undefined";
@@ -165,32 +182,32 @@ export class KStream extends StreamDSL {
   }
 
   /**
-     * Emits an output for each record in either input source.
-     * If only one source contains a key, the other is null
-     * @param {StreamDSL} stream
-     */
-  outerJoin(stream) {
+   * Emits an output for each record in either input source.
+   * If only one source contains a key, the other is null
+   * @param {StreamDSL} stream
+   */
+  outerJoin(stream: StreamDSL) {
     throw new Error("not implemented yet."); //TODO implement
   }
 
   /**
-     * Emits an output for each record in the left or primary input source.
-     * If the other source does not have a value for a given key, it is set to null
-     * @param {StreamDSL} stream
-     */
-  leftJoin(stream) {
+   * Emits an output for each record in the left or primary input source.
+   * If the other source does not have a value for a given key, it is set to null
+   * @param {StreamDSL} stream
+   */
+  leftJoin(stream: StreamDSL) {
     throw new Error("not implemented yet."); //TODO implement
   }
 
   /**
-     * Emits an output for each record in any of the streams.
-     * Acts as simple merge of both streams.
-     * can be used with KStream or KTable instances
-     * returns a NEW KStream instance
-     * @param {StreamDSL} stream
-     * @returns {KStream}
-     */
-  merge(stream) {
+   * Emits an output for each record in any of the streams.
+   * Acts as simple merge of both streams.
+   * can be used with KStream or KTable instances
+   * returns a NEW KStream instance
+   * @param {StreamDSL} stream
+   * @returns {KStream}
+   */
+  merge(stream: StreamDSL): KStream {
 
     if (!(stream instanceof StreamDSL)) {
       throw new Error("stream has to be an instance of KStream or KTable.");
@@ -220,25 +237,25 @@ export class KStream extends StreamDSL {
   }
 
   /**
-     * creates a new KStream instance from a given most.js
-     * stream; the consume topic will be empty and therefore
-     * no consumer will be build
-     * @param {Object} most.js stream
-     * @returns {KStream}
-     */
+   * creates a new KStream instance from a given most.js
+   * stream; the consume topic will be empty and therefore
+   * no consumer will be build
+   * @param {Object} most.js stream
+   * @returns {KStream}
+   */
   fromMost(stream$) {
     return this._cloneWith(stream$);
   }
 
   /**
-     * as only joins and window operations return new stream instances
-     * you might need a clone sometimes, which can be accomplished
-     * using this function
-     * @param {boolean} cloneEvents - if events in the stream should be cloned
-     * @param {boolean} cloneDeep - if events in the stream should be cloned deeply
-     * @returns {KStream}
-     */
-  clone(cloneEvents = false, cloneDeep = false) {
+   * as only joins and window operations return new stream instances
+   * you might need a clone sometimes, which can be accomplished
+   * using this function
+   * @param {boolean} cloneEvents - if events in the stream should be cloned
+   * @param {boolean} cloneDeep - if events in the stream should be cloned deeply
+   * @returns {KStream}
+   */
+  clone(cloneEvents = false, cloneDeep = false): KStream {
 
     let clone$ = this.stream$.multicast();
 
@@ -257,17 +274,17 @@ export class KStream extends StreamDSL {
   }
 
   /**
-     * Splits a stream into multiple branches based on cloning
-     * and filtering it depending on the passed predicates.
-     * [ (message) => message.key.startsWith("A"),
-     *   (message) => message.key.startsWith("B"),
-     *   (message) => true ]
-     * ---
-     * [ streamA, streamB, streamTrue ]
-     * @param {Array<Function>} preds
-     * @returns {Array<KStream>}
-     */
-  branch(preds = []) {
+   * Splits a stream into multiple branches based on cloning
+   * and filtering it depending on the passed predicates.
+   * [ (message) => message.key.startsWith("A"),
+   *   (message) => message.key.startsWith("B"),
+   *   (message) => true ]
+   * ---
+   * [ streamA, streamB, streamTrue ]
+   * @param {Array<Function>} preds
+   * @returns {Array<KStream>}
+   */
+  branch(preds = []): KStream[] {
 
     if (!Array.isArray(preds)) {
       throw new Error("branch predicates must be an array.");
@@ -284,25 +301,31 @@ export class KStream extends StreamDSL {
   }
 
   /**
-     * builds a window'ed stream across all events of the current kstream
-     * when the first event with an exceeding "to" is received (or the abort()
-     * callback is called) the window closes and emits its "collected" values to the
-     * returned kstream
-     * from and to must be unix epoch timestamps in milliseconds (Date.now())
-     * etl can be a function that should return the timestamp (event time) of
-     * from within the message e.g. m -> m.payload.createdAt
-     * if etl is not given, a timestamp of receiving will be used (processing time)
-     * for each event
-     * encapsulated refers to the result messages (defaults to true, they will be
-     * encapsulated in an object: {time, value}
-     * @param {number} from
-     * @param {number} to
-     * @param {function} etl
-     * @param {boolean} encapsulated - if event should stay encapsulated {time, value}
-     * @param {boolean} collect - if events should be collected first before publishing to result stream
-     * @returns {{window: *, abort: abort, stream: *}}
-     */
-  window(from, to, etl = null, encapsulated = true, collect = true) {
+   * builds a window'ed stream across all events of the current kstream
+   * when the first event with an exceeding "to" is received (or the abort()
+   * callback is called) the window closes and emits its "collected" values to the
+   * returned kstream
+   * from and to must be unix epoch timestamps in milliseconds (Date.now())
+   * etl can be a function that should return the timestamp (event time) of
+   * from within the message e.g. m -> m.payload.createdAt
+   * if etl is not given, a timestamp of receiving will be used (processing time)
+   * for each event
+   * encapsulated refers to the result messages (defaults to true, they will be
+   * encapsulated in an object: {time, value}
+   * @param {number} from
+   * @param {number} to
+   * @param {function} etl
+   * @param {boolean} encapsulated - if event should stay encapsulated {time, value}
+   * @param {boolean} collect - if events should be collected first before publishing to result stream
+   * @returns {{window: *, abort: abort, stream: *}}
+   */
+  window(
+    from: number,
+    to: number,
+    etl: (element) => void = null,
+    encapsulated = true,
+    collect = true
+  ): KStreamWindow {
 
     if (typeof from !== "number" || typeof to !== "number") {
       throw new Error("from & to should be unix epoch ms times.");
@@ -356,12 +379,12 @@ export class KStream extends StreamDSL {
   }
 
   /**
-     * closes the internal stream
-     * and all kafka open connections
-     * as well as KStorage connections
-     * @returns {Promise.<boolean>}
-     */
-  close() {
+   * closes the internal stream
+   * and all kafka open connections
+   * as well as KStorage connections
+   * @returns {Promise.<boolean>}
+   */
+  close(): Promise<boolean> {
     this.stream$ = this.stream$.take(0);
     this.stream$ = null;
     this.kafka.close();

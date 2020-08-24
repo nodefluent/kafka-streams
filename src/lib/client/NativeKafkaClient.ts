@@ -2,19 +2,21 @@ import uuid from "uuid";
 import { NConsumer, NProducer } from "sinek";
 import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:nativeclient");
-import { KafkaClient } from "./KafkaClient";
+import { KafkaClient, KafkaClientStats, KafkaReadyCallback, KafkaErrorCallback } from "./KafkaClient";
+import { KafkaStreamsConfig } from "../../interfaces";
+import { EventEmitter } from "events";
 
 const NOOP = () => { };
 
 export class NativeKafkaClient extends KafkaClient {
-	public topic: any;
-	public config: any;
+	public topic: string[] | string;
+	public config: KafkaStreamsConfig;
 	public batchOptions: any;
-	public consumer: any;
-	public producer: any;
-	public produceTopic: any;
-	public producePartitionCount: any;
-	public _produceHandler: any;
+	public consumer: any = null;
+	public producer: any = null;
+	public produceTopic: any = null;
+	public producePartitionCount = 1;
+	public _produceHandler: any = null;
 
 	/**
      * NativeKafkaClient (EventEmitter)
@@ -24,60 +26,58 @@ export class NativeKafkaClient extends KafkaClient {
      * @param config
      * @param batchOptions - optional
      */
-	constructor(topic, config, batchOptions = undefined) {
+	constructor(topic: string | string[], config: KafkaStreamsConfig, batchOptions = undefined) {
 	  super();
 
 	  this.topic = topic;
 	  this.config = config;
 	  this.batchOptions = batchOptions;
-
-	  this.consumer = null;
-	  this.producer = null;
-
-	  this.produceTopic = null;
-	  this.producePartitionCount = 1;
-	  this._produceHandler = null;
 	}
 
 	/**
-     * sets a handler for produce messages
-     * (emits whenever kafka messages are produced/delivered)
-     * @param handler {EventEmitter}
-     */
-	setProduceHandler(handler) {
+	 * sets a handler for produce messages
+	 * (emits whenever kafka messages are produced/delivered)
+	 * @param handler {EventEmitter}
+	 */
+	setProduceHandler(handler: EventEmitter): void {
 	  this._produceHandler = handler;
 	}
 
 	/**
-     * returns the produce handler instance if present
-     * @returns {null|EventEmitter}
-     */
-	getProduceHandler() {
+	 * returns the produce handler instance if present
+	 * @returns {null|EventEmitter}
+	 */
+	getProduceHandler(): EventEmitter | null {
 	  return this._produceHandler;
 	}
 
 	/**
-     * overwrites the topic
-     * @param topics {Array<string>}
-     */
-	overwriteTopics(topics) {
+	 * overwrites the topic
+	 * @param topics {Array<string>}
+	 */
+	overwriteTopics(topics: string[]): void {
 	  this.topic = topics;
 	}
 
-	adjustDefaultPartitionCount(partitionCount = 1) {
+	adjustDefaultPartitionCount(partitionCount = 1): void {
 	  this.producePartitionCount = partitionCount;
 	  this.producer.defaultPartitionCount = partitionCount;
 	}
 
 	/**
-     * starts a new kafka consumer
-     * will await a kafka-producer-ready-event if started withProducer=true
-     * @param readyCallback
-     * @param kafkaErrorCallback
-     * @param withProducer
-     * @param withBackPressure
-     */
-	start(readyCallback = null, kafkaErrorCallback = null, withProducer = false, withBackPressure = false) {
+	 * starts a new kafka consumer
+	 * will await a kafka-producer-ready-event if started withProducer=true
+	 * @param readyCallback
+	 * @param kafkaErrorCallback
+	 * @param withProducer
+	 * @param withBackPressure
+	 */
+	start(
+	  readyCallback: KafkaReadyCallback = null,
+	  kafkaErrorCallback: KafkaErrorCallback = null,
+	  withProducer = false,
+	  withBackPressure = false
+	): Promise<void> {
 
 	  //might be possible if the parent stream is build to produce messages only
 	  if (!this.topic || !this.topic.length) {
@@ -129,16 +129,22 @@ export class NativeKafkaClient extends KafkaClient {
 	}
 
 	/**
-     * starts a new kafka-producer
-     * will fire kafka-producer-ready-event
-     * requires a topic's partition count during initialisation
-     * @param produceTopic
-     * @param partitions
-     * @param readyCallback
-     * @param kafkaErrorCallback
-     * @param outputKafkaConfig
-     */
-	setupProducer(produceTopic, partitions = 1, readyCallback = null, kafkaErrorCallback = null, outputKafkaConfig = null) {
+	 * starts a new kafka-producer
+	 * will fire kafka-producer-ready-event
+	 * requires a topic's partition count during initialisation
+	 * @param produceTopic
+	 * @param partitions
+	 * @param readyCallback
+	 * @param kafkaErrorCallback
+	 * @param outputKafkaConfig
+	 */
+	setupProducer(
+	  produceTopic: string,
+	  partitions = 1,
+	  readyCallback: KafkaReadyCallback = null,
+	  kafkaErrorCallback: KafkaErrorCallback = null,
+	  outputKafkaConfig: KafkaStreamsConfig = null
+	): void {
 
 	  this.produceTopic = produceTopic || this.produceTopic;
 	  this.producePartitionCount = partitions;
@@ -169,18 +175,25 @@ export class NativeKafkaClient extends KafkaClient {
 	//async send(topicName, message, _partition = null, _key = null, _partitionKey = null, _opaqueKey = null)
 
 	/**
-     * simply produces a message or multiple on a topic
-     * if producerPartitionCount is > 1 it will randomize
-     * the target partition for the message/s
-     * @param topicName
-     * @param message
-     * @param partition - optional
-     * @param key - optional
-     * @param partitionKey - optional
-     * @param opaqueKey - optional
-     * @returns {Promise<void>}
-     */
-	send(topicName, message, partition = null, key = null, partitionKey = null, opaqueKey = null) {
+	 * simply produces a message or multiple on a topic
+	 * if producerPartitionCount is > 1 it will randomize
+	 * the target partition for the message/s
+	 * @param topicName
+	 * @param message
+	 * @param partition - optional
+	 * @param key - optional
+	 * @param partitionKey - optional
+	 * @param opaqueKey - optional
+	 * @returns {Promise<void>}
+	 */
+	send(
+	  topicName: string,
+	  message: Buffer | string | null,
+	  partition: number = null,
+	  key: string = null,
+	  partitionKey: number = null,
+	  opaqueKey = null
+	): Promise<void> {
 
 	  if (!this.producer) {
 	    return Promise.reject("producer is not yet setup.");
@@ -190,19 +203,27 @@ export class NativeKafkaClient extends KafkaClient {
 	}
 
 	/**
-     * buffers a keyed message to be send
-     * a keyed message needs an identifier, if none is provided
-     * an uuid.v4() will be generated
-     * @param topic
-     * @param identifier
-     * @param payload
-     * @param _ - optional
-     * @param partition - optional
-     * @param version - optional
-     * @param partitionKey - optional
-     * @returns {Promise<void>}
-     */
-	buffer(topic, identifier, payload, _ = null, partition = null, version = null, partitionKey = null) {
+	 * buffers a keyed message to be send
+	 * a keyed message needs an identifier, if none is provided
+	 * an uuid.v4() will be generated
+	 * @param topic
+	 * @param identifier
+	 * @param payload
+	 * @param _ - optional
+	 * @param partition - optional
+	 * @param version - optional
+	 * @param partitionKey - optional
+	 * @returns {Promise<void>}
+	 */
+	buffer(
+	  topic: string,
+	  identifier: string,
+	  payload: Buffer | string | null,
+	  _ = null,
+	  partition: number = null,
+	  version: number = null,
+	  partitionKey = null
+	 ): Promise<void> {
 
 	  if (!this.producer) {
 	    return Promise.reject("producer is not yet setup.");
@@ -212,19 +233,27 @@ export class NativeKafkaClient extends KafkaClient {
 	}
 
 	/**
-     * buffers a keyed message in (a base json format) to be send
-     * a keyed message needs an identifier, if none is provided
-     * an uuid.4() will be generated
-     * @param topic
-     * @param identifier
-     * @param payload
-     * @param version - optional
-     * @param _ - optional
-     * @param partitionKey - optional
-     * @param partition - optional
-     * @returns {Promise<void>}
-     */
-	bufferFormat(topic, identifier, payload, version = 1, _ = null, partitionKey = null, partition = null) {
+	 * buffers a keyed message in (a base json format) to be send
+	 * a keyed message needs an identifier, if none is provided
+	 * an uuid.4() will be generated
+	 * @param topic
+	 * @param identifier
+	 * @param payload
+	 * @param version - optional
+	 * @param _ - optional
+	 * @param partitionKey - optional
+	 * @param partition - optional
+	 * @returns {Promise<void>}
+	 */
+	bufferFormat(
+	  topic: string,
+	  identifier: unknown,
+	  payload: Buffer | string | null,
+	  version = 1,
+	  _ = null,
+	  partitionKey = null,
+	  partition = null
+	): Promise<void> {
 
 	  if (!this.producer) {
 	    return Promise.reject("producer is not yet setup.");
@@ -237,25 +266,21 @@ export class NativeKafkaClient extends KafkaClient {
 	  return this.producer.bufferFormatPublish(topic, identifier, payload, version, undefined, partitionKey, partition);
 	}
 
-	pause() {
-
+	pause(): void {
 	  //no consumer pause
-
 	  if (this.producer) {
 	    this.producer.pause();
 	  }
 	}
 
-	resume() {
-
+	resume(): void {
 	  //no consumer resume
-
 	  if (this.producer) {
 	    this.producer.resume();
 	  }
 	}
 
-	getStats() {
+	getStats(): KafkaClientStats {
 	  return {
 	    inTopic: this.topic ? this.topic : null,
 	    consumer: this.consumer ? this.consumer.getStats() : null,
@@ -265,7 +290,7 @@ export class NativeKafkaClient extends KafkaClient {
 	  };
 	}
 
-	close(commit = false) {
+	close(commit = false): void {
 
 	  if (this.consumer) {
 	    this.consumer.close(commit);
@@ -277,8 +302,7 @@ export class NativeKafkaClient extends KafkaClient {
 	}
 
 	//required by KTable
-	closeConsumer(commit = false) {
-
+	closeConsumer(commit = false): void {
 	  if (this.consumer) {
 	    this.consumer.close(commit);
 	    this.consumer = null;
