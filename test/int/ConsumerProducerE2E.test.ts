@@ -18,7 +18,7 @@ const keyValueMapperEtl = (message) => {
 
 describe("E2E INT", () => {
 
-  let kafkaStreams = null;
+  let kafkaStreams: KafkaStreams = null;
 
   const topic = "my-input-topic";
   const outputTopic = "my-output-topic";
@@ -36,6 +36,9 @@ describe("E2E INT", () => {
 
   before(() => {
     kafkaStreams = new KafkaStreams(config);
+    kafkaStreams.on("error", (error) => {
+      console.log("Error occured:", error.message);
+    });
   });
 
   after(async () => {
@@ -54,12 +57,13 @@ describe("E2E INT", () => {
       if (count === messages.length) {
         setTimeout(done, 250);
       }
-    });
-
+    }).on("kafka-producer-ready", message => console.log(message)).on("message", message => console.log('we have message', message));
+    
     stream.start().then(() => {
       console.log("started");
       stream.writeToStream(messages);
     }).catch((error) => {
+      console.log(error);
       done(error);
     });
   });

@@ -10,7 +10,6 @@ import { KafkaClient, KafkaReadyCallback, KafkaErrorCallback } from "../client";
 
 const NOOP = () => { };
 
-
 export type KStreamWindow = {
  window: any;
  abort: () => void;

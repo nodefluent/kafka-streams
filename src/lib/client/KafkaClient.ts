@@ -13,6 +13,8 @@ export type KafkaErrorCallback = (e: Error) => void | null;
 
 export abstract class KafkaClient extends EventEmitter {
 
+  abstract topic: string[] | string;
+
   static _getRandomIntInclusive(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -38,7 +40,7 @@ export abstract class KafkaClient extends EventEmitter {
   abstract bufferFormat(
     topic: string,
     identifier: string,
-    payload: Buffer | string | null,
+    payload: Record<string, unknown>,
     version: number,
     compressionType: number
   ): Promise<void>;

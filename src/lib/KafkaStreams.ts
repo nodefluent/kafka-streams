@@ -15,7 +15,7 @@ export class KafkaStreams extends EventEmitter {
   public factory: KafkaFactory;
   public storageClass: typeof KStorage;
   public storageOptions: any;
-  public kafkaClients: KafkaClient[];
+  public kafkaClients: KafkaClient[] = [];
   public storages: KStorage[] = [];
 
   /**
@@ -23,12 +23,12 @@ export class KafkaStreams extends EventEmitter {
    * pre-build KStream and KTable instances
    * injected with a KafkaClient instance
    * and with a KStorage instance
-   * @param {object} config
+   * @param {object} config - KafkaStreamsConfig @todo - update this from sinek.
    * @param {KStorage} storageClass
    * @param {object} storageOptions
    * @param {boolean} disableStorageTest
    */
-  constructor(config: KafkaStreamsConfig, storageClass: new () => KStorage = null, storageOptions = {}, disableStorageTest = false) {
+  constructor(config: any, storageClass: new () => KStorage = null, storageOptions = {}, disableStorageTest = false) {
     super();
 
     this.config = config;
@@ -79,7 +79,7 @@ export class KafkaStreams extends EventEmitter {
    * @param storage
    * @returns {KStream}
    */
-  getKStream(topic: string, storage: KStorage | null = null): KStream {
+  getKStream(topic?: string, storage: KStorage | null = null): KStream {
 
     const kstream = new KStream(topic,
       storage || this.getStorage(),

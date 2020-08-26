@@ -17,9 +17,7 @@ const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
 
 export type StreamDSLConfig = {
   withBackPressure: boolean;
-  config: {
-    outputKafkaConfig?: KafkaStreamsConfig 
-  }
+  outputKafkaConfig?: KafkaStreamsConfig
 }
 
 /**
@@ -28,7 +26,7 @@ export type StreamDSLConfig = {
 export class StreamDSL {
   public noTopicProvided: any;
   public topicName: any;
-  public kafka: any;
+  public kafka: KafkaClient;
   public storage: KStorage;
   public isClone: any;
   public _ee: any;
@@ -177,7 +175,7 @@ export class StreamDSL {
    * events: produced, delivered
    * @param handler {module:events.internal}
    */
-  setProduceHandler(handler) {
+  setProduceHandler(handler): void {
 
     if (!handler || !(handler instanceof EventEmitter)) {
       throw new Error("ProduceHandler must be an instance of EventEmitter (events).");
@@ -191,7 +189,7 @@ export class StreamDSL {
    * for this stream instance
    * @returns {module:events.internal}
    */
-  createAndSetProduceHandler() {
+  createAndSetProduceHandler(): EventEmitter {
     const ee = new EventEmitter();
     this.setProduceHandler(ee);
     return ee;

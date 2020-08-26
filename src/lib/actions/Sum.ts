@@ -21,7 +21,7 @@ export class Sum {
 	 * @param {string} [sumField=null]
 	 * 	The field to store the sum value in.
 	 */
-	constructor(storage: KStorage, key = "key", fieldName = "value", sumField: string = null) {
+	constructor(storage: KStorage, key = "key", fieldName = "value", sumField: string | boolean = null) {
 	  this.storage = storage;
 	  this.key = key;
 	  this.fieldName = fieldName;

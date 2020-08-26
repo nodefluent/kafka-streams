@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import * as most from "most";
 import { Promise } from "bluebird";
-import { StreamDSL } from "./StreamDSL";
+import { StreamDSL, StreamDSLConfig } from "./StreamDSL";
 import { LastState } from "../actions";
 import { StorageMerger } from "../StorageMerger";
 import { messageProduceHandle } from "../messageProduceHandle";
@@ -63,8 +63,8 @@ export class KTable extends StreamDSL {
      * @param {Object} outputKafkaConfig
      */
   start(
-    kafkaReadyCallback: KafkaReadyCallback = null,
-    kafkaErrorCallback: KafkaErrorCallback | Config = null,
+    kafkaReadyCallback: KafkaReadyCallback | StreamDSLConfig = null,
+    kafkaErrorCallback: KafkaErrorCallback = null,
     withBackPressure = false,
     outputKafkaConfig = null
   ): Promise<void> {

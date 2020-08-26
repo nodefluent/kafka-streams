@@ -1,20 +1,20 @@
 import uuid from "uuid";
-import { Kafka, PartitionDrainer, Drainer, Publisher } from "sinek";
+import { JSConsumer, JSProducer } from "sinek";
 import debugFactory from "debug";
 const debug = debugFactory("kafka-streams:jsclient");
 import { KafkaClient, KafkaClientStats, KafkaReadyCallback, KafkaErrorCallback } from "./KafkaClient";
 import { EventEmitter } from "events";
-import { KafkaStreamsConfig, CombinedKafkaConfig } from "../../interfaces";
+import { KafkaStreamsConfig } from "../../interfaces";
 
 const NOOP = () => { };
 
 export class JSKafkaClient extends KafkaClient {
 	public topic: string[] | string;
-	public config: CombinedKafkaConfig;
-	public kafkaConsumerClient: any = null;
-	public kafkaProducerClient: Kafka = null;
-	public consumer: any = null;
-	public producer: Publisher = null;
+	public config: any;
+	public kafkaConsumerClient: JSConsumer = null;
+	public kafkaProducerClient: JSProducer = null;
+	// public consumer: any = null;
+	// public producer: Publisher = null;
 	public produceTopic: string = null;
 	public producePartitionCount = 1;
 	
@@ -25,9 +25,9 @@ export class JSKafkaClient extends KafkaClient {
 	 * that wraps an internal instance of a
 	 * Sinek kafka- Consumer and/or Producer
 	 * @param topic
-	 * @param config
+	 * @param config // KafkaConsumerConfig
 	 */
-	constructor(topic: string, config: CombinedKafkaConfig) {
+	constructor(topic: string, config: any) {
 	  super();
 
 	  this.topic = topic;
@@ -79,23 +79,28 @@ export class JSKafkaClient extends KafkaClient {
 	    return;
 	  }
 
-	  const { zkConStr, kafkaHost, logger, groupId, workerPerPartition, options } = this.config;
+		const { kafkaHost, groupId, workerPerPartition, noptions } = this.config;
+		const { 
+      "metadata.broker.list": brokerList,
+    } = this.config.noptions;
 
 	  let conStr = null;
 
 	  if (typeof kafkaHost === "string") {
 	    conStr = kafkaHost;
-	  }
-
-	  if (typeof zkConStr === "string") {
-	    conStr = zkConStr;
-	  }
+		}
+		
+		if (typeof brokerList === "string") {
+			conStr = brokerList;
+		}
 
 	  if (conStr === null) {
 	    throw new Error("One of the following: zkConStr or kafkaHost must be defined.");
 	  }
 
-	  this.kafkaConsumerClient = new Kafka(conStr, logger, conStr === kafkaHost);
+	  this.kafkaConsumerClient = new JSConsumer(this.topic, this.config);
+
+	  // this.kafkaConsumerClient = new Kafka(conStr, logger, conStr === kafkaHost);
 
 	  this.kafkaConsumerClient.on("ready", () => {
 	    debug("consumer ready");
@@ -106,34 +111,34 @@ export class JSKafkaClient extends KafkaClient {
 	  });
 	  this.kafkaConsumerClient.on("error", kafkaErrorCallback || NOOP);
 
-	  this.kafkaConsumerClient.becomeConsumer(this.topic, groupId, options || {});
+	  // this.kafkaConsumerClient.becomeConsumer(this.topic, groupId, options || {});
 
-	  if (withBackPressure) {
-	    this.consumer = new PartitionDrainer(this.kafkaConsumerClient, workerPerPartition || 1, false, false);
-	  } else {
-	    this.consumer = new Drainer(this.kafkaConsumerClient, workerPerPartition, true, false, false);
-	  }
+	  // if (withBackPressure) {
+	  //   this.consumer = new PartitionDrainer(this.kafkaConsumerClient, workerPerPartition || 1, false, false);
+	  // } else {
+	  //   this.consumer = new Drainer(this.kafkaConsumerClient, workerPerPartition, true, false, false);
+	  // }
 
 	  //consumer has to wait for producer
-	  super.once("kafka-producer-ready", () => {
+	  // super.once("kafka-producer-ready", () => {
 
-	    if (withBackPressure) {
+	  //   if (withBackPressure) {
 
-	      if (this.topic.length > 1) {
-	        throw new Error("JS Client does not support multiple topics in backpressure mode.");
-	      }
+	  //     if (this.topic.length > 1) {
+	  //       throw new Error("JS Client does not support multiple topics in backpressure mode.");
+	  //     }
 
-	      this.consumer.drain(this.topic[0], (message, done) => {
-	        super.emit("message", message);
-	        done();
-	      }).catch(e => kafkaErrorCallback(e));
-	    } else {
-	      this.consumer.drain((message, done) => {
-	        super.emit("message", message);
-	        done();
-	      });
-	    }
-	  });
+	  //     this.consumer.drain(this.topic[0], (message, done) => {
+	  //       super.emit("message", message);
+	  //       done();
+	  //     }).catch(e => kafkaErrorCallback(e));
+	  //   } else {
+	  //     this.consumer.drain((message, done) => {
+	  //       super.emit("message", message);
+	  //       done();
+	  //     });
+	  //   }
+	  // });
 
 	  if (!withProducer) {
 	    super.emit("kafka-producer-ready", true);
@@ -162,17 +167,21 @@ export class JSKafkaClient extends KafkaClient {
 
 	  this.produceTopic = produceTopic || this.produceTopic;
 	  this.producePartitionCount = partitions;
-	  const { zkConStr, kafkaHost, logger, clientName, options } = (outputKafkaConfig || this.config);
+
+	  const { kafkaHost, logger, clientName, noptions } = (outputKafkaConfig || this.config);
+		const { 
+      "metadata.broker.list": brokerList,
+    } = this.config.noptions;
 
 	  let conStr = null;
 
 	  if (typeof kafkaHost === "string") {
 	    conStr = kafkaHost;
-	  }
-
-	  if (typeof zkConStr === "string") {
-	    conStr = zkConStr;
-	  }
+		}
+		
+		if (typeof brokerList === "string") {
+			conStr = brokerList;
+		}
 
 	  if (conStr === null) {
 	    throw new Error("One of the following: zkConStr or kafkaHost must be defined.");
@@ -180,7 +189,9 @@ export class JSKafkaClient extends KafkaClient {
 
 	  //might be possible if the parent stream is build to produce messages only
 	  if (!this.kafkaProducerClient) {
-	    this.kafkaProducerClient = new Kafka(conStr, logger, conStr === kafkaHost);
+
+		  this.kafkaProducerClient = new JSProducer(this.config);
+	    // this.kafkaProducerClient = new Kafka(conStr, logger, conStr === kafkaHost);
 
 	    //consumer is awaiting producer
 	    this.kafkaProducerClient.on("ready", () => {
@@ -194,8 +205,8 @@ export class JSKafkaClient extends KafkaClient {
 	    this.kafkaProducerClient.on("error", kafkaErrorCallback || NOOP);
 	  }
 
-	  this.kafkaProducerClient.becomeProducer([this.produceTopic], clientName, options);
-	  this.producer = new Publisher(this.kafkaProducerClient, partitions || 1, 0, 100);
+	  // this.kafkaProducerClient.becomeProducer([this.produceTopic], clientName, options);
+	  // this.producer = new Publisher(this.kafkaProducerClient, partitions || 1, 0, 100);
 	}
 
 	/**
@@ -208,7 +219,7 @@ export class JSKafkaClient extends KafkaClient {
 	 */
 	send(topic: string, message: any[]): Promise<void> {
 
-	  if (!this.producer) {
+	  if (!this.kafkaProducerClient) {
 	    return Promise.reject("producer is not yet setup.");
 	  }
 
@@ -219,11 +230,9 @@ export class JSKafkaClient extends KafkaClient {
 	    partition = KafkaClient._getRandomIntInclusive(0, this.producePartitionCount);
 	  }
 
-	  return this.producer.send(topic,
-	    Array.isArray(message) ? message : [message],
-	    null,
-	    partition,
-	    0
+	  return this.kafkaProducerClient.send(topic,
+	    Buffer.from(Array.isArray(message) ? message : [message]),
+	    partition
 	  );
 	}
 
@@ -240,11 +249,11 @@ export class JSKafkaClient extends KafkaClient {
 	buffer(
 	  topic: string,
 	  identifier: string,
-	  payload: Buffer | string,
+	  payload: Record<string, unknown>,
 	  compressionType = 0
 	): Promise<void> {
 
-	  if (!this.producer) {
+	  if (!this.kafkaProducerClient) {
 	    return Promise.reject("producer is not yet setup.");
 	  }
 
@@ -252,7 +261,7 @@ export class JSKafkaClient extends KafkaClient {
 	    identifier = uuid.v4();
 	  }
 
-	  return this.producer.appendBuffer(topic, identifier, payload, compressionType);
+	  return this.kafkaProducerClient.buffer(topic, identifier, payload, compressionType);
 	}
 
 	/**
@@ -269,12 +278,12 @@ export class JSKafkaClient extends KafkaClient {
 	bufferFormat(
 	  topic: string,
 	  identifier: string,
-	  payload: Buffer | string,
+	  payload: Record<string, unknown>,
 	  version = 1,
 	  compressionType = 0
 	): Promise<void> {
 
-	  if (!this.producer) {
+	  if (!this.kafkaProducerClient) {
 	    return Promise.reject("producer is not yet setup.");
 	  }
 
@@ -282,7 +291,7 @@ export class JSKafkaClient extends KafkaClient {
 	    identifier = uuid.v4();
 	  }
 
-	  return this.producer.bufferPublishMessage(topic, identifier, payload, version, compressionType);
+	  return this.kafkaProducerClient.bufferFormatPublish(topic, identifier, payload, version, compressionType);
 	}
 
 	/**
@@ -290,12 +299,12 @@ export class JSKafkaClient extends KafkaClient {
 	 */
 	pause(): void {
 
-	  if (this.consumer) {
-	    this.consumer.pause();
+	  if (this.kafkaConsumerClient) {
+		  this.kafkaConsumerClient.pause();
 	  }
 
-	  if (this.producer) {
-	    this.producer.pause();
+	  if (this.kafkaProducerClient) {
+	    this.kafkaProducerClient.pause();
 	  }
 	}
 	/**
@@ -303,12 +312,12 @@ export class JSKafkaClient extends KafkaClient {
 	 */
 	resume(): void {
 
-	  if (this.consumer) {
-	    this.consumer.resume();
+	  if (this.kafkaConsumerClient) {
+	    this.kafkaConsumerClient.resume();
 	  }
 
-	  if (this.producer) {
-	    this.producer.resume();
+	  if (this.kafkaProducerClient) {
+	    this.kafkaProducerClient.resume();
 	  }
 	}
 
@@ -318,10 +327,10 @@ export class JSKafkaClient extends KafkaClient {
 	getStats(): KafkaClientStats {
 	  return {
 	    inTopic: this.topic ? this.topic : null,
-	    consumer: this.consumer ? this.consumer.getStats() : null,
+	    consumer: this.kafkaConsumerClient ? this.kafkaConsumerClient.getStats() : null,
 
 	    outTopic: this.produceTopic ? this.produceTopic : null,
-	    producer: this.producer ? this.producer.getStats() : null
+	    producer: this.kafkaProducerClient ? this.kafkaProducerClient.getStats() : null
 	  };
 	}
 
@@ -332,14 +341,14 @@ export class JSKafkaClient extends KafkaClient {
 	 */
 	close(commit = false): void {
 
-	  if (this.consumer) {
-	    this.consumer.close(commit);
-	    this.consumer = null;
+	  if (this.kafkaConsumerClient) {
+	    this.kafkaConsumerClient.close();
+	    this.kafkaConsumerClient = null;
 	  }
 
-	  if (this.producer) {
-	    this.producer.close();
-	    this.producer = null;
+	  if (this.kafkaProducerClient) {
+	    this.kafkaProducerClient.close();
+	    this.kafkaProducerClient = null;
 	  }
 	}
 
@@ -348,9 +357,9 @@ export class JSKafkaClient extends KafkaClient {
 	 */
 	closeConsumer(): void {
 	  //required by KTable
-	  if (this.consumer) {
-	    this.consumer.close();
-	    this.consumer = null;
+	  if (this.kafkaConsumerClient) {
+	    this.kafkaConsumerClient.close();
+	    this.kafkaConsumerClient = null;
 	  }
 	}
 }
