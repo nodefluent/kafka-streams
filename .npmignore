@@ -1,4 +1,4 @@
-docs
+website/
 .idea
 coverage
 logs
@@ -8,3 +8,4 @@ kafka-setup
 .editorconfig
 .travis.yml
 .gitignore
+src
