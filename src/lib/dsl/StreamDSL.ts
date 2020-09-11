@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import * as most from "most";
+import { Observable, Subscriber as Observer, Subscription } from "most";
 import { Promise } from "bluebird";
 import { v4 as uuidv4 } from "uuid";
 import debugFactory from "debug";
@@ -9,7 +10,6 @@ import { KafkaClient } from "../client/KafkaClient";
 import { messageProduceHandle } from "../messageProduceHandle";
 import PRODUCE_TYPES from "../produceTypes";
 import { KeyCount, Sum, Min, Max } from "../actions";
-import { Observer } from "observable";
 
 const NOOP = () => { };
 const MESSAGE = "message";
@@ -18,7 +18,7 @@ const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
 /**
  * Stream base class
  */
-export class StreamDSL {
+export class StreamDSL implements Observable<any> {
   public noTopicProvided: any;
   public topicName: any;
   public kafka: any;
@@ -203,7 +203,7 @@ export class StreamDSL {
    * @param {Observer} observer
    * @returns {Function} Unsubscribe function
    */
-  subscribe(observer: Observer) {
+  subscribe(observer: Observer<any>): Subscription<any> {
       return this.stream$.subscribe(observer);
   }
 

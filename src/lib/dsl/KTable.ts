@@ -46,7 +46,7 @@ export class KTable extends StreamDSL {
 
     if (!isClone) {
       this.map(keyMapETL);
-      this.storage.setSubscription(this.subscribe(this.storage));
+      this.storage.start(this.subscribe(this.storage));
     } else {
       this.consumerOpen = false;
       this.started = true;

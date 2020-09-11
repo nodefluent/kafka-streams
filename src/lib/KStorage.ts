@@ -1,12 +1,10 @@
 import { Promise } from "bluebird";
-import { Subscription, SubscriptionObserver } from "observable";
+import { Subscriber as Observer, Subscription } from "most";
 
-
-export class KStorage implements SubscriptionObserver {
+export class KStorage implements Observer<any> {
 	public options: any;
 	public state: any;
-  public closed: boolean;
-  private _subscription: Subscription;
+  private _subscription: Subscription<any>;
 
 	/**
 	 * be aware that even though KStorage is built on Promises
@@ -17,7 +15,6 @@ export class KStorage implements SubscriptionObserver {
 	 * set operations
 	 */
 	constructor(options) {
-    this.closed = false;
 	  this.options = options;
 	  this.state = {};
 	}
@@ -81,13 +78,9 @@ export class KStorage implements SubscriptionObserver {
 	  return Promise.resolve(true);
 	}
 
-  setSubscription(subscription) {
+  start(subscription: Subscription<any>) {
     this._subscription = subscription;
     return Promise.resolve(true);
-  }
-
-  getSubscription() {
-    return Promise.resolve(this._subscription);
   }
 
 	getMin(key = "min") {
@@ -99,21 +92,21 @@ export class KStorage implements SubscriptionObserver {
 	}
 
 	close() {
-    this.closed = true;
-	  return Promise.resolve(this.closed);
+    this._subscription.unsubscribe();
+	  return Promise.resolve(true);
 	}
 
   next({ key, value }) {
-      return this.set(key, value);
+    return this.set(key, value);
   }
 
   error(error) {
-      // Not much to do in this context.
-      console.error(error);
+    // Not much to do in this context.
+    console.error(error);
   }
 
   complete() {
-      this._subscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 }
 
