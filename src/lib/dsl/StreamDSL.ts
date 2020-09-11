@@ -9,6 +9,7 @@ import { KafkaClient } from "../client/KafkaClient";
 import { messageProduceHandle } from "../messageProduceHandle";
 import PRODUCE_TYPES from "../produceTypes";
 import { KeyCount, Sum, Min, Max } from "../actions";
+import { Observer } from "observable";
 
 const NOOP = () => { };
 const MESSAGE = "message";
@@ -202,7 +203,7 @@ export class StreamDSL {
    * @param {Observer} observer
    * @returns {Function} Unsubscribe function
    */
-  subscribe(observer) {
+  subscribe(observer: Observer) {
       return this.stream$.subscribe(observer);
   }
 

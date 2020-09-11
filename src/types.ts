@@ -1,5 +1,44 @@
 // declare type Buffer = any;
 
+// https://github.com/tc39/proposal-observable#api
+declare module "observable" {
+  export type SubscriberFunction = (observer: SubscriptionObserver) => (() => void) | Subscription;
+  export type OnNextFunction = (value: any) => void;
+  export type OnErrorFunction = (error: any) => void;
+  export type OnCompleteFunction = () => void;
+
+  export class Observable {
+    constructor(subscriber: SubscriberFunction);
+    subscribe(observer: Observer): Subscription;
+    subscribe(
+      onNext: OnNextFunction,
+      onError?: OnErrorFunction,
+      onComplete?: OnCompleteFunction
+    ): Subscription;
+    static of(...items): Observable;
+    static from(observable): Observable;
+  }
+
+  export interface Subscription {
+    unsubscribe(): void;
+    closed: boolean;
+  }
+
+  export interface Observer {
+    start(subscription: Subscription): void;
+    next(value: any): void;
+    error(errorValue: any): void;
+    complete(): void;
+  }
+
+  export interface SubscriptionObserver {
+    next(value: any): void;
+    error(errorValue: any): void;
+    complete(): void;
+    closed: boolean;
+  }
+}
+
 declare module "kafka-streams" {
 
     export interface KafkaHealthConfig {

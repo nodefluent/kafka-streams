@@ -1,9 +1,12 @@
 import { Promise } from "bluebird";
+import { Subscription, SubscriptionObserver } from "observable";
 
-export class KStorage {
+
+export class KStorage implements SubscriptionObserver {
 	public options: any;
 	public state: any;
-  private _subscription: any;
+  public closed: boolean;
+  private _subscription: Subscription;
 
 	/**
 	 * be aware that even though KStorage is built on Promises
@@ -14,6 +17,7 @@ export class KStorage {
 	 * set operations
 	 */
 	constructor(options) {
+    this.closed = false;
 	  this.options = options;
 	  this.state = {};
 	}
@@ -95,7 +99,8 @@ export class KStorage {
 	}
 
 	close() {
-	  return Promise.resolve(true);
+    this.closed = true;
+	  return Promise.resolve(this.closed);
 	}
 
   next({ key, value }) {
