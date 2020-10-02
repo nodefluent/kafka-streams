@@ -99,7 +99,7 @@ export class JSKafkaClient extends KafkaClient {
 	  }
 
 	  this.kafkaConsumerClient = new JSConsumer(this.topic, this.config);
-
+	  this.kafkaConsumerClient.connect();
 	  // this.kafkaConsumerClient = new Kafka(conStr, logger, conStr === kafkaHost);
 
 	  this.kafkaConsumerClient.on("ready", () => {
@@ -191,7 +191,7 @@ export class JSKafkaClient extends KafkaClient {
 	  if (!this.kafkaProducerClient) {
 
 		  this.kafkaProducerClient = new JSProducer(this.config);
-	    // this.kafkaProducerClient = new Kafka(conStr, logger, conStr === kafkaHost);
+		  this.kafkaProducerClient.connect();
 
 	    //consumer is awaiting producer
 	    this.kafkaProducerClient.on("ready", () => {
@@ -204,9 +204,6 @@ export class JSKafkaClient extends KafkaClient {
 
 	    this.kafkaProducerClient.on("error", kafkaErrorCallback || NOOP);
 	  }
-
-	  // this.kafkaProducerClient.becomeProducer([this.produceTopic], clientName, options);
-	  // this.producer = new Publisher(this.kafkaProducerClient, partitions || 1, 0, 100);
 	}
 
 	/**
