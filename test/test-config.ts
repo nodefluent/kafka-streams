@@ -1,3 +1,4 @@
+import { CompressionTypes } from "kafkajs";
 
 //dont use these settings for production, it will set your broker on fire..
 const batchOptions = {
@@ -14,7 +15,7 @@ export const nativeConfig = {
     "group.id": "kafka-streams-test-native",
     "client.id": "kafka-streams-test-name-native",
     "event_cb": true,
-    "compression.codec": "snappy",
+    "compression.codec": CompressionTypes.GZIP,
     "api.version.request": true,
 
     "socket.keepalive.enable": true,
@@ -36,7 +37,9 @@ export const nativeConfig = {
     "fetch.wait.max.ms": 1000,
     "queue.buffering.max.ms": 1000,
 
-    "batch.num.messages": 10000
+    "batch.num.messages": 10000,
+
+    "fromBeginning": true,
   },
   tconf: {
     "auto.offset.reset": "earliest",

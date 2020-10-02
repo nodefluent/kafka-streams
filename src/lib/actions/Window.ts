@@ -1,25 +1,25 @@
-import { async as createSubject } from "most-subject";
+import { async as createSubject, AsyncSubject } from "most-subject";
 
 /**
  * used to build windows of key value states
  * in a stream
  */
 export class Window {
-	public container: any;
-	public container$: any;
-	public collect: any;
+	public container: unknown[];
+	public container$: AsyncSubject<unknown>;
+	public collect: boolean;
 
-	constructor(container, collect = false) {
+	constructor(container: unknown[], collect = false) {
 	  this.container = container || [];
 	  this.container$ = createSubject();
 	  this.collect = collect;
 	}
 
-	getStream() {
+	getStream(): AsyncSubject<unknown> {
 	  return this.container$;
 	}
 
-	execute(element, leaveEncapsulated = true) {
+	execute(element, leaveEncapsulated = true): void {
 	  const ele = leaveEncapsulated ? element : element.value;
 	  if (this.collect) {
 	    this.container.push(ele);
@@ -28,7 +28,7 @@ export class Window {
 	  }
 	}
 
-	writeToStream() {
+	writeToStream(): void {
 	  if (this.collect) {
 	    this.container.forEach(event => this.container$.next(event));
 	  } else {
@@ -36,7 +36,7 @@ export class Window {
 	  }
 	}
 
-	flush() {
+	flush(): void {
 	  this.container$.complete();
 	}
 }

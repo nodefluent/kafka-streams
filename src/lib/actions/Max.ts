@@ -1,21 +1,22 @@
 import { Promise } from "bluebird";
+import { KStorage } from "../KStorage";
 
 /**
  * used to grab the highest value of key values
  * in a stream
  */
 export class Max {
-	public storage: any;
-	public fieldName: any;
-	public max: any;
+	public storage: KStorage;
+	public fieldName: string;
+	public max: string;
 
-	constructor(storage, fieldName = "value", max = "max") {
+	constructor(storage: KStorage, fieldName = "value", max = "max") {
 	  this.storage = storage;
 	  this.fieldName = fieldName;
 	  this.max = max;
 	}
 
-	execute(element) {
+	execute(element): number {
 
 	  if (!element || typeof element[this.fieldName] === "undefined") {
 	    return Promise.resolve(element);

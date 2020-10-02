@@ -1,32 +1,44 @@
 import { Promise } from "bluebird";
+import { KStorage } from "../KStorage";
 
 /**
  * used to sum up key values in a stream
  */
 export class Sum {
-	public storage: any;
-	public key: any;
-	public fieldName: any;
-	public sumField: any;
+	public storage: KStorage;
+	public key: string;
+	public fieldName: string;
+	public sumField: string;
 
-	constructor(storage, key = "key", fieldName = "value", sumField = false) {
+	/**
+	 * Creates an instance of Sum.
+	 * @param {KStorage} storage
+	 * 	 The store.
+	 * @param {string} [key="key"]
+	 * 	 The key.
+	 * @param {string} [fieldName="value"]
+	 * 	 The field name.
+	 * @param {string} [sumField=null]
+	 * 	The field to store the sum value in.
+	 */
+	constructor(storage: KStorage, key = "key", fieldName = "value", sumField: string | boolean = null) {
 	  this.storage = storage;
 	  this.key = key;
 	  this.fieldName = fieldName;
-	  this.sumField = sumField || fieldName;
+	  this.sumField = (sumField && typeof sumField === "string") ? sumField : fieldName;
 	}
 
-	static tryConvertFloat(value) {
+	static tryConvertFloat(value: string | number): number {
 
-	  const parsed = parseFloat(value);
+	  const parsed = parseFloat(value as string);
 	  if (!isNaN(parsed)) {
 	    return parsed;
 	  }
 
-	  return value;
+	  return value as number;
 	}
 
-	execute(element) {
+	execute(element): number {
 
 	  if (!element || typeof element[this.key] === "undefined") {
 	    return Promise.resolve(element);

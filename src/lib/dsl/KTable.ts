@@ -1,10 +1,11 @@
 import { EventEmitter } from "events";
 import * as most from "most";
 import { Promise } from "bluebird";
-import { StreamDSL } from "./StreamDSL";
+import { StreamDSL, StreamDSLConfig } from "./StreamDSL";
 import { LastState } from "../actions";
 import { StorageMerger } from "../StorageMerger";
 import { messageProduceHandle } from "../messageProduceHandle";
+import { KafkaReadyCallback, KafkaErrorCallback } from "../client";
 
 const MESSAGE = "message";
 const NOOP = () => { };
@@ -13,10 +14,10 @@ const NOOP = () => { };
  * table representation of a stream
  */
 export class KTable extends StreamDSL {
-  public _tee: any;
-  public started: any;
-  public finalised: any;
-  public consumerOpen: any;
+  public _tee: EventEmitter;
+  public started = false;
+  public finalised = false;
+  public consumerOpen = false;
 
   /**
      * creates a table representation of a stream
@@ -29,7 +30,7 @@ export class KTable extends StreamDSL {
      * @param {KafkaClient} kafka
      * @param {boolean} isClone
      */
-  constructor(topicName, keyMapETL, storage = null, kafka = null, isClone = false) {
+  constructor(topicName: string, keyMapETL, storage = null, kafka = null, isClone = false) {
     super(topicName, storage, kafka, isClone);
 
     //KTable only works on {key, value} payloads
@@ -38,8 +39,6 @@ export class KTable extends StreamDSL {
     }
 
     this._tee = new EventEmitter();
-    this.started = false;
-    this.finalised = false;
 
     //will close on first stream$.onComplete()
     this.consumerOpen = true;
@@ -63,7 +62,12 @@ export class KTable extends StreamDSL {
      * @param {boolean} withBackPressure
      * @param {Object} outputKafkaConfig
      */
-  start(kafkaReadyCallback = null, kafkaErrorCallback = null, withBackPressure = false, outputKafkaConfig = null) {
+  start(
+    kafkaReadyCallback: KafkaReadyCallback | StreamDSLConfig = null,
+    kafkaErrorCallback: KafkaErrorCallback = null,
+    withBackPressure = false,
+    outputKafkaConfig = null
+  ): Promise<void> {
 
     if (kafkaReadyCallback && typeof kafkaReadyCallback === "object" && arguments.length < 2) {
       return new Promise((resolve, reject) => {

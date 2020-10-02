@@ -2,7 +2,7 @@ import { KafkaStreams } from "../../src/index";
 import { nativeConfig as config } from "../test-config";
 
 const keyValueMapperEtl = (message) => {
-  console.log(message);
+  console.log('keyValueMapperEtl', message);
   const elements = message.toLowerCase().split(" ");
   return {
     key: elements[0],
@@ -18,7 +18,7 @@ const keyValueMapperEtl = (message) => {
 
 describe("E2E INT", () => {
 
-  let kafkaStreams = null;
+  let kafkaStreams: KafkaStreams = null;
 
   const topic = "my-input-topic";
   const outputTopic = "my-output-topic";
@@ -36,6 +36,9 @@ describe("E2E INT", () => {
 
   before(() => {
     kafkaStreams = new KafkaStreams(config);
+    kafkaStreams.on("error", (error) => {
+      console.log("Error occured:", error.message);
+    });
   });
 
   after(async () => {
@@ -54,18 +57,19 @@ describe("E2E INT", () => {
       if (count === messages.length) {
         setTimeout(done, 250);
       }
-    });
+    }).on("kafka-producer-ready", message => console.log(message)).on("message", message => console.log('we have message', message));
 
     stream.start().then(() => {
       console.log("started");
       stream.writeToStream(messages);
     }).catch((error) => {
+      console.log(error);
       done(error);
     });
   });
 
   it("should give kafka some time", done => {
-    setTimeout(done, 2500);
+    setTimeout(done, 5000);
   });
 
   it("should run complexer wordcount sample", done => {
@@ -86,17 +90,28 @@ describe("E2E INT", () => {
 
     let count = 0;
     stream.createAndSetProduceHandler().on("delivered", () => {
+      console.log('delivered!!');
       count++;
       if (count === 2) {
         setTimeout(done, 250);
       }
-    });
+    }).on("message", message => console.log('we have message', message));
 
-    stream.start();
+    // Because sinek uses kafkaJS when we create a stream its already subscribed to
+    // that topic at a particular offset so we need to write more items to the
+    // topic. The only other options would be to call `seek` and move the consumer
+    // topic back to 0 when we call getKStream?
+    stream.start().then(() => {
+      console.log("started");
+      stream.writeToStream(messages);
+    }).catch((error) => {
+      console.log(error);
+      done(error);
+    });
   });
 
   it("should give kafka some time again", done => {
-    setTimeout(done, 2500);
+    setTimeout(done, 5000);
   });
 
   it("should be able to consume produced wordcount results", done => {
@@ -114,7 +129,17 @@ describe("E2E INT", () => {
         }
       })
       .forEach(console.log);
-
-    stream.start();
+    
+    // Because sinek uses kafkaJS when we create a stream its already subscribed to
+    // that topic at a particular offset so we need to write more items to the
+    // topic. The only other options would be to call `seek` and move the consumer
+    // topic back to 0 when we call getKStream?
+    stream.start().then(() => {
+      console.log("started");
+      stream.writeToStream(messages);
+    }).catch((error) => {
+      console.log(error);
+      done(error);
+    });
   });
 });

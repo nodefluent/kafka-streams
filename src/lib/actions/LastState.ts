@@ -1,21 +1,22 @@
 import { Promise } from "bluebird";
+import { KStorage } from "../KStorage";
 
 /**
  * used to hold the last state of key values
  * in a stream e.g. building KTables
  */
 export class LastState {
-	public storage: any;
-	public key: any;
-	public fieldName: any;
+	public storage: KStorage;
+	public key: string;
+	public fieldName: string;
 
-	constructor(storage, key = "key", fieldName = "value") {
+	constructor(storage: KStorage, key = "key", fieldName = "value") {
 	  this.storage = storage;
 	  this.key = key;
 	  this.fieldName = fieldName;
 	}
 
-	execute(element) {
+	execute(element): number {
 
 	  if (!element || typeof element[this.key] === "undefined") {
 	    return Promise.resolve(element);

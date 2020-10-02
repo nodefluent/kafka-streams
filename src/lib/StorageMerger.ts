@@ -1,3 +1,4 @@
+import { KStorageState } from "../lib/KStorage";
 /**
  * static class, that helps with merging
  * KStorages (e.g. joining two KTables)
@@ -11,7 +12,7 @@ export class StorageMerger {
      * @param storages
      * @returns {Promise.<{State}>}
      */
-  static mergeIntoState(storages) {
+  static mergeIntoState(storages): Promise<KStorageState> {
     return Promise.all(storages
       .map(storage => storage.getState()))
       .then(states => {
