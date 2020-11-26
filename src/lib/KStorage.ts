@@ -78,7 +78,11 @@ export class KStorage implements Observer<any> {
 	  return Promise.resolve(true);
 	}
 
-  start(subscription: Subscription<any>) {
+  /**
+   * Attaches existing subscription to storage class
+   * @returns {Promise<boolean>}
+   */
+  start(subscription: Subscription<any>): Promise<boolean> {
     this._subscription = subscription;
     return Promise.resolve(true);
   }
@@ -91,21 +95,44 @@ export class KStorage implements Observer<any> {
 	  return Promise.resolve(this.state[key]);
 	}
 
-	close() {
-    this._subscription.unsubscribe();
+  /**
+   * Unsubscribe from observable
+   *
+   * @returns {Promise<boolean}
+   */
+	close(): Promise<boolean> {
+    if (this._subscription)
+      this._subscription.unsubscribe();
 	  return Promise.resolve(true);
 	}
 
-  next({ key, value }) {
+  /**
+   * Adapter for set(), taking an object with props key and value.
+   * Called by the Observable API on write to a given topic, storing the
+   * latest value for a given key in the store.
+   *
+   * @returns {Promise<any>} Promise that resolves with the value passed to function
+   */
+  next({ key, value }: { key: string, value: any }): Promise<any> {
     return this.set(key, value);
   }
 
-  error(error) {
+  /**
+   * Error handler for Observable
+   *
+   * @returns {void}
+   */
+  error(error): void {
     // Not much to do in this context.
     console.error(error);
   }
 
-  complete() {
+  /**
+   * Unsubscribe from observable, required by Observable API
+   *
+   * @returns {void}
+   */
+  complete(): void {
     this._subscription.unsubscribe();
   }
 }

@@ -200,11 +200,12 @@ export class StreamDSL implements Observable<any> {
 
   /**
    * Treats stream as an observable and allows others to subscribe to it
+   *
    * @param {Observer} observer
    * @returns {Function} Unsubscribe function
    */
   subscribe(observer: Observer<any>): Subscription<any> {
-      return this.stream$.subscribe(observer);
+    return this.stream$.subscribe(observer);
   }
 
   /*
