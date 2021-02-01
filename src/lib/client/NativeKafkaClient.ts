@@ -169,24 +169,25 @@ export class NativeKafkaClient extends KafkaClient {
 	//async send(topicName, message, _partition = null, _key = null, _partitionKey = null, _opaqueKey = null)
 
 	/**
-     * simply produces a message or multiple on a topic
-     * if producerPartitionCount is > 1 it will randomize
-     * the target partition for the message/s
-     * @param topicName
-     * @param message
-     * @param partition - optional
-     * @param key - optional
-     * @param partitionKey - optional
-     * @param opaqueKey - optional
-     * @returns {Promise<void>}
-     */
-	send(topicName, message, partition = null, key = null, partitionKey = null, opaqueKey = null) {
+	 * simply produces a message or multiple on a topic
+	 * if producerPartitionCount is > 1 it will randomize
+	 * the target partition for the message/s
+	 * @param topicName
+	 * @param message
+	 * @param partition - optional
+	 * @param key - optional
+	 * @param partitionKey - optional
+	 * @param opaqueKey - optional
+	 * @param {array} headers - optional array with message headers (key/value objects)
+	 * @returns {Promise<void>}
+	 */
+	send(topicName, message, partition = null, key = null, partitionKey = null, opaqueKey = null, headers = null) {
 
 	  if (!this.producer) {
 	    return Promise.reject("producer is not yet setup.");
 	  }
 
-	  return this.producer.send(topicName, message, partition, key, partitionKey, opaqueKey);
+	  return this.producer.send(topicName, message, partition, key, partitionKey, opaqueKey, headers);
 	}
 
 	/**
