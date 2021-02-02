@@ -185,9 +185,9 @@ export class NativeKafkaClient extends KafkaClient {
 
 	  if (!this.producer) {
 	    return Promise.reject("producer is not yet setup.");
-	  }
+    }
 
-	  return this.producer.send(topicName, message, partition, key, partitionKey, opaqueKey, headers);
+	  return this.producer.send(topicName, message, partition, key, partitionKey, headers);
 	}
 
 	/**

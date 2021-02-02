@@ -36,7 +36,7 @@ const hasKVStructure = message => {
  * @param version - optional
  * @returns {Promise<void>}
  */
-const produceTypeSelection = (produceType, kafka, compressionType, topic, partition, key, value, partitionKey = null, opaqueKey = null, version = 1) => {
+const produceTypeSelection = (produceType, kafka, compressionType, topic, partition, key, value, headers, partitionKey = null, opaqueKey = null, version = 1) => {
 
   debug("producing", produceType, topic, partition, key, partitionKey, opaqueKey, version, value);
 
@@ -46,7 +46,7 @@ const produceTypeSelection = (produceType, kafka, compressionType, topic, partit
   switch (produceType) {
 
     case PRODUCE_TYPES.SEND:
-      return kafka.send(topic, value, partition, key, partitionKey, opaqueKey);
+      return kafka.send(topic, value, partition, key, partitionKey, opaqueKey, headers);
 
     case PRODUCE_TYPES.BUFFER:
       return kafka.buffer(topic, key, value, compressionType, partition, version, partitionKey);
@@ -80,6 +80,7 @@ export const messageProduceHandle = (kafka, message, outputTopicName, produceTyp
   let _partitionKey = null;
   let _opaqueKey = null;
   let _value = message;
+  let _headers = [];
 
   //overwrite default values or configured values
   //with on demand message settings
@@ -108,6 +109,10 @@ export const messageProduceHandle = (kafka, message, outputTopicName, produceTyp
       _opaqueKey = message.opaqueKey;
     }
 
+    if (typeof message.headers !== "undefined" && Array.isArray(message.headers)) {
+      _headers = message.headers;
+    }
+
     _value = message.value;
   }
 
@@ -118,6 +123,7 @@ export const messageProduceHandle = (kafka, message, outputTopicName, produceTyp
     partition: _partition,
     key: _key,
     value: _value,
+    headers: _headers,
     partitionKey: _partitionKey,
     opaqueKey: _opaqueKey
   };
@@ -137,6 +143,7 @@ export const messageProduceHandle = (kafka, message, outputTopicName, produceTyp
     _partition,
     _key,
     _value,
+    _headers,
     _partitionKey,
     _opaqueKey,
     _version
