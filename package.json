@@ -69,7 +69,8 @@
         "lodash.clonedeep": "~4.5.0",
         "most": "1.7.3",
         "most-subject": "5.3.0",
-        "sinek": "~9.0.0",
+        "node-rdkafka": "^2.10.1",
+        "sinek": "~9.1.0",
         "uuid": "~3.4.0"
     },
     "devDependencies": {
