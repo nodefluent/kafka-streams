@@ -1334,17 +1334,10 @@ github-from-package@0.0.0:
   resolved "https://registry.yarnpkg.com/github-from-package/-/github-from-package-0.0.0.tgz#97fb5d96bfde8973313f20e8288ef9a167fa64ce"
   integrity sha1-l/tdlr/eiXMxPyDoKI75oWf6ZM4=
 
-glob-parent@^5.0.0:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.1.tgz#b6c1ef417c4e5663ea498f1c45afac6916bbc229"
-  integrity sha512-FnI+VGOpnlGHWZxthPGR+QhR78fuiK0sNLkHQv+bL9fQi57lNNdquIbna/WrfROrolq8GK5Ek6BiMwqL/voRYQ==
-  dependencies:
-    is-glob "^4.0.1"
-
-glob-parent@~5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.0.tgz#5f4c1d1e748d30cd73ad2944b3577a81b081e8c2"
-  integrity sha512-qjtRgnIVmOfnKUE3NJAQEdk+lKrxfw8t5ke7SXtfMTHcjsBfOfWXCQfdb30zfDoZQ2IRSIiidmjtbHZPZ++Ihw==
+glob-parent@^5.0.0, glob-parent@~5.1.0:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
+  integrity sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==
   dependencies:
     is-glob "^4.0.1"
 
@@ -2131,10 +2124,10 @@ murmur2-partitioner@~1.0.0:
   dependencies:
     murmur-hash-js "^1.0.0"
 
-murmurhash@~0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/murmurhash/-/murmurhash-0.0.2.tgz#6f07bd8a1105e709c26fc89420cb5930c24585fe"
-  integrity sha1-bwe9ihEF5wnCb8iUIMtZMMJFhf4=
+murmurhash@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/murmurhash/-/murmurhash-1.0.0.tgz#d0e4556892317d984af632b6a88d5605beef26a7"
+  integrity sha512-u/NfpXS+viMWAupgU6IkwAVWkVnpvzS+D9bDxNuNRUoQ0BRMZ1DK/dPH6Qrknn7RxMHVQBpYBQQigUt7of6RiQ==
 
 mv@~2:
   version "2.1.1"
@@ -2199,6 +2192,14 @@ node-forge@^0.9.0:
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.9.1.tgz#775368e6846558ab6676858a4d8c6e8d16c677b5"
   integrity sha512-G6RlQt5Sb4GMBzXvhfkeFmbqR6MzhtnT7VTHuLadjkii3rdYHNdw0m8zA4BTxVIh68FicCQ2NSUANpsqkr9jvQ==
+
+node-rdkafka@^2.10.1:
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/node-rdkafka/-/node-rdkafka-2.10.1.tgz#de6055a8aed6315a68f5b401415e7d6b9bfcc631"
+  integrity sha512-yRb9Y90ipef4X+S/UbvQedUNtKZONa9RR6hCpAaGD83NqUga/uxTofdRQG8bm7SEh/DNuaifIJjRzLcoG9nUSQ==
+  dependencies:
+    bindings "^1.3.1"
+    nan "^2.14.0"
 
 noop-logger@^0.1.1:
   version "0.1.1"
@@ -2654,10 +2655,10 @@ simple-get@^3.0.3:
     once "^1.3.1"
     simple-concat "^1.0.0"
 
-sinek@~9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/sinek/-/sinek-9.0.0.tgz#0a5ada279b0a77f79c8dc88e27ea72d37c7e46d8"
-  integrity sha512-W9DH4KyPcsUcNfVKYpt0/Qk1RqABhkp8oqvNlt8JOuj31UWL7gvnc21849jn0GpYlE9rIR84DSKR72jdNuKlcg==
+sinek@~9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/sinek/-/sinek-9.1.0.tgz#b818f7a22a7244dc1d6d3e62c1f1f5fd4ff896b1"
+  integrity sha512-uQMwWXR5IHB77odjze6cX8Cg9flN5MegaGJYziNl+BHTC/CGqfCpEigOq4nTmbbbnVObYjD3RgEO54DHmATvJg==
   dependencies:
     async "~3.2.0"
     bluebird "~3.7.2"
@@ -2666,8 +2667,8 @@ sinek@~9.0.0:
     kafkajs "1.12.0"
     lodash.merge "~4.6.2"
     murmur2-partitioner "~1.0.0"
-    murmurhash "~0.0.2"
-    uuid "~3.4.0"
+    murmurhash "~1.0.0"
+    uuid "~7.0.3"
 
 slice-ansi@^2.1.0:
   version "2.1.0"
@@ -3107,6 +3108,11 @@ uuid@~3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==
+
+uuid@~7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 v8-compile-cache@^2.0.3:
   version "2.1.1"
