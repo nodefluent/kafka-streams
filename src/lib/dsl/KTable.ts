@@ -46,6 +46,7 @@ export class KTable extends StreamDSL {
 
     if (!isClone) {
       this.map(keyMapETL);
+      this.storage.start(this.subscribe(this.storage));
     } else {
       this.consumerOpen = false;
       this.started = true;
@@ -198,9 +199,6 @@ export class KTable extends StreamDSL {
     // a KStream is a simple changelog implementation (which StreamDSL delivers by default)
     // a KTable is a table stream representation meaning that only the latest representation of
     // a message must be present
-
-    const lastState = new LastState(this.storage);
-    this.asyncMap(lastState.execute.bind(lastState));
 
     this.stream$.forEach(NOOP).then(_ => {
       //streams until completed

@@ -5,9 +5,9 @@
     "allowJs": true,
     "outDir": "./dist",
     "declaration": true,
-    "alwaysStrict": true,
+    "alwaysStrict": true
   },
   "include": [
-    "./src/**/*",
+    "./src/**/*"
   ]
 }

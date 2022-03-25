@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import * as most from "most";
+import { Observable, Subscriber as Observer, Subscription } from "most";
 import { Promise } from "bluebird";
 import { v4 as uuidv4 } from "uuid";
 import debugFactory from "debug";
@@ -17,7 +18,7 @@ const DEFAULT_AUTO_FLUSH_BUFFER_SIZE = 100;
 /**
  * Stream base class
  */
-export class StreamDSL {
+export class StreamDSL implements Observable<any> {
   public noTopicProvided: any;
   public topicName: any;
   public kafka: any;
@@ -195,6 +196,16 @@ export class StreamDSL {
      */
   setKafkaStreamsReference(reference) {
     this._kafkaStreams = reference;
+  }
+
+  /**
+   * Treats stream as an observable and allows others to subscribe to it
+   *
+   * @param {Observer} observer
+   * @returns {Function} Unsubscribe function
+   */
+  subscribe(observer: Observer<any>): Subscription<any> {
+    return this.stream$.subscribe(observer);
   }
 
   /*
